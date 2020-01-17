@@ -1,7 +1,19 @@
 # PRCO304
 Final Year Project
 
+Project Vision:
 
+Efficient production is key to profitability in manufacturing sites. If too much stock is produced in a product line then it can pile up before a bottleneck production process in the manufacturing plant. Equally, if not enough stock is made then a worker on a station may have no processing they can do and so be wasting their time and company money. During my placement year at a manufacturing facility I was made aware first hand of these potential problems and the many ways that have been devised to solve them should they happen. 
+
+For instance Kanban (devised by Toyota in Japan in the 40s) is a just in time manufacturing process that aims to increase efficiency by reducing bottlenecks and stock wastage. This same term is also used in software engineering for similar effect. 
+
+The project being undertaken will be focusing on displaying data gathered in a fictional factory. Data will be gathered from sensors and also manually input by managers and group leaders to create many dashboard screens that shows employees throughout the factory if they are on track to produce the correct amount of parts for their respective product line.  
+
+The project will allow managers to input targets from both their mobile devices and computers. These targets will then be used as key performance indictors to show factory floor workers and managers the if they are on track for each product line throughout the factory. 
+
+Additionally, successful implementation and deployment of this software will allow line operators to synchronise their efforts so that a minimum of excess stock is around at any one time. For instance, if a process at some point during the manufacturing procedure required two parts, then the lines that produce those parts will need to be in synchronisation with each other. This will reduce waste, both of physical stock no longer needed, and of operator time. Both of these cost the company money, and preventing wastage of physical stock is environmentally sounder. 
+
+ 
 
 
 
