@@ -5,7 +5,12 @@
          <!--Bootstrap CSS CDN-->
   <link rel="stylesheet" href="libraries/bootstrap.min.css">
   <script>
-  
+        if (sessionStorage.loggedIn == "true"){
+            console.log("user logged in")
+        }
+        else{
+            document.location.assign("login.html");
+        }
 
 
         // Load the Visualization API and the corechart package.
@@ -27,12 +32,12 @@
             data.addColumn('string', 'Topping');
             data.addColumn('number', 'Slices');
             data.addRows([
-                ['Approved', numAppr],
-                ['Waiting', numWait]
+                ['Bracket #423', numAppr],
+                ['Sidewall #323', numWait]
             ]);
             // Set chart options
             var options = {
-                'title': 'Requisitions waiting vs approved',
+                'title': 'Assembled part #32',
                 'width': '100%',
                 'height': 500
             };

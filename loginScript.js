@@ -32,10 +32,12 @@ function startListeningCaps(){
 
     //Now hash the password
     var hashPass = new Hashes.MD5().hex(password + salt);
+    //hashPass = "hello";
     var k; //k is used in loop below to find user
     var wrongPassword = true; //Set password as wrong by default
+    console.log(hashPass);
     for (k in result) {
-        if (userName == result[k].user && hashPass == result[k].password) {
+        if (userName == result[k].name && hashPass == result[k].password) {
             sessionStorage.setItem('loggedIn', 'true');
             sessionStorage.setItem('role', result[k].role);
             wrongPassword = false;
