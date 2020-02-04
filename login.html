@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Page</title>
+    <meta charset="utf-8">
+
+    <!--Make website responsive-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Bootstrap library-->
+    <link rel="stylesheet" href="libraries/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!--Favicon Resources-->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+
+</head>
+
+<body>
+    <div class="container login-container">
+        <div class="col-xs-2 login-form-1">
+            <h3>Login To Workflow System</h3>
+            <div class="form-group mb-2">
+                <input type="text" class="form-control" id="txtUserName" placeholder="Your Username *"><br>
+                <input type="password" class="form-control" id="txtPassword" placeholder="Your Password *"><br>
+                <div style="text-align:center;">
+                    <input type="submit" value="login" class="btnSubmit" onclick="loginButton()">Login</button>
+                </div>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
+                <strong>Login incorrect</strong> You should check in on some of those fields below.
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertWarning">
+                <strong>Caps Lock on</strong> You should check in on some of those fields below.
+            </div>
+        </div>
+    </div>
+</body>
