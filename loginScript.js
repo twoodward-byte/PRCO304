@@ -2,6 +2,7 @@ function startListeningCaps(){
     input.addEventListener("keyup", function (event) {
         if (event.getModifierState("CapsLock")) {
             text.style.display = "block";
+            console.log("hello");
         } else {
             text.style.display = "none"
         }
