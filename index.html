@@ -1,19 +1,40 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="script.js"></script>
     <!--Bootstrap CSS CDN-->
     <link rel="stylesheet" href="libraries/bootstrap.min.css">
     <script>
+      var result;
+
         if (sessionStorage.loggedIn == "true") {
             console.log("user logged in")
+            
         }
         else {
             document.location.assign("login.html");
         }
 
+        //Address of websocket server
+const url = 'ws://localhost:8080'
+const connection = new WebSocket(url)
+//Send a sample websocket connection
+connection.onopen = () => {
+  connection.send('data') 
+}
+//When server responds with data
+connection.onmessage = (e) => { 
+  var data = e.data.toString();
+  try{
+      result = JSON.parse(data);
+      //console.log(result);
+      console.log(result[0].name)
+      }catch{
+        console.log("Error")
+      }
+
+}
         // Load the Visualization API and the corechart package.
         google.charts.load('current', { 'packages': ['corechart'] });
 
@@ -26,15 +47,16 @@
         function drawChart() {
             //var numWait = parseInt(sessionStorage.getItem("numWaiting"));
             //var numAppr = parseInt(sessionStorage.getItem("numAppr"));
-            var numWait = 23
-            var numAppr = 30
+            var bracket = result[0].amount;
+            var sidewall = result[1].amount;
             // Create the data table.
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Topping');
             data.addColumn('number', 'Slices');
+            console.log(bracket);
             data.addRows([
-                ['Bracket #423', numAppr],
-                ['Sidewall #323', numWait]
+                ['Bracket #423', parseInt(bracket)],
+                ['Sidewall #323', parseInt(sidewall)]
             ]);
             // Set chart options
             var options = {
@@ -48,8 +70,6 @@
             chart.draw(data, options);
         }
 
-
-        
         google.charts.load('current', { packages: ['corechart', 'line'] });
         google.charts.setOnLoadCallback(drawBasic);
         function drawBasic() {
@@ -89,11 +109,42 @@
     <h1 style="float:left">Management View</h1>
     <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link"
         href="#" onclick="logout()">Logout</a>
+        
     <div style="clear:both;"></div>
+    <!--Navigation bar-->
+<nav class="navbar-light navbar-expand-lg navbar-dark justify-content-between mr-0 pr-0" style="background-color:brown" >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand"> <img src="/icons/baseline_work_black_18dp.png" width="30" height="30" alt=""></a>
+      <ul class="nav navbar-nav mr-auto mt-2 mt-lg-0 ">
+        <li class="nav-item" id="navbarIndex">
+          <a class="nav-link" href='/index.html'>Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about.html">About</a>
+        </li>
+
+
+  
+ 
+        <li class="nav-item">
+          <a class="nav-link" href="/help.html">Help</a>
+        </li>
+      </ul>
+     <!-- <form class="form-inline my-2 my-lg-0 mr-1" >-->
+       <div class="form-inline my-2 my-lg-0 mr-1">
+        <input class="form-control mr-sm-2" type="text" id="txtSearch" placeholder="Search" aria-label="Search">
+        <button class="btn btn-primary my-2 my-sm-0  mr-0" onclick="searchTable()">Search</button>
+      </div>    
+    <!-- </form>-->
+    </div>
+  </nav>
     <div style="width: 100%; overflow: hidden;">
         <!--Div that will hold the pie chart-->
         <div id="chart_div" style="width: 600px; float: left;"></div>
-
         <!--Div that will hold the line chart-->
         <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
     </div>

@@ -19,6 +19,7 @@ var client;
 const uri = "mongodb+srv://test:test@cluster0-bcfvz.mongodb.net/test?retryWrites=true&w=majority";
 const MongoClient = require('mongodb').MongoClient;
 client = new MongoClient(uri, { useNewUrlParser: true });
+
 client.connect(err => {
   db = client.db("FinalProject");
   app.listen(9000, '0.0.0.0', () => {
@@ -48,23 +49,11 @@ wss.on('connection', ws => {
         //ws.send(JSON.stringify(db.collection('test').find().toArray()));
     })
     //Send information via websockets
-    ws.send('Information incoming');
-    console.log(wss.message);
     ws.on('message', function incoming(data) {
         //Execute code depending on message
-        if(data.toString() == "hey"){
+        if(data.toString() == "data"){
             console.log('message is hey');
-            db.collection("test").find({}).toArray(function(err, result) {
-                if (err) throw err;
-                //console.log(result);
-                dbResult = result;
-                ws.send(JSON.stringify(dbResult));
-                //db.close();
-              });
-        }
-        if(data.toString() == "users"){
-            console.log('message is users');
-            db.collection("users").find({}).toArray(function(err, result) {
+            db.collection("partsProduced").find({}).toArray(function(err, result) {
                 if (err) throw err;
                 //console.log(result);
                 dbResult = result;
