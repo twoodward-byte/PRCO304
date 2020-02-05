@@ -61,6 +61,15 @@ wss.on('connection', ws => {
                 //db.close();
               });
         }
+        else if(data.toString() == "users"){
+            db.collection("users").find({}).toArray(function(err, result) {
+                if (err) throw err;
+                //console.log(result);
+                dbResult = result;
+                ws.send(JSON.stringify(dbResult));
+                //db.close();
+              });
+        }
       });
     console.log('web socket sent information');
 })
