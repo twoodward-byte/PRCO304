@@ -1,121 +1,137 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="script.js"></script>
-    <!--Bootstrap CSS CDN-->
-    <link rel="stylesheet" href="libraries/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
-    <script>
-      var result;
+  <!--Google charts library-->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-        if (sessionStorage.loggedIn == "true") {
-            console.log("user logged in")
-            
-        }
-        else {
-            document.location.assign("login.html");
-        }
+  <!--My functions library-->
+  <script type="text/javascript" src="script.js"></script>
 
-        //Address of websocket server
-const url = 'ws://localhost:8080'
-const connection = new WebSocket(url)
-//Send a sample websocket connection
-connection.onopen = () => {
-  connection.send('data') 
-}
-//When server responds with data
-connection.onmessage = (e) => { 
-  var data = e.data.toString();
-  try{
-      result = JSON.parse(data);
-      //console.log(result);
-      console.log(result[0].name)
-      }catch{
+  <!--Bootstrap CSS CDN-->
+  <link rel="stylesheet" href="libraries/bootstrap.min.css">
+
+  <!--My stylesheet-->
+  <link rel="stylesheet" href="style.css">
+
+  <!--Custom font-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+
+  <!--Favicon Resources-->
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+
+  <script>
+    var result;
+    //Address of websocket server
+    const url = 'ws://localhost:8080'
+    const connection = new WebSocket(url)
+    if (sessionStorage.loggedIn == "true") {
+      console.log("user logged in")
+
+    }
+    else {
+      document.location.assign("login.html");
+    }
+
+
+    //Send a sample websocket connection
+    connection.onopen = () => {
+      connection.send('data')
+    }
+    //When server responds with data
+    connection.onmessage = (e) => {
+      var data = e.data.toString();
+      try {
+        result = JSON.parse(data);
+        //console.log(result);
+        console.log(result[0].name)
+      } catch{
         console.log("Error")
       }
 
-}
-        // Load the Visualization API and the corechart package.
-        google.charts.load('current', { 'packages': ['corechart'] });
+    }
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', { 'packages': ['corechart'] });
 
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawChart);
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
 
-        // Callback that creates and populates a data table,
-        // instantiates the pie chart, passes in the data and
-        // draws it.
-        function drawChart() {
-            //var numWait = parseInt(sessionStorage.getItem("numWaiting"));
-            //var numAppr = parseInt(sessionStorage.getItem("numAppr"));
-            var bracket = result[0].amount;
-            var sidewall = result[1].amount;
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            console.log(bracket);
-            data.addRows([
-                ['Bracket #423', parseInt(bracket)],
-                ['Sidewall #323', parseInt(sidewall)]
-            ]);
-            // Set chart options
-            var options = {
-                'title': 'Assembled part #32',
-                'width': '100%',
-                'height': 500
-            };
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    function drawChart() {
+      //var numWait = parseInt(sessionStorage.getItem("numWaiting"));
+      //var numAppr = parseInt(sessionStorage.getItem("numAppr"));
+      var bracket = result[0].amount;
+      var sidewall = result[1].amount;
+      // Create the data table.
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Topping');
+      data.addColumn('number', 'Slices');
+      console.log(bracket);
+      data.addRows([
+        ['Bracket #423', parseInt(bracket)],
+        ['Sidewall #323', parseInt(sidewall)]
+      ]);
+      // Set chart options
+      var options = {
+        'title': 'Assembled part #32',
+        'width': '100%',
+        'height': 500
+      };
 
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-        }
+      // Instantiate and draw our chart, passing in some options.
+      var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
 
-        google.charts.load('current', { packages: ['corechart', 'line'] });
-        google.charts.setOnLoadCallback(drawBasic);
-        function drawBasic() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('number', 'X');
-            data.addColumn('number', 'Product line 1');
-            data.addRows([
-                [0, 0], [1, 10], [2, 23], [3, 17], [4, 18], [5, 9],
-                [6, 11], [7, 27], [8, 33], [9, 40], [10, 32], [11, 35],
-                [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
-                [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
-                [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
-                [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
-                [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
-                [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
-                [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
-                [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
-                [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
-                [66, 70], [67, 72], [68, 75], [69, 80]
-            ]);
-            var options = {
-                hAxis: {
-                    title: 'Time'
-                },
-                vAxis: {
-                    title: 'Items made'
-                },
-                curveType: 'function'
-            };
-            var chart = new google.visualization.LineChart(document.getElementById('line_chart_div'));
-            chart.draw(data, options);
-        }
-    </script>
+    google.charts.load('current', { packages: ['corechart', 'line'] });
+    google.charts.setOnLoadCallback(drawBasic);
+    function drawBasic() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Product line 1');
+      data.addRows([
+        [0, 0], [1, 10], [2, 23], [3, 17], [4, 18], [5, 9],
+        [6, 11], [7, 27], [8, 33], [9, 40], [10, 32], [11, 35],
+        [12, 30], [13, 40], [14, 42], [15, 47], [16, 44], [17, 48],
+        [18, 52], [19, 54], [20, 42], [21, 55], [22, 56], [23, 57],
+        [24, 60], [25, 50], [26, 52], [27, 51], [28, 49], [29, 53],
+        [30, 55], [31, 60], [32, 61], [33, 59], [34, 62], [35, 65],
+        [36, 62], [37, 58], [38, 55], [39, 61], [40, 64], [41, 65],
+        [42, 63], [43, 66], [44, 67], [45, 69], [46, 69], [47, 70],
+        [48, 72], [49, 68], [50, 66], [51, 65], [52, 67], [53, 70],
+        [54, 71], [55, 72], [56, 73], [57, 75], [58, 70], [59, 68],
+        [60, 64], [61, 60], [62, 65], [63, 67], [64, 68], [65, 69],
+        [66, 70], [67, 72], [68, 75], [69, 80]
+      ]);
+      var options = {
+        hAxis: {
+          title: 'Time'
+        },
+        vAxis: {
+          title: 'Items made'
+        },
+        curveType: 'function'
+      };
+      var chart = new google.visualization.LineChart(document.getElementById('line_chart_div'));
+      chart.draw(data, options);
+    }
+  </script>
 </head>
 
 <body>
-  <h1 style="float:left" class="ml-3">  <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30" height="30" alt="">
+  <h1 style="float:left" class="ml-3">
+    <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30"
+      height="30" alt="">
     Management View</h1>
-    <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link"
-        href="#" onclick="logout()">Logout</a>
-        
-    <div style="clear:both;"></div>
-    <!--Navigation bar-->
-<nav class="navbar-light navbar-expand-lg navbar-dark justify-content-between mr-0 pr-0" style="background-color: #0e4d92" >
+  <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
+    onclick="logout()">Logout</a>
+
+  <div style="clear:both;"></div>
+  <!--Navigation bar-->
+  <nav class="navbar-light navbar-expand-lg navbar-dark justify-content-between mr-0 pr-0"
+    style="background-color: #0e4d92">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
       aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -133,23 +149,25 @@ connection.onmessage = (e) => {
           <a class="nav-link" href="/help.html">Help</a>
         </li>
       </ul>
-     <!-- <form class="form-inline my-2 my-lg-0 mr-1" >-->
-       <div class="mb-1 mt-1 mr-1 style="width: 20%">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Enter search term" aria-label="Recipient's username" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-          <button class="btn btn-primary" type="button">Search</button>
+      <!-- <form class="form-inline my-2 my-lg-0 mr-1" >-->
+      <div class="mb-1 mt-1 mr-1 style=" width: 20%">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Enter search term" aria-label="Recipient's username"
+            aria-describedby="basic-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button">Search</button>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- </form>-->
+      <!-- </form>-->
     </div>
   </nav>
-    <div style="width: 100%; overflow: hidden;">
-        <!--Div that will hold the pie chart-->
-        <div id="chart_div" style="width: 600px; float: left;"></div>
-        <!--Div that will hold the line chart-->
-        <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
-    </div>
+  <div style="width: 100%; overflow: hidden;">
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div" style="width: 600px; float: left;"></div>
+    <!--Div that will hold the line chart-->
+    <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
+  </div>
 </body>
+
 </html>
