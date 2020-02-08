@@ -28,7 +28,7 @@ function startListeningCaps(){
     //Get username and password values entered by user
     var userName = document.getElementById("txtUserName").value;
     var password = document.getElementById("txtPassword").value;
-    var salt = "c65va7l";
+    var salt = result[0].salt;
 
     //Now hash the password
     var hashPass = new Hashes.MD5().hex(password + salt);

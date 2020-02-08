@@ -74,13 +74,6 @@ wss.on('connection', ws => {
     console.log('web socket sent information');
 })
 
-//Message sent to web socket
-wss.on('message', message => {
-    console.log('Message recieved');
-})
-wss.onmessage = function(event){
-    console.log("heloooooooooo");
-}
 
 //Post new requisitions to server
 app.post('/additem', (req, res) => {

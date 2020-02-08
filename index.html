@@ -25,19 +25,14 @@
     //Address of websocket server
     const url = 'ws://localhost:8080'
     const connection = new WebSocket(url)
-    if (sessionStorage.loggedIn == "true") {
-      console.log("user logged in")
 
-    }
-    else {
-      document.location.assign("login.html");
-    }
+    checkIfLoggedIn();
 
-
-    //Send a sample websocket connection
+    //Send a websocket connection requesting data
     connection.onopen = () => {
       connection.send('data')
     }
+
     //When server responds with data
     connection.onmessage = (e) => {
       var data = e.data.toString();
@@ -48,8 +43,8 @@
       } catch{
         console.log("Error")
       }
-
     }
+
     // Load the Visualization API and the corechart package.
     google.charts.load('current', { 'packages': ['corechart'] });
 
@@ -60,8 +55,6 @@
     // instantiates the pie chart, passes in the data and
     // draws it.
     function drawChart() {
-      //var numWait = parseInt(sessionStorage.getItem("numWaiting"));
-      //var numAppr = parseInt(sessionStorage.getItem("numAppr"));
       var bracket = result[0].amount;
       var sidewall = result[1].amount;
       // Create the data table.
@@ -148,8 +141,10 @@
         <li class="nav-item">
           <a class="nav-link" href="/help.html">Help</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/targets.html">Enter Targets</a>
+      </li>
       </ul>
-      <!-- <form class="form-inline my-2 my-lg-0 mr-1" >-->
       <div class="mb-1 mt-1 mr-1 style=" width: 20%">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Enter search term" aria-label="Recipient's username"
@@ -159,12 +154,13 @@
           </div>
         </div>
       </div>
-      <!-- </form>-->
     </div>
   </nav>
   <div style="width: 100%; overflow: hidden;">
+
     <!--Div that will hold the pie chart-->
     <div id="chart_div" style="width: 600px; float: left;"></div>
+
     <!--Div that will hold the line chart-->
     <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
   </div>
