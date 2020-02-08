@@ -20,6 +20,8 @@
   <!--Favicon Resources-->
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
 
+  <script src="libraries/jquery-3.4.1.min.js"></script>
+
   <script>
     var result;
     //Address of websocket server
@@ -27,6 +29,13 @@
     const connection = new WebSocket(url)
 
     checkIfLoggedIn();
+
+    jQuery(document).ready(function(){
+      $('#navDiv').load("navbar.html", function() {
+        console.log("nav bar loaded");
+     });
+    });
+
 
     //Send a websocket connection requesting data
     connection.onopen = () => {
@@ -122,40 +131,7 @@
     onclick="logout()">Logout</a>
 
   <div style="clear:both;"></div>
-  <!--Navigation bar-->
-  <nav class="navbar-light navbar-expand-lg navbar-dark justify-content-between mr-0 pr-0"
-    style="background-color: #0e4d92">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01"
-      aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand"> </a>
-      <ul class="nav navbar-nav mr-auto mt-2 mt-lg-0 ">
-        <li class="nav-item" id="navbarIndex">
-          <a class="nav-link" href='/index.html'>Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/about.html">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/help.html">Help</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/targets.html">Enter Targets</a>
-      </li>
-      </ul>
-      <div class="mb-1 mt-1 mr-1 style=" width: 20%">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Enter search term" aria-label="Recipient's username"
-            aria-describedby="basic-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-primary" type="button">Search</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <div id="navDiv"></div>
   <div style="width: 100%; overflow: hidden;">
 
     <!--Div that will hold the pie chart-->
