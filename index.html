@@ -34,13 +34,14 @@
       $('#navDiv').load("navbar.html", function() {
         console.log("nav bar loaded");
      });
-    });
-
-
-    //Send a websocket connection requesting data
+        //Send a websocket connection requesting data
     connection.onopen = () => {
       connection.send('data')
     }
+    });
+
+
+ 
 
     //When server responds with data
     connection.onmessage = (e) => {
