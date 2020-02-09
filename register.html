@@ -33,13 +33,13 @@
             </h1>
             <h3 class="mt-4 mb-5">Register</h3>
             <div class="form-group mb-2">
-                <form action="/register" method="POST">
+                <form action="/register" method="POST" id="registerForm">
                 <input type="text" class="form-control" id="txtUserName" placeholder="Create Username *" name="user" required ><br>
                 <input type="password" class="form-control" id="txtPassword" placeholder="Create Password *" name="password" required><br>
                 <input type="password" class="form-control" id="txtPassword2" placeholder="Repeat Password *" required><br>
 
                 <div style="text-align:center;">
-                    <input type="submit" value="Submit" class="btnRegister" onclick="userRegistered()"> <br><br>
+                    <input type="submit" value="Submit" class="btnRegister"> <br><br>
                     <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('index.html')">
                 </div>
             </form>
@@ -84,4 +84,10 @@
             console.log("error parsing JSON");
         }
     }
+
+
+    $('#registerForm').submit(function() {
+      userRegistered();
+      return true;
+    });
 </script>

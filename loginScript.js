@@ -62,5 +62,10 @@ function generateSalt(){
     var salt = generateSalt();
     var password = document.getElementById("txtPassword").value;
     var passwordSalt = password+salt;
-    var hashedPass;
+    var hashPass = new Hashes.MD5().hex(password + salt);
+    $("#txtPassword").val(hashPass.toString());
+    $("<input />").attr("type", "hidden")
+          .attr("name", "salt")
+          .attr("value", salt.toString())
+          .appendTo("#registerForm");
   }
