@@ -3,6 +3,12 @@
     margin-bottom: 5%;
 }
 
+#logTitle{
+    text-align: center;
+    margin-top: 0px; 
+    color:white;
+}
+
 .login-form-1 {
     padding: 3%;
     background: #0e4d92;

@@ -11,23 +11,26 @@
     <!--Bootstrap library-->
     <link rel="stylesheet" href="libraries/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
- <!--Custom font-->
- <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
 
+    <!--Custom font-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
 
     <!--Favicon Resources-->
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
 
+    <!--Includes for various javascript libraries-->
+    <script type="text/javascript" src="libraries/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript" src="libraries/popper.min.js"></script>
+    <script type="text/javascript" src="libraries/hashes.min.js"></script>
+    <script src="loginScript.js"></script>
 </head>
 
 <body>
     <div class="container login-container">
-
         <div class="col-xs-2 login-form-1">
-            <h1 style="text-align: center; margin-top: 0px; color:white">
-               Factory Dashboard
+            <h1 id="logTitle">
+                Factory Dashboard
             </h1>
-
             <h3 class="mt-4 mb-5">Login</h3>
             <div class="form-group mb-2">
                 <input type="text" class="form-control" id="txtUserName" placeholder="Your Username *"><br>
@@ -38,19 +41,15 @@
                 </div>
             </div>
             <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
-                <strong>Login incorrect</strong> You should check in on some of those fields below.
+                <strong>Login incorrect.</strong> You should check in on some of those fields below.
             </div>
             <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertWarning">
-                <strong>Caps Lock on</strong> You should check in on some of those fields below.
+                <strong>Caps Lock on.</strong> You should check in on some of those fields below.
             </div>
         </div>
     </div>
 </body>
-<script type="text/javascript" src="libraries/jquery-3.4.1.slim.min.js"></script>
-<script type="text/javascript" src="libraries/popper.min.js"></script>
-<script type="text/javascript" src="libraries/bootstrap.min.js"></script>
-<script type="text/javascript" src="libraries/hashes.min.js"></script>
-<script src="loginScript.js"></script>
+
 <script>
     //Hide alerts
     $("#alertLogin").hide();
@@ -68,8 +67,8 @@
         connection.send('users')
     }
 
-       //When server responds with data
-       connection.onmessage = (e) => {
+    //When server responds with data
+    connection.onmessage = (e) => {
         console.log("logged in");
         console.log("Data recieved is");
         console.log(e.data);
