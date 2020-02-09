@@ -1,11 +1,13 @@
 .login-container {
-    margin-top: 5%;
+    margin-top: 1%;
     margin-bottom: 5%;
 }
 
 .login-form-1 {
-    padding: 9%;
-    background: #282726;
+    padding: 3%;
+    background: #0e4d92;
+    border-radius: 30px;
+
     box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
 }
 
@@ -18,8 +20,18 @@
 .btnSubmit {
     font-weight: 600;
     width: 50%;
-    color: #282726;
+    color: #0e4d92;
     background-color: #fff;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+}
+
+.btnRegister{
+    font-weight: 600;
+    width: 40%;
+    color: white;
+    background-color: #1b88fd;
     border: none;
     border-radius: 1.5rem;
     padding: 2%;

@@ -11,6 +11,9 @@
     <!--Bootstrap library-->
     <link rel="stylesheet" href="libraries/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+ <!--Custom font-->
+ <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+
 
     <!--Favicon Resources-->
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
@@ -19,13 +22,19 @@
 
 <body>
     <div class="container login-container">
+
         <div class="col-xs-2 login-form-1">
-            <h3>Login</h3>
+            <h1 style="text-align: center; margin-top: 0px; color:white">
+               Factory Dashboard
+            </h1>
+
+            <h3 class="mt-4 mb-5">Login</h3>
             <div class="form-group mb-2">
                 <input type="text" class="form-control" id="txtUserName" placeholder="Your Username *"><br>
                 <input type="password" class="form-control" id="txtPassword" placeholder="Your Password *"><br>
                 <div style="text-align:center;">
-                    <input type="submit" value="login" class="btnSubmit" onclick="loginButton()">
+                    <input type="submit" value="Login" class="btnSubmit" onclick="loginButton()"><br><br>
+                    <input type="submit" value="Register" class="btnRegister">
                 </div>
             </div>
             <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
