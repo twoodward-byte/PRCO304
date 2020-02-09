@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Register</title>
+    <meta charset="utf-8">
+
+    <!--Make website responsive-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Bootstrap library-->
+    <link rel="stylesheet" href="libraries/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <!--Custom font-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+
+    <!--Favicon Resources-->
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+
+    <!--Includes for various javascript libraries-->
+    <script type="text/javascript" src="libraries/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript" src="libraries/popper.min.js"></script>
+    <script type="text/javascript" src="libraries/hashes.min.js"></script>
+    <script src="loginScript.js"></script>
+</head>
+
+<body>
+    <div class="container login-container">
+        <div class="col-xs-2 login-form-1">
+            <h1 id="logTitle">
+                Factory Dashboard
+            </h1>
+            <h3 class="mt-4 mb-5">Register</h3>
+            <div class="form-group mb-2">
+                <form action="/register" method="POST">
+                <input type="text" class="form-control" id="txtUserName" placeholder="Create Username *" name="user" required ><br>
+                <input type="password" class="form-control" id="txtPassword" placeholder="Create Password *" name="password" required><br>
+                <input type="password" class="form-control" id="txtPassword2" placeholder="Repeat Password *" required><br>
+
+                <div style="text-align:center;">
+                    <input type="submit" value="Submit" class="btnRegister" onclick="userRegistered()"> <br><br>
+                    <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('index.html')">
+                </div>
+            </form>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
+                <strong>Login incorrect.</strong> You should check the fields above.
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertWarning">
+                <strong>Caps Lock on.</strong> You should check the fields above.
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    //Hide alerts
+    $("#alertLogin").hide();
+    $('#alertWarning').hide();
+    var input = document.getElementById("txtPassword");
+    var text = document.getElementById("alertWarning");
+    startListeningCaps();
+    startListeningEnter();
+    var result;
+
+    //Address of websocket server
+    const url = 'ws://localhost:8080';
+    const connection = new WebSocket(url);
+    connection.onopen = () => {
+        connection.send('users')
+    }
+
+    //When server responds with data
+    connection.onmessage = (e) => {
+        console.log("logged in");
+        console.log("Data recieved is");
+        console.log(e.data);
+        var data = e.data.toString();
+        try {
+            result = JSON.parse(data);
+            console.log(result);
+        } catch{
+            console.log("error parsing JSON");
+        }
+    }
+</script>

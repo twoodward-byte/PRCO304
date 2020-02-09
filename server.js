@@ -76,14 +76,15 @@ wss.on('connection', ws => {
 
 
 //Post new requisitions to server
-app.post('/additem', (req, res) => {
+app.post('/register', (req, res) => {
     //console.log(req.body)
-    db.collection('test').save(req.body, (err, result) => {
+    db.collection('users').save(req.body, (err, result) => {
       if (err) return console.log(err)
       console.log('saved to database')
       res.redirect('/')
     })
   });
+
 
 //Delete post request made to server
 app.post('/delete', (req, res) =>{

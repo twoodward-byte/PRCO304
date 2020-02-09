@@ -51,3 +51,16 @@ function startListeningCaps(){
     }
 }
 
+
+
+        
+function generateSalt(){
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
+
+  function userRegistered(){
+    var salt = generateSalt();
+    var password = document.getElementById("txtPassword").value;
+    var passwordSalt = password+salt;
+    var hashedPass;
+  }
