@@ -26,8 +26,8 @@ function startListeningCaps(){
     console.log("Login button pressed");
 
     //Get username and password values entered by user
-    var userName = document.getElementById("txtUserName").value;
-    var password = document.getElementById("txtPassword").value;
+    var userName = $("#txtUserName").val();
+    var password = $("#txtPassword").val();
     var salt = result[0].salt;
 
     //Now hash the password
@@ -62,7 +62,7 @@ function generateSalt(){
     var salt = generateSalt();
     var password = document.getElementById("txtPassword").value;
     var passwordSalt = password+salt;
-    var hashPass = new Hashes.MD5().hex(password + salt);
+    var hashPass = new Hashes.MD5().hex(password + salt); //Hash password for security
     $("#txtPassword").val(hashPass.toString());
     $("<input />").attr("type", "hidden")
           .attr("name", "salt")
