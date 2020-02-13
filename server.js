@@ -100,6 +100,18 @@ app.post('/delete', (req, res) =>{
       res.redirect('/')
 })
 
+
+app.post('/targets123', (req, res)=>{
+  console.log(req.body.target);
+  db.collection("targets").updateOne({"line": "2"}, {$set: {"target": req.body.target}, function(err, obj){
+    if(err) throw err;
+    console.log("Line updated")
+
+
+
+  }});
+})
+
 //Approval post request made to server
 app.post('/approve', (req, res) =>{
     console.log("approve POST request recieved");
