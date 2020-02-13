@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="libraries/jquery-3.4.1.min.js"></script>
+  <!--Bootstrap CSS CDN-->
+  <link rel="stylesheet" href="libraries/bootstrap.min.css">
+  
+  <!--Custom font-->
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+  
+  <script src="script.js"></script>
+
+  <!--My stylesheet-->
+  <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+
+        <h1 style="float:left" class="ml-3">
+            <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30"
+              height="30" alt="">
+            Approve Users</h1>
+          <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
+            onclick="logout()">Logout</a>
+        
+          <div style="clear:both;"></div>
+          <div id="navDiv"></div>
+
+          
+        
+            <script>
+             jQuery(document).ready(function(){
+                loadNavbar();
+             });
+            </script>
+    </body>
+</html>
