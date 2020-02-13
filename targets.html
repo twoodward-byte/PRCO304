@@ -6,6 +6,7 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
           <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
         </head>
 <body>
 
@@ -52,9 +53,6 @@
 </html>
 <script>
         jQuery(document).ready(function(){
-      $('#navDiv').load("navbar.html", function() {
-      var pathname = window.location.pathname;
-      $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
-     });
+      loadNavbar();
         });
 </script>

@@ -8,6 +8,8 @@
   <!--Custom font-->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
   
+  <script src="script.js"></script>
+
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
     </head>
@@ -25,10 +27,7 @@
         
             <script>
              jQuery(document).ready(function(){
-                $('#navDiv').load("navbar.html", function() {
-                 var pathname = window.location.pathname;
-                 $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
-               });
+                loadNavbar();
              });
             </script>
     </body>

@@ -35,14 +35,11 @@
     checkIfLoggedIn();
 
     jQuery(document).ready(function(){
-      $('#navDiv').load("navbar.html", function() {
-      var pathname = window.location.pathname;
-      $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
-     });
+      loadNavbar();
         //Send a websocket connection requesting data
-    connection.onopen = () => {
-      connection.send('data')
-    }
+      connection.onopen = () => {
+        connection.send('data')
+      }
     });
 
 
