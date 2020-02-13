@@ -22,14 +22,24 @@ function startListeningCaps(){
     });
   }
 
+
+  function getUserSalt(username, data){
+    for(i = 0; i<result.length; i++){
+        if(result[i].name == username){
+            return result[i].salt;
+        }
+    }
+  }
+
   function loginButton() {
     console.log("Login button pressed");
 
     //Get username and password values entered by user
     var userName = $("#txtUserName").val();
     var password = $("#txtPassword").val();
-    var salt = result[0].salt;
 
+    //Need to get correct salt, not just first in list
+    var salt = getUserSalt(userName, result);
     //Now hash the password
     var hashPass = new Hashes.MD5().hex(password + salt);
     //hashPass = "hello";
