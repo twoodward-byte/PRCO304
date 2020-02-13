@@ -1,58 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="libraries/jquery-3.4.1.min.js"></script>
-        <link rel="stylesheet" href="libraries/bootstrap.min.css">
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
-          <!--My stylesheet-->
+
+<head>
+  <script src="libraries/jquery-3.4.1.min.js"></script>
+  <link rel="stylesheet" href="libraries/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+  <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
-        </head>
+</head>
+
 <body>
+  <h1 style="float:left" class="ml-3">
+    <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30" height="30" alt="">
+    Enter Targets</h1>
+  <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
+    onclick="logout()">Logout</a>
 
+  <div style="clear:both;"></div>
+  <div id="navDiv"></div>
 
-
-    <h1 style="float:left" class="ml-3">
-        <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30"
-          height="30" alt="">
-        Enter Targets</h1>
-      <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
-        onclick="logout()">Logout</a>
-    
-      <div style="clear:both;"></div>
-    <div id="navDiv"></div>
-
-    <form>
-<div class="mt-1 mr-3" style="width: 500px">
-  <div class="input-group">
-      <label class="ml-1 mt-1" for="prodLine1Input">Production line 1:</label>
-     <input id="prodLine1Input" class="form-control ml-1" type="text" placeholder="Enter new value">
-     <div class="input-group-append">
-       <input class="btn btn-primary" type="submit" value="Update">
-     </div>
-  </div>
-  <div class="input-group mt-1">
-    <label class="ml-1 mt-1" for="prodLine1Input">Production line 2:</label>
-   <input id="prodLine1Input" class="form-control ml-1" type="text" placeholder="Enter new value">
-   <div class="input-group-append">
-     <input class="btn btn-primary" type="submit" value="Update">
-   </div>
-</div>
-</div>
-
-    
-
-
-    </form>
+  <form>
+    <div class="mt-1 mr-3" style="width: 500px">
+      <div class="input-group">
+        <label class="ml-1 mt-1" for="prodLine1Input">Production line 1:</label>
+        <input id="prodLine1Input" class="form-control ml-1" type="text" placeholder="Enter new value">
+        <div class="input-group-append">
+          <input class="btn btn-primary" type="submit" value="Update">
+        </div>
+      </div>
+      <div class="input-group mt-1">
+        <label class="ml-1 mt-1" for="prodLine1Input">Production line 2:</label>
+        <input id="prodLine1Input" class="form-control ml-1" type="text" placeholder="Enter new value">
+        <div class="input-group-append">
+          <input class="btn btn-primary" type="submit" value="Update">
+        </div>
+      </div>
+    </div>
+  </form>
 </body>
-
-
-
-
 
 </html>
 <script>
-        jQuery(document).ready(function(){
-      loadNavbar();
-        });
+  jQuery(document).ready(function () {
+    loadNavbar();
+  });
 </script>
