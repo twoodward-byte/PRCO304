@@ -26,11 +26,12 @@
 </div>
 
 <script>
-  jQuery(document).ready(function(){
-      $('#navDiv').load("navbar.html", function() {
-        console.log("nav bar loaded");
-     });
-    });
+      jQuery(document).ready(function(){
+        $('#navDiv').load("navbar.html", function() {
+        var pathname = window.location.pathname;
+        $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
+        });
+      });
 </script>
 
 

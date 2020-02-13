@@ -51,9 +51,10 @@
 
 </html>
 <script>
-    jQuery(document).ready(function(){
+        jQuery(document).ready(function(){
       $('#navDiv').load("navbar.html", function() {
-        console.log("nav bar loaded");
+      var pathname = window.location.pathname;
+      $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
      });
-    });
+        });
 </script>

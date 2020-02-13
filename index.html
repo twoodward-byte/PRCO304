@@ -23,6 +23,9 @@
   <!--Jquery library-->
   <script src="libraries/jquery-3.4.1.min.js"></script>
 
+      <!--Make website responsive-->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <script>
     var result;
     //Address of websocket server
@@ -33,7 +36,8 @@
 
     jQuery(document).ready(function(){
       $('#navDiv').load("navbar.html", function() {
-        console.log("nav bar loaded");
+      var pathname = window.location.pathname;
+      $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
      });
         //Send a websocket connection requesting data
     connection.onopen = () => {
