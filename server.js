@@ -15,8 +15,8 @@ const ObjectID = require('mongodb').ObjectID;
 var dbResult;
 var db;
 var client;
-//const uri = "mongodb://localhost:27017/newTestDB" //Local connection string
-const uri = "mongodb+srv://test:test@cluster0-bcfvz.mongodb.net/test?retryWrites=true&w=majority";
+const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
+//const uri = "mongodb+srv://test:test@cluster0-bcfvz.mongodb.net/test?retryWrites=true&w=majority";
 const MongoClient = require('mongodb').MongoClient;
 client = new MongoClient(uri, { useNewUrlParser: true });
 
@@ -70,6 +70,12 @@ wss.on('connection', ws => {
                 //db.close();
               });
         }
+        else if(data.toString()=="targets"){
+          db.collection("targets").find({}).toArray(function(err, result){
+            if (err) throw err;
+            ws.send(JSON.stringify(result));
+          });
+        };
       });
     console.log('web socket sent information');
 })
@@ -101,15 +107,28 @@ app.post('/delete', (req, res) =>{
 })
 
 
-app.post('/targets123', (req, res)=>{
+app.post('/targets2', (req, res)=>{
   console.log(req.body.target);
   db.collection("targets").updateOne({"line": "2"}, {$set: {"target": req.body.target}, function(err, obj){
     if(err) throw err;
     console.log("Line updated")
 
 
+  }});
+  res.redirect('/targets.html');
+
+})
+
+app.post('/targets1', (req, res)=>{
+  console.log(req.body.target);
+  db.collection("targets").updateOne({"line": "1"}, {$set: {"target": req.body.target}, function(err, obj){
+    if(err) throw err;
+    console.log("Line updated")
+
 
   }});
+  res.redirect('/targets.html');
+
 })
 
 //Approval post request made to server

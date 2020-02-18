@@ -20,25 +20,34 @@
   <div style="clear:both;"></div>
   <div id="navDiv"></div>
   <h3>Targets per 24 hour period</h3>
-    <div class="mt-1 mr-3" style="width: 500px">
-      <div class="input-group">
-        <label class="ml-1 mt-1" for="prodLine1Input">Production line 1:</label>
-        <input id="prodLine1Input" class="form-control ml-1" type="text" placeholder="Enter new value">
-        <div class="input-group-append">
-          <input class="btn btn-primary" type="submit" value="Update">
-        </div>
+  <div class="mt-1 mr-3" style="width: 500px">
+
+
+    <div class="input-group">
+      <label class="ml-1 mt-1" for="prodLine1Input">Production Line 1:</label>
+      <input id="prodLine1Input" class="form-control ml-1" type="text" placeholder="Enter new value">
+      <div class="input-group-append">
+        <input class="btn btn-primary" type="button" id="btnProdLine1" value="Update">
       </div>
-      <div class="input-group mt-1">
-        Production Line 2:
-        <form action="/targets123" method="POST">
-          <input type="text" name="target" id="target">
-          <input type="submit" value="Update">
-          </form>
-      <!--</div>-->
-    </div>
     </div>
 
   
+      <div class="input-group mt-1">
+      <label class="ml-1 mt-1">
+      Production Line 2:
+    </label>
+        <input type="text" class="form-control ml-1" name="target" id="target" placeholder="Enter new value">
+        <div class="input-group-append">
+          <input class="btn btn-primary" id="btnProdLine2" type="button" value="Update">
+        </div>
+      
+    </div>
+
+
+
+  </div>
+
+
 </body>
 
 </html>
@@ -46,4 +55,34 @@
   jQuery(document).ready(function () {
     loadNavbar();
   });
+
+  var x = $('#target').val();
+
+  var method = "POST"
+  $('#btnProdLine2').click(function(){
+    var params = {
+        target : $('#target').val()
+      };
+        $.ajax({
+          type : method,
+          url : "/targets2",
+          data : params
+        }).done(function(e){
+          console.log(e);
+        })
+      });
+
+      $('#btnProdLine1').click(function(){
+     params = {
+        target : $('#prodLine1Input').val()
+      };
+        $.ajax({
+          type : method,
+          url : "/targets1",
+          data : params
+        }).done(function(e){
+          console.log(e);
+        })
+      });
+
 </script>
