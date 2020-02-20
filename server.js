@@ -63,7 +63,7 @@ app.get("/getPieData", function(require, response){
 
 
 
-//Post new requisitions to server
+//Endpoint for posting new requisitions to the server
 app.post('/register', (req, res) => {
     //console.log(req.body)
     db.collection('users').save(req.body, (err, result) => {
@@ -73,8 +73,7 @@ app.post('/register', (req, res) => {
     })
   });
 
-
-//Delete post request made to server
+//Endpoint for deleting
 app.post('/delete', (req, res) =>{
     console.log("delete POST request recieved");
     console.log(req.body.id);
@@ -94,11 +93,8 @@ app.post('/targets2', (req, res)=>{
   db.collection("targets").updateOne({"line": "2"}, {$set: {"target": req.body.target}, function(err, obj){
     if(err) throw err;
     console.log("Line updated")
-
-
   }});
   res.redirect('/targets.html');
-
 })
 
 app.post('/targets1', (req, res)=>{
@@ -106,11 +102,8 @@ app.post('/targets1', (req, res)=>{
   db.collection("targets").updateOne({"line": "1"}, {$set: {"target": req.body.target}, function(err, obj){
     if(err) throw err;
     console.log("Line updated")
-
-
   }});
   res.redirect('/targets.html');
-
 })
 
 //Approval post request made to server
