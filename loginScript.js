@@ -1,4 +1,4 @@
-const e = require("express");
+//const e = require("express");
 
 function startListeningCaps() {
     input.addEventListener("keyup", function (event) {
@@ -27,18 +27,20 @@ function startListeningEnter() {
 
 function getUserSalt(username, data) {
     for (i = 0; i < result.length; i++) {
-        if (result[i].name == username) {
+        if (result[i].user == username) {
             return result[i].salt;
         }
     }
 }
 
-function checkUserUnique(username, data){
+function checkUserUnique(username){
+    var unique = true;
     for (i = 0; i < result.length; i++) {
-        if (result[i].name == username) {
-            return false;
+        if (result[i].user == username) {
+            unique = false;
         }
     }
+    return unique;
 }
 
 function loginButton() {
@@ -54,7 +56,7 @@ function loginButton() {
     var wrongPassword = true; //Set password as wrong by default
     console.log(hashPass);
     for (k in result) { //For each user in the database
-        if (userName == result[k].name && hashPass == result[k].password) { //Check if the username and password match up
+        if (userName == result[k].user && hashPass == result[k].password) { //Check if the username and password match up
             sessionStorage.setItem('loggedIn', 'true');
             sessionStorage.setItem('role', result[k].role);
             wrongPassword = false;
@@ -72,8 +74,10 @@ function generateSalt() {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
+
 function userRegistered() {
-    if (checkUserUnique()){
+    var userName = $("#txtUserName").val();
+    if (checkUserUnique(userName)){
         var salt = generateSalt(); //Generate random salt
         var password = $("#txtPassword").val(); //Get password
         var passwordSalt = password + salt;
