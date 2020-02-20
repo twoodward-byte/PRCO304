@@ -89,6 +89,7 @@ function userRegistered() {
             .appendTo("#registerForm");
     }
     else{
+        //Go back to login page
         document.location.assign("login.html");
     }
 

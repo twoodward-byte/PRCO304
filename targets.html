@@ -5,6 +5,7 @@
   <script src="libraries/jquery-3.4.1.min.js"></script>
   <link rel="stylesheet" href="libraries/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
@@ -31,23 +32,27 @@
       </div>
     </div>
 
-  
-      <div class="input-group mt-1">
+
+    <div class="input-group mt-1">
       <label class="ml-1 mt-1">
-      Production Line 2:
-    </label>
-        <input type="text" class="form-control ml-1" name="target" id="target" placeholder="Enter new value">
-        <div class="input-group-append">
-          <input class="btn btn-primary" id="btnProdLine2" type="button" value="Update">
-        </div>
-      
+        Production Line 2:
+      </label>
+      <input type="text" class="form-control ml-1" name="target" id="target" placeholder="Enter new value">
+      <div class="input-group-append">
+        <input class="btn btn-primary" id="btnProdLine2" type="button" value="Update">
+      </div>
+
     </div>
 
 
 
   </div>
-
-
+  <br>
+  <div class="alert alert-success alert-dismissible ml-1" role="alert" id="targetAlert" role="alert" style="width: 25%;">
+    Target successfully updated <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 </body>
 
 </html>
@@ -55,34 +60,39 @@
   jQuery(document).ready(function () {
     loadNavbar();
   });
-
+  //$('.alert').alert();
+  $('#targetAlert').hide();
+  
   var x = $('#target').val();
 
   var method = "POST"
-  $('#btnProdLine2').click(function(){
+  $('#btnProdLine2').click(function () {
     var params = {
-        target : $('#target').val()
-      };
-        $.ajax({
-          type : method,
-          url : "/targets2",
-          data : params
-        }).done(function(e){
-          console.log(e);
-        })
-      });
+      target: $('#target').val()
+    };
+    $.ajax({
+      type: method,
+      url: "/targets2",
+      data: params
+    }).done(function (e) {
+      console.log(e);
+      $('#targetAlert').show()
+      
+    })
+  });
 
-      $('#btnProdLine1').click(function(){
-     params = {
-        target : $('#prodLine1Input').val()
-      };
-        $.ajax({
-          type : method,
-          url : "/targets1",
-          data : params
-        }).done(function(e){
-          console.log(e);
-        })
-      });
+  $('#btnProdLine1').click(function () {
+    params = {
+      target: $('#prodLine1Input').val()
+    };
+    $.ajax({
+      type: method,
+      url: "/targets1",
+      data: params
+    }).done(function (e) {
+      console.log(e);
+      $('#targetAlert').show()
+    })
+  });
 
 </script>
