@@ -53,9 +53,6 @@
 
       //Convert all forms to ajax, more flexible than html forms
 
-
-
-
       $('#btnSubmit').click(function(){
         $.ajax({
           type : method,
@@ -66,9 +63,6 @@
         })
       })
     });
-
-
- 
 
     //When server responds with data
     connection.onmessage = (e) => {
@@ -122,9 +116,10 @@
     <!--Div that will hold the line chart-->
     <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
   </div>
-  <h3 >Targets:</h3><br>
+  <h1>Targets:</h1>
   <div>
-  <h4>Line 1: </h4><p id="line1Target"></p> <h4>Line 2: </h4><p id="line2Target"></p>
+  <h2>Line 1: <small id="line1Target"></small></h2>
+  <h2>Line 2: <small id="line2Target"></small></h2>
 </div>
 
 
