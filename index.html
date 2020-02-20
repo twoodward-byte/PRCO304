@@ -23,91 +23,133 @@
   <!--Jquery library-->
   <script src="libraries/jquery-3.4.1.min.js"></script>
 
-      <!--Make website responsive-->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--Make website responsive-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script>
+        var amount1 = 1;
+    var amount2 = 1;
+       //Makes an ajax call and populates the pie chart
+       $.get("/getPieData", function (data) {
+      try {
+        var bottle = data;
+     //   $('#line1Target').text(bottle[0].target);
+        //$('#line2Target').text(bottle[1].target);
+        amount1 = bottle[0].amount;
+        amount2 = bottle[1].amount;
+      } catch (Exception) {
+        console.log(Exception)
+      }
+    });
     var result;
+
     //Address of websocket server
     const url = 'ws://localhost:8080'
-    const connection = new WebSocket(url)
+    //const connection = new WebSocket(url)
 
     checkIfLoggedIn();
 
-    jQuery(document).ready(function(){
+    jQuery(document).ready(function () {
       loadNavbar();
-        //Send a websocket connection requesting data
-      connection.onopen = () => {
+      //Send a websocket connection requesting data
+      //connection.onopen = () => {
         //connection.send('data');
-        connection.send('targets');
-
-
-
-      }
+        //connection.send('targets');
+     // }
 
 
       var params = {
-        target : 123
+        target: 123
       };
       var method = "POST";
 
-      //Convert all forms to ajax, more flexible than html forms
-
-      $('#btnSubmit').click(function(){
+      $('#btnSubmit').click(function () {
         $.ajax({
-          type : method,
-          url : "/targets2",
-          data : params
-        }).done(function(e){
+          type: method,
+          url: "/targets2",
+          data: params
+        }).done(function (e) {
           console.log(e);
         })
       })
     });
 
     //When server responds with data
-    connection.onmessage = (e) => {
-      console.log(e);
-      var data = e.data.toString();
-      try {
-        result = JSON.parse(data);
-        //console.log(result);
-        console.log(result[0].name)
-      } catch{
-        console.log("Error")
-      }
-    }
+   // connection.onmessage = (e) => {
+    //  console.log(e);
+    //  var data = e.data.toString();
+    //  try {
+    //    result = JSON.parse(data);
+    /    //console.log(result);
+    //    console.log(result[0].name)
+     // } catch{
+    //    console.log("Error")
+    //  }
+    //}
 
-    connection.onmessage=()=>{
-      console.log("TARGETS");
-    }
+  //  connection.onmessage = () => {
+  //    console.log("TARGETS");
+    //}
 
 
     // Load the Visualization API and the corechart package.
     google.charts.load('current', { 'packages': ['corechart'] });
 
     // Set a callback to run when the Google Visualization API is loaded.
-    google.charts.setOnLoadCallback(drawChart);
+    
 
- 
+
 
     google.charts.load('current', { packages: ['corechart', 'line'] });
     google.charts.setOnLoadCallback(drawBasic);
- 
+    
+// Callback that creates and populates a data table,
+// instantiates the pie chart, passes in the data and
+// draws it.
+function drawChart() {
+  try{
+    var bracket = amount1;
+    var sidewall = amount2;
+  }catch{
+    console.log("error")
+  }
+
+  // Create the data table.
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Topping');
+  data.addColumn('number', 'Slices');
+  console.log(bracket);
+  data.addRows([
+    ['Bracket #423', parseInt(bracket)],
+    ['Sidewall #323', parseInt(sidewall)]
+  ]);
+  // Set chart options
+  var options = {
+    'title': 'Assembled part #32',
+    'width': '100%',
+    'height': 500
+  };
+
+  // Instantiate and draw our chart, passing in some options.
+  var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+  chart.draw(data, options);
+}
+    google.charts.setOnLoadCallback(drawChart)
+
   </script>
 </head>
 
 <body>
   <h1 style="float:left" class="ml-3">
-    <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30"
-      height="30" alt="">
+    <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30" height="30" alt="">
     Management View</h1>
-  <a style="position: relative; float: right; text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
-    onclick="logout()">Logout</a>
+  <a style="position: relative; float: right; text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link"
+    href="#" onclick="logout()">Logout</a>
 
   <div style="clear:both;"></div>
   <div id="navDiv"></div>
   <div style="width: 100%; overflow: hidden;">
-<!--
+    <!--
     <button id="btnSubmit"> Click me </button>
 -->
     <!--Div that will hold the pie chart-->
@@ -118,25 +160,26 @@
   </div>
   <h1>Targets:</h1>
   <div>
-  <h2>Line 1: <small id="line1Target"></small></h2>
-  <h2>Line 2: <small id="line2Target"></small></h2>
-</div>
+    <h2>Line 1: <small id="line1Target"></small></h2>
+    <h2>Line 2: <small id="line2Target"></small></h2>
+  </div>
 
 
-<script>
-  
-  $.get("/getMyData", function( data ) {
-          try{
-            var bottle = data;
-            console.log("/get my data returns " + bottle[0].amount);
-            $('#line1Target').text(bottle[0].target);
-            $('#line2Target').text(bottle[1].target);
-          }catch(Exception){
-            console.log(Exception)
-          }
-          
-        });
-</script>
+  <script>
+
+    //Makes an ajax call and populates the target text boxes
+    $.get("/getMyData", function (data) {
+      try {
+        var bottle = data;
+        $('#line1Target').text(bottle[0].target);
+        $('#line2Target').text(bottle[1].target);
+      } catch (Exception) {
+        console.log(Exception)
+      }
+    });
+
+       
+  </script>
 </body>
 
 </html>

@@ -18,10 +18,10 @@ function checkIfLoggedIn() {
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
 // draws it.
-function drawChart() {
+function drawChart(amount1, amount2) {
   try{
-    var bracket = result[0].amount;
-    var sidewall = result[1].amount;
+    var bracket = amount1;
+    var sidewall = amount2;
   }catch{
     console.log("error")
   }

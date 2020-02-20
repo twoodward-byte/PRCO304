@@ -5,8 +5,8 @@
 const express = require('express');
 const mongo = require('mongodb');
 const bodyParser = require('body-parser');
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
+//const WebSocket = require('ws');
+//const wss = new WebSocket.Server({ port: 8080 });
 const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/'));
@@ -24,12 +24,6 @@ client.connect(err => {
   db = client.db("FinalProject");
   app.listen(9000, '0.0.0.0', () => {
     console.log('listening on 9000')
-    db.collection("targets").find({}).toArray(function(err, result) {
-        if (err) throw err;
-        console.log(result);
-        dbResult = result;
-        //db.close();
-      });
 })
 });
 
@@ -40,10 +34,11 @@ app.get('/', (req, res) => {
     })
 })
 
+//Endpoint for the line target data
 app.get("/getMyData", function(require, response){
   db.collection("targets").find({}).toArray(function(err, result) {
     if (err) throw err;
-    //console.log(result);
+    console.log(result);
     dbResult = result;
     //ws.send(JSON.stringify(dbResult));
     //db.close();
@@ -51,45 +46,21 @@ app.get("/getMyData", function(require, response){
   response.json(dbResult);
 });
 
-//Connection made to web socket
-wss.on('connection', ws => {
-    console.log('connection made');
-    wss.on('message', message => {
-        console.log('Recieved message => ${message}');
-        console.log(db.collection('test').find().toArray());
-        //ws.send(JSON.stringify(db.collection('test').find().toArray()));
-    })
-    //Send information via websockets
-    ws.on('message', function incoming(data) {
-        //Execute code depending on message
-        if(data.toString() == "data"){
-            console.log('message is hey');
-            db.collection("partsProduced").find({}).toArray(function(err, result) {
-                if (err) throw err;
-                //console.log(result);
-                dbResult = result;
-                ws.send(JSON.stringify(dbResult));
-                //db.close();
-              });
-        }
-        else if(data.toString() == "users"){
-            db.collection("users").find({}).toArray(function(err, result) {
-                if (err) throw err;
-                //console.log(result);
-                dbResult = result;
-                ws.send(JSON.stringify(dbResult));
-                //db.close();
-              });
-        }
-        else if(data.toString()=="targets"){
-          db.collection("targets").find({}).toArray(function(err, result){
-            if (err) throw err;
-            ws.send(JSON.stringify(result));
-          });
-        };
-      });
-    console.log('web socket sent information');
-})
+//Endpoint for the pie chart data
+app.get("/getPieData", function(require, response){
+  var resultPie;
+  db.collection("partsProduced").find({}).toArray(function(err, result) {
+    if (err) throw err;
+    console.log(result);
+    resultPie = result;
+    //ws.send(JSON.stringify(dbResult));
+    //db.close();
+    response.json(resultPie);
+
+  });
+});
+
+
 
 
 //Post new requisitions to server
