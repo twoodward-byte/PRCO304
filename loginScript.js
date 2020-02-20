@@ -24,11 +24,11 @@ function startListeningEnter() {
     });
 }
 
-
+//MAKE this self contained function getting user list through argument
 function getUserSalt(username, data) {
-    for (i = 0; i < result.length; i++) {
-        if (result[i].user == username) {
-            return result[i].salt;
+    for (i = 0; i < data.length; i++) {
+        if (data[i].user == username) {
+            return data[i].salt;
         }
     }
 }
@@ -49,16 +49,16 @@ function loginButton() {
     //Get password entered
     var password = $("#txtPassword").val();
     //Find correct user's salt in database
-    var salt = getUserSalt(userName, result);
+    var salt = getUserSalt(userName, users);
     //Now hash the password with the correct salt
     var hashPass = new Hashes.MD5().hex(password + salt);
     var k; //k is used in loop below to find user
     var wrongPassword = true; //Set password as wrong by default
     console.log(hashPass);
-    for (k in result) { //For each user in the database
-        if (userName == result[k].user && hashPass == result[k].password) { //Check if the username and password match up
+    for (k in users) { //For each user in the database
+        if (userName == users[k].user && hashPass == users[k].password) { //Check if the username and password match up
             sessionStorage.setItem('loggedIn', 'true');
-            sessionStorage.setItem('role', result[k].role);
+            sessionStorage.setItem('role', users[k].role);
             wrongPassword = false;
             //Go to main page
             document.location.assign("index.html");
@@ -77,7 +77,7 @@ function generateSalt() {
 
 function userRegistered() {
     var userName = $("#txtUserName").val();
-    if (checkUserUnique(userName)){
+    if (checkUserUnique(userName)){ //If desired username is unique
         var salt = generateSalt(); //Generate random salt
         var password = $("#txtPassword").val(); //Get password
         var passwordSalt = password + salt;

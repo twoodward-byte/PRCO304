@@ -46,6 +46,17 @@ app.get("/getMyData", function(require, response){
   response.json(dbResult);
 });
 
+app.get("/users", function(require, response){
+  db.collection("users").find({}).toArray(function(err, result){
+    if (err) throw err;
+    console.log(result);
+    dbResult = result;
+    //ws.send(JSON.stringify(dbResult));
+    //db.close();
+  });
+  response.json(dbResult);
+});
+
 //Endpoint for the pie chart data
 app.get("/getPieData", function(require, response){
   var resultPie;
