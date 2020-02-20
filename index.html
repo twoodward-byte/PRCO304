@@ -40,6 +40,20 @@
       connection.onopen = () => {
         connection.send('data');
         connection.send('targets');
+
+
+
+        $.get("/getMyData", function( data ) {
+          try{
+            var bottle = data;
+            console.log("/get my data returns " + bottle[0].amount);
+            $('#line1Target').text(bottle[0].target);
+            $('#line2Target').text(bottle[1].target);
+          }catch(Exception){
+            console.log(Exception)
+          }
+          
+        });
       }
 
 
@@ -121,7 +135,7 @@
   </div>
   <h3 >Targets:</h3><br>
   <div>
-  <h4>Line 1: </h4><p id="testP"></p> <h4>Line 2: </h4>
+  <h4>Line 1: </h4><p id="line1Target"></p> <h4>Line 2: </h4><p id="line2Target"></p>
 </div>
 </body>
 

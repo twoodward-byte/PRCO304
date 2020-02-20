@@ -40,6 +40,17 @@ app.get('/', (req, res) => {
     })
 })
 
+app.get("/getMyData", function(require, response){
+  db.collection("targets").find({}).toArray(function(err, result) {
+    if (err) throw err;
+    //console.log(result);
+    dbResult = result;
+    //ws.send(JSON.stringify(dbResult));
+    //db.close();
+  });
+  response.json(dbResult);
+});
+
 //Connection made to web socket
 wss.on('connection', ws => {
     console.log('connection made');
