@@ -50,7 +50,9 @@
       loadNavbar();
     });
 
-
+    function refreshPage(){
+      document.location.reload();
+    }
     function fillTable(users) {
       var apprTable = document.getElementById('itemTable');
       var i;
@@ -66,7 +68,7 @@
           +'</td>'
           apprTable.appendChild(tr);
       
-      });
+      }); 
     }
 
     $.get("/users", function (data) {
