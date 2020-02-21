@@ -51,11 +51,6 @@
 
     jQuery(document).ready(function () {
       loadNavbar();
-      //Send a websocket connection requesting data
-      //connection.onopen = () => {
-      //connection.send('data');
-      //connection.send('targets');
-      // }
 
 
       var params = {
@@ -73,24 +68,6 @@
         })
       })
     });
-
-    //When server responds with data
-    // connection.onmessage = (e) => {
-    //  console.log(e);
-    //  var data = e.data.toString();
-    //  try {
-    //    result = JSON.parse(data);
-    // console.log(result);
-    //    console.log(result[0].name)
-    // } catch{
-    //    console.log("Error")
-    //  }
-    //}
-
-    //  connection.onmessage = () => {
-    //    console.log("TARGETS");
-    //}
-
 
     // Load the Visualization API and the corechart package.
     google.charts.load('current', { 'packages': ['corechart'] });
