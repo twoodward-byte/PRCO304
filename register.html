@@ -44,12 +44,12 @@
 
                 <div style="text-align:center;">
                     <input type="submit" value="Submit" class="btnRegister" onclick="registerUser()"> <br><br>
-                    <input type="button" value="Back" class="btnSubmit" >
+                    <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('index.html')"">
                 </div>
 
             </div>
-            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
-                <strong>Login incorrect.</strong> You should check the fields above.
+            <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertRegister">
+                <strong>Register successful.</strong>
             </div>
             <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertWarning">
                 <strong>Caps Lock on.</strong> You should check the fields above.
@@ -62,6 +62,8 @@
     //Hide alerts
     $("#alertLogin").hide();
     $('#alertWarning').hide();
+    $('#alertRegister').hide();
+
     var input = document.getElementById("txtPassword");
     var text = document.getElementById("alertWarning");
     startListeningCaps();

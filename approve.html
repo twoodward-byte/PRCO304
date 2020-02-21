@@ -1,36 +1,80 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script src="libraries/jquery-3.4.1.min.js"></script>
+
+<head>
+  <script src="libraries/jquery-3.4.1.min.js"></script>
   <!--Bootstrap CSS CDN-->
   <link rel="stylesheet" href="libraries/bootstrap.min.css">
-  
+
   <!--Custom font-->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
-  
+
   <script src="script.js"></script>
 
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
+</head>
 
-        <h1 style="float:left" class="ml-3">
-            <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30"
-              height="30" alt="">
-            Approve Users</h1>
-          <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
-            onclick="logout()">Logout</a>
-        
-          <div style="clear:both;"></div>
-          <div id="navDiv"></div>
+<body>
 
-          
-        
-            <script>
-             jQuery(document).ready(function(){
-                loadNavbar();
-             });
-            </script>
-    </body>
+  <h1 style="float:left" class="ml-3">
+    <img class="mb-2" src="/icons/baseline_work_black_18dp.png" width="30" height="30" alt="">
+    Approve Users</h1>
+  <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
+    onclick="logout()">Logout</a>
+
+  <div style="clear:both;"></div>
+  <div id="navDiv"></div>
+
+  <div class="table-responsive container-fluid mr-0 pl-0 pr-0" style="width:99.9999%">
+    <!--Main table-->
+    <table style="width:inherit" class="table table-striped table-bordered table-hover table-dark mr-0 pr-0"
+      id="itemTable">
+      <tr>
+        <th>User</th>
+        <th>Status </th>
+
+        <th class="table-responsive">Status<button
+            style="position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;" class="btn btn-success ml-1"
+            onclick="refreshPage()">Refresh</button></th>
+      </tr>
+    </table>
+  </div>
+
+
+
+
+  <script>
+    var users;
+    jQuery(document).ready(function () {
+      loadNavbar();
+    });
+
+
+    function fillTable(users) {
+      var apprTable = document.getElementById('itemTable');
+
+      users.forEach(function(object) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = 
+          //Item description
+          '<td>' + object.user + '</td>';
+          apprTable.appendChild(tr);
+      
+      });
+    }
+
+    $.get("/users", function (data) {
+      try {
+        console.log(data);
+        users = data;
+        fillTable(users);
+      } catch (Exception) {
+        console.log(Exception)
+      }
+    });
+    
+  </script>
+</body>
+
 </html>
