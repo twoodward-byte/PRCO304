@@ -101,7 +101,8 @@
             var params = {
                 user: userName,
                 password: hashPass,
-                salt: salt
+                salt: salt,
+                status: "waiting"
             };
             $.ajax({
                 type: "POST",
