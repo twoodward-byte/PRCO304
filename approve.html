@@ -50,6 +50,21 @@
       loadNavbar();
     });
 
+    function approveBtn(id){
+      var params = {
+        id: id,
+        status: "approved"
+      }
+      $.ajax({
+                type: "POST",
+                url: "/approve",
+                data: params
+            }).done(function (e) {
+                console.log(e);
+               // $('#alertRegister').show()
+            })
+    }
+
     function refreshPage(){
       document.location.reload();
     }

@@ -46,6 +46,7 @@ app.get("/getMyData", function(require, response){
   response.json(dbResult);
 });
 
+//Endpoint for sending the users data to the client
 app.get("/users", function(require, response){
   db.collection("users").find({}).toArray(function(err, result){
     if (err) throw err;
@@ -117,15 +118,14 @@ app.post('/targets1', (req, res)=>{
 //Approval post request made to server
 app.post('/approve', (req, res) =>{
     console.log("approve POST request recieved");
-    console.log(req.body.id);
+    console.log("body of request" + req.body.id);
     var id = req.body.id;
     var newvalues = { $set: {status: "approved" } };
-    db.collection("test").updateOne({ _id: new mongo.ObjectId(id) }, newvalues, function(err, obj) {
+    db.collection("users").updateOne({ _id: new mongo.ObjectId(id) }, newvalues, function(err, obj) {
         if (err) throw err;
-        console.log("1 document deleted");
        // db.close();
       });
       //Go back to homepage
-      res.redirect('/')
+     // res.redirect('/')
 });
   

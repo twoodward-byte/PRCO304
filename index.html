@@ -136,16 +136,27 @@
     }
     google.charts.setOnLoadCallback(drawChart)
  //Makes an ajax call and populates the target text boxes
- $.get("/getMyData", function (data) {
-      try {
-        var bottle = data;
-        $('#line1Target').text(bottle[0].target);
-        $('#line2Target').text(bottle[1].target);
-      } catch (Exception) {
-        console.log(Exception)
-      }
-    });
+ //$.get("/getMyData", function (data) {
+    //  try {
+     //   var bottle = data;
+
+        
+     // } catch (Exception) {
+     //   console.log(Exception)
+    //  }
+   // });
+
+  $.ajax({
+    type: 'GET',
+    url: '/getMyData',
+    success: testFunc,
+  })
     //document.location.reload();
+
+    function testFunc(bottle){
+      $('#line1Target').text(bottle[0].target);
+        $('#line2Target').text(bottle[1].target);
+    }
   </script>
 </head>
 
