@@ -71,9 +71,6 @@ app.get("/getPieData", function(require, response){
   });
 });
 
-
-
-
 //Endpoint for posting new requisitions to the server
 app.post('/register', (req, res) => {
     //console.log(req.body)

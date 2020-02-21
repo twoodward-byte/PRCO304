@@ -33,10 +33,10 @@ function getUserSalt(username, data) {
     }
 }
 
-function checkUserUnique(username){
+function checkUserUnique(username, users){
     var unique = true;
-    for (i = 0; i < result.length; i++) {
-        if (result[i].user == username) {
+    for (i = 0; i < users.length; i++) {
+        if (users[i].user == username) {
             unique = false;
         }
     }

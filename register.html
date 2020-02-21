@@ -19,11 +19,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
 
     <!--Includes for various javascript libraries-->
-    <script type="text/javascript" src="libraries/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript" src="libraries/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="libraries/popper.min.js"></script>
     <script type="text/javascript" src="libraries/hashes.min.js"></script>
     <script src="loginScript.js"></script>
-    
+
 </head>
 
 <body>
@@ -34,16 +34,19 @@
             </h1>
             <h3 class="mt-4 mb-5">Register</h3>
             <div class="form-group mb-2">
-                <form action="/register" method="POST" id="registerForm">
-                <input type="text" class="form-control" id="txtUserName" placeholder="Create Username *" name="user" required ><br>
-                <input type="password" class="form-control" id="txtPassword" placeholder="Create Password *" name="password" required><br>
-                <input type="password" class="form-control" id="txtPassword2" placeholder="Repeat Password *" required><br>
+
+                <input type="text" class="form-control" id="txtUserName" placeholder="Create Username *" name="user"
+                    required><br>
+                <input type="password" class="form-control" id="txtPassword" placeholder="Create Password *"
+                    name="password" required><br>
+                <input type="password" class="form-control" id="txtPassword2" placeholder="Repeat Password *" required
+                    oninput="check(this)"><br>
 
                 <div style="text-align:center;">
-                    <input type="submit" value="Submit" class="btnRegister"> <br><br>
-                    <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('index.html')">
+                    <input type="submit" value="Submit" class="btnRegister" onclick="registerUser()"> <br><br>
+                    <input type="button" value="Back" class="btnSubmit" >
                 </div>
-            </form>
+
             </div>
             <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
                 <strong>Login incorrect.</strong> You should check the fields above.
@@ -63,32 +66,50 @@
     var text = document.getElementById("alertWarning");
     startListeningCaps();
     startListeningEnter();
-    var result;
+    var users;
+
+    //Makes an ajax call and populates the target text boxes
+    $.get("/users", function (data) {
+      try {
+        users = data;
+      } catch (Exception) {
+        console.log(Exception)
+      }
+    });
 
     //Address of websocket server
-    const url = 'ws://localhost:8080';
-    //const connection = new WebSocket(url);
-   // connection.onopen = () => {
-   //     connection.send('users')
-  //  }
+    //const url = 'ws://localhost:8080';
 
-    //When server responds with data
- //   connection.onmessage = (e) => {
-  //      console.log("logged in");
-   //     console.log("Data recieved is");
-   //     console.log(e.data);
-   //     var data = e.data.toString();
-   //     try {
-   ///         result = JSON.parse(data);
-    //        console.log(result);
-    //    } catch{
-    //        console.log("error parsing JSON");
-    //    }
-    //}
+    function check(input) {
+        if (input.value != document.getElementById('txtPassword').value) {
+            input.setCustomValidity('Password Must be Matching.');
+        } else {
+            // input is valid -- reset the error message
+            input.setCustomValidity('');
+        }
+    }
 
+    function registerUser() {
+        var userName = $("#txtUserName").val();
+        if (checkUserUnique(userName, users)) { //If desired username is unique
+            var salt = generateSalt(); //Generate random salt
+            var password = $("#txtPassword").val(); //Get password
+            var passwordSalt = password + salt;
+            var hashPass = new Hashes.MD5().hex(password + salt); //Hash password for security
+            var params = {
+                user: userName,
+                password: hashPass,
+                salt: salt
+            };
+            $.ajax({
+                type: "POST",
+                url: "/register",
+                data: params
+            }).done(function (e) {
+                console.log(e);
+                $('#alertRegister').show()
+            })
+        }
+    }
 
-    $('#registerForm').submit(function() {
-      userRegistered();
-      return true;
-    });
 </script>
