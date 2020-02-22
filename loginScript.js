@@ -57,16 +57,26 @@ function loginButton() {
     var notApproved;
     console.log(hashPass);
     for (k in users) { //For each user in the database
-        if (userName == users[k].user && hashPass == users[k].password && users[k].status == "approved") { //Check if the username and password match up
-            sessionStorage.setItem('loggedIn', 'true');
-            sessionStorage.setItem('role', users[k].role);
+        if (userName == users[k].user && hashPass == users[k].password) { //Check if the username and password match up
             wrongPassword = false;
-            //Go to main page
-            document.location.assign("index.html");
+            if(users[k].status == "approved"){
+                sessionStorage.setItem('loggedIn', 'true');
+                sessionStorage.setItem('role', users[k].role);
+                //wrongPassword = false;
+                //Go to main page
+                document.location.assign("index.html");
+            }
+            else{
+                notApproved = true;
+            }
         }
     }
+
     if (wrongPassword == true) {
         $('#alertLogin').show();
+    }
+    if(notApproved == true){
+        $('#alertApproved').show();
     }
 }
 
