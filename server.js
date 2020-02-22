@@ -33,17 +33,18 @@ app.get('/', (req, res) => {
         if (err) return console.log(err);
     })
 })
-
+var returnData;
 //Endpoint for the line target data
 app.get("/getMyData", function(require, response){
+  
   db.collection("targets").find({}).toArray(function(err, result) {
     if (err) throw err;
-    console.log(result);
-    dbResult = result;
+    console.log("Get my data successful"+result);
+    returnData = result;
     //ws.send(JSON.stringify(dbResult));
     //db.close();
   });
-  response.json(dbResult);
+  response.json(returnData);
 });
 
 //Endpoint for sending the users data to the client
@@ -82,14 +83,14 @@ app.post('/register', (req, res) => {
     })
   });
 
-//Endpoint for deleting
+//Endpoint for deleting users
 app.post('/delete', (req, res) =>{
     console.log("delete POST request recieved");
     console.log(req.body.id);
     var id = req.body.id;
-    db.collection("test").deleteOne({ _id: new mongo.ObjectId(id) }, function(err, obj) {
+    db.collection("users").deleteOne({ _id: new mongo.ObjectId(id) }, function(err, obj) {
         if (err) throw err;
-        console.log("1 document deleted");
+        console.log("1 user deleted");
        // db.close();
       });
       //Go back to homepage
@@ -126,6 +127,6 @@ app.post('/approve', (req, res) =>{
        // db.close();
       });
       //Go back to homepage
-     // res.redirect('/')
+    res.redirect('/approve.html')
 });
   

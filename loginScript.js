@@ -54,9 +54,10 @@ function loginButton() {
     var hashPass = new Hashes.MD5().hex(password + salt);
     var k; //k is used in loop below to find user
     var wrongPassword = true; //Set password as wrong by default
+    var notApproved;
     console.log(hashPass);
     for (k in users) { //For each user in the database
-        if (userName == users[k].user && hashPass == users[k].password) { //Check if the username and password match up
+        if (userName == users[k].user && hashPass == users[k].password && users[k].status == "approved") { //Check if the username and password match up
             sessionStorage.setItem('loggedIn', 'true');
             sessionStorage.setItem('role', users[k].role);
             wrongPassword = false;

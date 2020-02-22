@@ -2,7 +2,9 @@
 <html>
 
 <head>
+  <!--Jquery library-->
   <script src="libraries/jquery-3.4.1.min.js"></script>
+
   <!--Bootstrap CSS CDN-->
   <link rel="stylesheet" href="libraries/bootstrap.min.css">
 
@@ -41,13 +43,24 @@
     </table>
   </div>
 
+<div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertApprove">
+    <strong>User approved</strong>
+</div>
+<div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertDelete">
+  <strong>User deleted</strong>
+</div>
 
 
 
   <script>
     var users;
+
+    checkIfLoggedIn();
+
     jQuery(document).ready(function () {
       loadNavbar();
+      $('#alertApprove').hide();
+      $('#alertDelete').hide();
     });
 
     function approveBtn(id){
@@ -58,11 +71,38 @@
       $.ajax({
                 type: "POST",
                 url: "/approve",
-                data: params
+                data: params,
+                success: function(){
+                  $('#alertApprove').show();
+                  //window.location.reload();
+                },
+                error: function(){
+                  console.log("error");
+                },
+                complete: function(){
+                  console.log("complete");
+                }
             }).done(function (e) {
                 console.log(e);
-               // $('#alertRegister').show()
+               //$('#alertApprove').show()
             })
+    }
+
+    function deleteBtn(id){
+      var params = {
+        id: id
+      }
+      $.ajax({
+        type:"POST",
+        url:'/delete',
+        data: params,
+        success: function(){
+                  $('#alertDelete').show();
+                },
+
+      }).done(function (e) {
+        console.log(e);
+      })
     }
 
     function refreshPage(){

@@ -44,29 +44,29 @@
     var result;
 
     //Address of websocket server
-    const url = 'ws://localhost:8080'
+    //const url = 'ws://localhost:8080'
     //const connection = new WebSocket(url)
 
     checkIfLoggedIn();
 
     jQuery(document).ready(function () {
       loadNavbar();
-
+     
 
       var params = {
         target: 123
       };
       var method = "POST";
 
-      $('#btnSubmit').click(function () {
-        $.ajax({
-          type: method,
-          url: "/targets2",
-          data: params
-        }).done(function (e) {
-          console.log(e);
-        })
-      })
+      ///$('#btnSubmit').click(function () {
+      //  $.ajax({
+       //   type: method,
+       //   url: "/targets2",
+       //   data: params
+      //  }).done(function (e) {
+     //     console.log(e);
+      //  })
+     // })
     });
 
     // Load the Visualization API and the corechart package.
@@ -123,17 +123,7 @@
     //  }
    // });
 
-  $.ajax({
-    type: 'GET',
-    url: '/getMyData',
-    success: testFunc,
-  })
-    //document.location.reload();
 
-    function testFunc(bottle){
-      $('#line1Target').text(bottle[0].target);
-        $('#line2Target').text(bottle[1].target);
-    }
   </script>
 </head>
 
@@ -156,7 +146,7 @@
     <!--Div that will hold the line chart-->
     <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
   </div>
-  <h1>Targets:</h1>
+  <h1 style="display: inline-block;">Targets:</h1><button class="btn btn-primary" value="Refresh" onclick="document.location.reload()">Refresh</button>
   <div>
     <h2>Line 1: <small id="line1Target"></small></h2>
     <h2>Line 2: <small id="line2Target"></small></h2>
@@ -167,6 +157,19 @@
 
    
 
+  </script>
+  <script>
+    
+    //document.location.reload();
+    $.ajax({
+    type: 'GET',
+    url: '/getMyData',
+    success: testFunc,
+  });
+    function testFunc(data){
+      $('#line1Target').text(data[0].target);
+        $('#line2Target').text(data[1].target);
+    }
   </script>
 </body>
 
