@@ -51,7 +51,7 @@
 
     jQuery(document).ready(function () {
       loadNavbar();
-     
+
 
       var params = {
         target: 123
@@ -60,13 +60,13 @@
 
       ///$('#btnSubmit').click(function () {
       //  $.ajax({
-       //   type: method,
-       //   url: "/targets2",
-       //   data: params
+      //   type: method,
+      //   url: "/targets2",
+      //   data: params
       //  }).done(function (e) {
-     //     console.log(e);
+      //     console.log(e);
       //  })
-     // })
+      // })
     });
 
     // Load the Visualization API and the corechart package.
@@ -117,7 +117,7 @@
     //  try {
      //   var bottle = data;
 
-        
+
      // } catch (Exception) {
      //   console.log(Exception)
     //  }
@@ -146,7 +146,8 @@
     <!--Div that will hold the line chart-->
     <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
   </div>
-  <h1 style="display: inline-block;">Targets:</h1><button class="btn btn-primary" value="Refresh" onclick="document.location.reload()">Refresh</button>
+  <h1 style="display: inline-block;">Targets:</h1><button class="btn btn-primary" value="Refresh"
+    onclick="document.location.reload()">Refresh</button>
   <div>
     <h2>Line 1: <small id="line1Target"></small></h2>
     <h2>Line 2: <small id="line2Target"></small></h2>
@@ -155,21 +156,29 @@
 
   <script>
 
-   
+
 
   </script>
   <script>
-    
-    //document.location.reload();
-    $.ajax({
-    type: 'GET',
-    url: '/getMyData',
-    success: testFunc,
-  });
-    function testFunc(data){
-      $('#line1Target').text(data[0].target);
+    jQuery(document).ready(function () {
+
+      $.ajax({
+        type: 'GET',
+        url: '/getMyData',
+        dataType: 'text',
+        success: testFunc,
+        error: function (req, err) {
+          console.log('my message' + err);
+        },
+      });
+
+      function testFunc(input) {
+        data = JSON.parse(input);
+        $('#line1Target').text(data[0].target);
         $('#line2Target').text(data[1].target);
-    }
+      }
+    });
+
   </script>
 </body>
 

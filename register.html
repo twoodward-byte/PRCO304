@@ -107,7 +107,11 @@
             $.ajax({
                 type: "POST",
                 url: "/register",
-                data: params
+                data: params,
+                success: function(){
+                    $('#alertRegister').show();
+                }
+
             }).done(function (e) {
                 console.log(e);
                 $('#alertRegister').show()
