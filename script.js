@@ -67,6 +67,7 @@ function drawBasic() {
     [66, 70], [67, 72], [68, 75], [69, 80]
   ]);
   var options = {
+    title: "Items made over time",
     hAxis: {
       title: 'Time'
     },

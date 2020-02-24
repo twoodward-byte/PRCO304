@@ -5,10 +5,12 @@
 const express = require('express');
 const mongo = require('mongodb');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/'));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 const ObjectID = require('mongodb').ObjectID;
 var dbResult;
 var db;
@@ -155,3 +157,70 @@ app.post('/approve', (req, res) => {
     res.redirect('/approve.html')
   })
 })
+
+
+
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
+
+
+    //Endpoint for posting new requisitions to the server
+    app.post('/register2', (req, res) => {
+    MongoClient.connect(uri, function (err, db) {
+      var dbo = db.db("FinalProject");
+      //console.log(req.body)
+        if(!req || !req.body || !req.body.password){
+            res.type("application/json");
+            res.status(400)
+            res.send();
+            return;
+        }
+        let myPlaintextPassword = req.body.password;
+        bcrypt.genSalt(saltRounds, function(err, salt){
+            if(err){
+                console.log("Error: "+ err);
+            }
+            bcrypt.hash(myPlaintextPassword, salt, function(err, hash){
+                let user = {
+                    user: req.body.user,
+                    password: hash,
+                    status: req.body.status
+                }
+                dbo.collection('users').save(user, (err, result) => {
+                    if (err) return console.log(err)
+                    console.log('saved to database')
+                    res.redirect('/')    })
+
+        })
+      })
+    })
+  });
+
+  app.post('/login2', (req, res) =>{
+    MongoClient.connect(uri, function (err, db) {
+      var dbo = db.db("FinalProject");
+      //console.log(req.body)
+        if(!req || !req.body || !req.body.password || !req.body.user){
+            res.type("application/json");
+            res.status(400)
+            res.send();
+            return;
+        }
+
+        let myPlaintextPassword = req.body.password;
+        let myUserName = req.body.user;
+
+          dbo.collection("users").findOne({"user" : myUserName}, (function (err, result) {
+            console.log(result);
+            bcrypt.compare(myPlaintextPassword, result.password, function(err, passwordMatched){
+              if(passwordMatched == true)
+              {
+                
+              }else{
+
+              }
+            })
+          }));
+    })
+  });
+

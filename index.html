@@ -116,18 +116,7 @@
       var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
       chart.draw(data, options);
     }
-    google.charts.setOnLoadCallback(drawChart)
- //Makes an ajax call and populates the target text boxes
- //$.get("/getMyData", function (data) {
-    //  try {
-     //   var bottle = data;
-
-
-     // } catch (Exception) {
-     //   console.log(Exception)
-    //  }
-   // });
-
+    google.charts.setOnLoadCallback(drawChart);
 
   </script>
 </head>
@@ -141,19 +130,25 @@
 
   <div style="clear:both;"></div>
   <div id="navDiv"></div>
-  <div style="width: 100%; overflow: hidden;">
-    <!--
-    <button id="btnSubmit"> Click me </button>
--->
+   <h2>Analytics</h2>
+    <table class="table-responsive container-fluid mr-0 pl-0 pr-0">
+      <tr>
+        <td>
     <!--Div that will hold the pie chart-->
-    <div id="chart_div" style="width: 600px; float: left;"></div>
-
+    <div id="chart_div" style="max-width: 600px; width: 400px"></div>
+        </td>
+        <td>
     <!--Div that will hold the line chart-->
-    <div id="line_chart_div" style="margin-left: 620px; height: 400px"></div>
+    <div id="line_chart_div" style="max-height: 400px; max-width: 600px; width: 400px"></div>
+        </td>
+      </tr>
+    </table>
+
+
+
   </div>
   <h1 style="display: inline-block;">Targets:</h1><button class="btn btn-primary" value="Refresh"
     onclick="document.location.reload()">Refresh</button>
-  <div>
     <h2>Line 1: <small id="line1Target"></small></h2>
     <h2>Line 2: <small id="line2Target"></small></h2>
   </div>

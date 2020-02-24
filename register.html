@@ -93,20 +93,19 @@
 
     function registerUser() {
         var userName = $("#txtUserName").val();
-        if (checkUserUnique(userName, users)) { //If desired username is unique
+       // if (checkUserUnique(userName, users)) { //If desired username is unique
             var salt = generateSalt(); //Generate random salt
             var password = $("#txtPassword").val(); //Get password
-            var passwordSalt = password + salt;
-            var hashPass = new Hashes.MD5().hex(password + salt); //Hash password for security
+            //var passwordSalt = password + salt;
+            //var hashPass = new Hashes.MD5().hex(password + salt); //Hash password for security
             var params = {
                 user: userName,
-                password: hashPass,
-                salt: salt,
+                password: password,
                 status: "waiting"
             };
             $.ajax({
                 type: "POST",
-                url: "/register",
+                url: "/login2",
                 data: params,
                 success: function(){
                     $('#alertRegister').show();
@@ -116,7 +115,7 @@
                 console.log(e);
                 $('#alertRegister').show()
             })
-        }
+        //}
     }
 
 </script>
