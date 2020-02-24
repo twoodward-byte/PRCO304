@@ -55,9 +55,7 @@
 
 <script>
     //Hide alerts
-    $("#alertLogin").hide();
-    $('#alertWarning').hide();
-    $('#alertApproved').hide();
+
     var input = document.getElementById("txtPassword");
     var text = document.getElementById("alertWarning");
     startListeningCaps();
@@ -66,11 +64,32 @@
     var users;
 
      //Makes an ajax call and populates the target text boxes
-     $.get("/users", function (data) {
-      try {
-        users = data;
-      } catch (Exception) {
-        console.log(Exception)
-      }
+    /// $.get("/users", function (data) {
+    //  try {
+    //    users = data;
+    //  } catch (Exception) {
+    //    console.log(Exception)
+    //  }
+   // });
+   jQuery(document).ready(function () {
+    $("#alertLogin").hide();
+    $('#alertWarning').hide();
+    $('#alertApproved').hide();
+    $.ajax({
+        type: "GET",
+        url: '/users',
+        dataType: 'text',
+       // data: params,
+        success: function (data) {
+          users = JSON.parse(data);
+         // window.location.reload();
+        },
+        error: function(req, err){ console.log('my message' + err);
+        },
     });
+});
+    
+
+
+    
 </script>

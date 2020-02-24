@@ -44,13 +44,22 @@ function checkUserUnique(username, users){
 }
 
 function loginButton() {
+
     //Get username entered
     var userName = $("#txtUserName").val();
     //Get password entered
     var password = $("#txtPassword").val();
+    //window.location.reload();
     //Find correct user's salt in database
-    var salt = getUserSalt(userName, users);
-    //Now hash the password with the correct salt
+    $.ajax({
+        type: "GET",
+        url: '/users',
+        dataType: 'text',
+       // data: params,
+        success: function (data) {
+            var users = JSON.parse(data);
+            var salt = getUserSalt(userName, users);
+                //Now hash the password with the correct salt
     var hashPass = new Hashes.MD5().hex(password + salt);
     var k; //k is used in loop below to find user
     var wrongPassword = true; //Set password as wrong by default
@@ -78,6 +87,12 @@ function loginButton() {
     if(notApproved == true){
         $('#alertApproved').show();
     }
+        },
+        error: function(req, err){ console.log('my message' + err);
+        },
+    });
+    
+
 }
 
 //Generates a random salt

@@ -43,99 +43,114 @@
     </table>
   </div>
 
-<div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertApprove">
+  <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertApprove">
     <strong>User approved</strong>
-</div>
-<div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertDelete">
-  <strong>User deleted</strong>
-</div>
+  </div>
+  <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertDelete">
+    <strong>User deleted</strong>
+  </div>
 
 
 
   <script>
     var users;
-
     checkIfLoggedIn();
 
     jQuery(document).ready(function () {
       loadNavbar();
-      $('#alertApprove').hide();
-      $('#alertDelete').hide();
+      hideAlerts();
+      sendUsersRequest();
     });
 
-    function approveBtn(id){
+    function hideAlerts(){
+      $('#alertApprove').hide();
+      $('#alertDelete').hide();
+    }
+
+    //Approves the user with the specified ID
+    function approveBtn(id) {
       var params = {
         id: id,
         status: "approved"
       }
       $.ajax({
-                type: "POST",
-                url: "/approve",
-                data: params,
-                success: function(){
-                  $('#alertApprove').show();
-                  //window.location.reload();
-                },
-                error: function(){
-                  console.log("error");
-                },
-                complete: function(){
-                  console.log("complete");
-                }
-            }).done(function (e) {
-                console.log(e);
-               //$('#alertApprove').show()
-            })
+        type: "POST",
+        url: "/approve",
+        data: params,
+        success: function () {
+          $('#alertApprove').show();
+        },
+        error: function () {
+          console.log("error");
+        },
+      });
     }
 
-    function deleteBtn(id){
+    //Deletes record with specified id and index
+    function deleteBtn(id, index) {
       var params = {
         id: id
       }
       $.ajax({
-        type:"POST",
-        url:'/delete',
+        type: "POST",
+        url: '/delete',
         data: params,
-        success: function(){
-                  $('#alertDelete').show();
-                },
+        success: function () {
+          $('#alertDelete').show();
+          //Now refresh table UI
+          var table = document.getElementById('itemTable');
+          table.deleteRow(parseInt(index));
+          //sleep(500);
+          window.location.reload();
+        },
 
       }).done(function (e) {
         console.log(e);
       })
     }
 
-    function refreshPage(){
+    function refreshPage() {
       document.location.reload();
     }
+
+    //Fills the table with the users data
     function fillTable(users) {
       var apprTable = document.getElementById('itemTable');
+      $('#itemTable tr:gt(0)').remove()
       var i;
-      users.forEach(function(object) {
+      var iterator = 0;
+      users.forEach(function (object) {
+        iterator++;
         var tr = document.createElement('tr');
         var i = object._id;
         var i = i.toString();
-        tr.innerHTML = 
+        iterator = iterator.toString(); 
+        tr.innerHTML =
           //Item description
           '<td>' + object.user + '</td>'
-          +'<td>'+object.status+' </td>'+'<td>'
-          + `<button class='btn btn-success ml-1' style='position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;' onclick='approveBtn(\"${i}\")'>Approve</button><button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`;
-          +'</td>'
-          apprTable.appendChild(tr);
-      
-      }); 
+          + '<td>' + object.status + ' </td>' + '<td>'
+          + `<button class='btn btn-success ml-1' style='position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;' onclick='approveBtn(\"${i}\")'>Approve</button><button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
+        +'</td>';
+        apprTable.appendChild(tr);
+
+      });
     }
 
-    $.get("/users", function (data) {
+    //Sends request for user data and populates table with data
+    function sendUsersRequest(){
+      $.get("/users", function (data) {
       try {
-        console.log(data);
+        //console.log(data);
         users = data;
-        fillTable(users);
+        fillTable(users)
       } catch (Exception) {
         console.log(Exception)
       }
     });
+    }
     
+
+
   </script>
 </body>
 
