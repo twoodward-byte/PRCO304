@@ -195,6 +195,10 @@ const saltRounds = 10;
       })
     })
   });
+//Generates a random salt
+function generateToken() {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
 
   app.post('/login2', (req, res) =>{
     MongoClient.connect(uri, function (err, db) {
@@ -215,7 +219,29 @@ const saltRounds = 10;
             bcrypt.compare(myPlaintextPassword, result.password, function(err, passwordMatched){
               if(passwordMatched == true)
               {
-                
+                //connect to userSession DB
+                //Create a userSession object
+                /*
+                  sessionID : {randomGeneratedString}
+                  userID: result._id
+                */
+
+                var session = {
+                  sessionID: generateToken(),
+                  userID: result._id.toString()
+                }
+                dbo.collection("userSession").save(session, function(err, sessionResult){
+                  if(err){
+                    console.log("error is: "+ err);
+
+                  }
+                  res.type("application/json");
+                  res.status(200);
+                  res.cookie('sessionToken', session.sessionID, {sameSite: true});
+                  res.send();
+                  return;
+                })
+
               }else{
 
               }
