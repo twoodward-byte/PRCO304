@@ -51,49 +51,65 @@ function loginButton() {
     var password = $("#txtPassword").val();
     //window.location.reload();
     //Find correct user's salt in database
-    $.ajax({
-        type: "GET",
-        url: '/users',
-        dataType: 'text',
+   // $.ajax({
+     //   type: "GET",
+     //   url: '/users',
+      //  dataType: 'text',
        // data: params,
-        success: function (data) {
-            var users = JSON.parse(data);
-            var salt = getUserSalt(userName, users);
+      //  success: function (data) {
+           // var users = JSON.parse(data);
+            //var salt = getUserSalt(userName, users);
                 //Now hash the password with the correct salt
-    var hashPass = new Hashes.MD5().hex(password + salt);
-    var k; //k is used in loop below to find user
-    var wrongPassword = true; //Set password as wrong by default
-    var notApproved;
-    console.log(hashPass);
-    for (k in users) { //For each user in the database
-        if (userName == users[k].user && hashPass == users[k].password) { //Check if the username and password match up
-            wrongPassword = false;
-            if(users[k].status == "approved"){
-                sessionStorage.setItem('loggedIn', 'true');
-                sessionStorage.setItem('role', users[k].role);
+   // var hashPass = new Hashes.MD5().hex(password + salt);
+  //  var k; //k is used in loop below to find user
+   // var wrongPassword = true; //Set password as wrong by default
+    //var notApproved;
+    //console.log(hashPass);
+    //for (k in users) { //For each user in the database
+   //     if (userName == users[k].user && hashPass == users[k].password) { //Check if the username and password match up
+     //       wrongPassword = false;
+         //   if(users[k].status == "approved"){
+           //     sessionStorage.setItem('loggedIn', 'true');
+           //     sessionStorage.setItem('role', users[k].role);
                 //wrongPassword = false;
                 //Go to main page
-                document.location.assign("index.html");
-            }
-            else{
-                notApproved = true;
-            }
-        }
-    }
-
-    if (wrongPassword == true) {
-        $('#alertLogin').show();
-    }
-    if(notApproved == true){
-        $('#alertApproved').show();
-    }
+              //  document.location.assign("index.html");
+           /// }
+           // else{
+              //  notApproved = true;
+           // }
+       // }
+var params = {
+    user: userName,
+    password: password
+}
+       $.ajax({
+        type: "POST",
+        url: '/login2',
+       // dataType: 'text',
+        data: params,
+        success: function (data) {
+         // users = JSON.parse(data);
+         console.log("success logging in");
+         if(data.success == true){
+             console.log("redirecting");
+             window.location.assign("/index");
+         }
+         // window.location.reload();
         },
         error: function(req, err){ console.log('my message' + err);
         },
     });
-    
 
-}
+    }
+
+    //if (wrongPassword == true) {
+  //      $('#alertLogin').show();
+  //  }
+  //  if(notApproved == true){
+    //    $('#alertApproved').show();
+   // }
+
 
 //Generates a random salt
 function generateSalt() {

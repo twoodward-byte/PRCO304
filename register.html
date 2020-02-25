@@ -44,7 +44,7 @@
 
                 <div style="text-align:center;">
                     <input type="submit" value="Submit" class="btnRegister" onclick="registerUser()"> <br><br>
-                    <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('index.html')"">
+                    <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('/login')"">
                 </div>
 
             </div>
@@ -94,10 +94,7 @@
     function registerUser() {
         var userName = $("#txtUserName").val();
        // if (checkUserUnique(userName, users)) { //If desired username is unique
-            var salt = generateSalt(); //Generate random salt
             var password = $("#txtPassword").val(); //Get password
-            //var passwordSalt = password + salt;
-            //var hashPass = new Hashes.MD5().hex(password + salt); //Hash password for security
             var params = {
                 user: userName,
                 password: password,
@@ -105,10 +102,13 @@
             };
             $.ajax({
                 type: "POST",
-                url: "/login2",
+                url: "/register2",
                 data: params,
                 success: function(){
                     $('#alertRegister').show();
+                    $('#txtUserName').val("");
+                    $('#txtPassword').val("");
+                    $('#txtPassword2').val("");
                 }
 
             }).done(function (e) {

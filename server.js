@@ -8,7 +8,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/libraries/'));
+app.use('/libraries', express.static('libraries'))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 const ObjectID = require('mongodb').ObjectID;
@@ -19,6 +20,7 @@ const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
 const MongoClient = require('mongodb').MongoClient;
 client = new MongoClient(uri, { useNewUrlParser: true });
 var returnData;
+var path = require("path");
 
 client.connect(err => {
   //db = client.db("FinalProject");
@@ -28,14 +30,45 @@ client.connect(err => {
 });
 
 //Return content for the index page
-app.get('/', (req, res) => {
+app.get('/index', (req, res) => {
   MongoClient.connect(uri, function (err, db) {
-    db.collection('target').find().toArray(function (err, results) {
-      if (err) return console.log(err);
-    })
-  })
+    var allowed = false; //Set to false by default
+    var cookies = req.cookies;
+    if (cookies && cookies.sessionToken) {
+      let userSessionToken = cookies.sessionToken;
+      var dbo = db.db("FinalProject");
+      let result = dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
+        console.log("Valid user session");
+        allowed = true; 
+        console.log("all checks out ok ");
+        res.sendFile(path.join(__dirname + '/index.html'));
+        //res.redirect("/index.html");
+        //res.send(path.join(__dirname + '/index.html'));
+      }));
+  }
+    else {
+       allowed =  false;
+       res.status(403);
+       res.redirect("/login");
+       res.send();
+       console.log("User not logged in, error");
+       return;
+    }
+});
 });
 
+app.get('/login', (req, res) => {
+  //delete session
+  res.cookie('sessionToken', "", { sameSite: true });
+
+  res.contentType("html");
+  res.sendFile(path.join(__dirname + '/login.html'));
+});
+
+app.get("/register", (req, res) => {
+  res.contentType("html");
+  res.sendFile(path.join(__dirname + '/register.html'));
+});
 
 //Endpoint for the line target data
 app.get("/getMyData", function (require, response) {
@@ -66,6 +99,7 @@ app.get("/users", function (require, response) {
     response.json(dbResult);
   })
 });
+
 
 //Endpoint for the pie chart data
 app.get("/getPieData", function (require, response) {
@@ -129,7 +163,6 @@ app.post('/targets2', (req, res) => {
 
 app.post('/targets1', (req, res) => {
   MongoClient.connect(uri, function (err, db) {
-
     console.log(req.body.target);
     db.collection("targets").updateOne({ "line": "1" }, {
       $set: { "target": req.body.target }, function(err, obj) {
@@ -158,95 +191,95 @@ app.post('/approve', (req, res) => {
   })
 })
 
-
-
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-
-    //Endpoint for posting new requisitions to the server
-    app.post('/register2', (req, res) => {
-    MongoClient.connect(uri, function (err, db) {
-      var dbo = db.db("FinalProject");
-      //console.log(req.body)
-        if(!req || !req.body || !req.body.password){
-            res.type("application/json");
-            res.status(400)
-            res.send();
-            return;
+//Endpoint for posting new requisitions to the server
+app.post('/register2', (req, res) => {
+  MongoClient.connect(uri, function (err, db) {
+    var dbo = db.db("FinalProject");
+    //console.log(req.body)
+    if (!req || !req.body || !req.body.password) {
+      res.type("application/json");
+      res.status(400);
+      res.send();
+      return;
+    }
+    let myPlaintextPassword = req.body.password;
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      if (err) {
+        console.log("Error: " + err);
+      }
+      bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
+        let user = {
+          user: req.body.user, //Get username
+          password: hash, //Get bcrypt generated hash
+          status: req.body.status //Get status
         }
-        let myPlaintextPassword = req.body.password;
-        bcrypt.genSalt(saltRounds, function(err, salt){
-            if(err){
-                console.log("Error: "+ err);
-            }
-            bcrypt.hash(myPlaintextPassword, salt, function(err, hash){
-                let user = {
-                    user: req.body.user,
-                    password: hash,
-                    status: req.body.status
-                }
-                dbo.collection('users').save(user, (err, result) => {
-                    if (err) return console.log(err)
-                    console.log('saved to database')
-                    res.redirect('/')    })
+        dbo.collection('users').save(user, (err, result) => {
+          if (err) return console.log(err)
+          console.log('saved to database')
+          res.redirect('/login.html')
+        }) //Why doesn't this work?
 
-        })
       })
     })
-  });
+  })
+});
 //Generates a random salt
 function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-  app.post('/login2', (req, res) =>{
-    MongoClient.connect(uri, function (err, db) {
-      var dbo = db.db("FinalProject");
-      //console.log(req.body)
-        if(!req || !req.body || !req.body.password || !req.body.user){
+
+//New server side login function
+app.post('/login2', (req, res) => {
+  MongoClient.connect(uri, function (err, db) {
+    var dbo = db.db("FinalProject");
+    //console.log(req.body)
+    if (!req || !req.body || !req.body.password || !req.body.user) {
+      res.type("application/json");
+      res.status(400)
+      res.send();
+      return;
+    }
+
+    let myPlaintextPassword = req.body.password;
+    let myUserName = req.body.user;
+
+    dbo.collection("users").findOne({ "user": myUserName }, (function (err, result) {
+      console.log(result);
+      bcrypt.compare(myPlaintextPassword, result.password, function (err, passwordMatched) {
+        if (passwordMatched == true) {
+          //connect to userSession DB
+          //Create a userSession object
+          /*
+            sessionID : {randomGeneratedString}
+            userID: result._id
+          */
+          var session = {
+            sessionID: generateToken(),
+            userID: result._id.toString()
+          }
+          dbo.collection("userSession").save(session, function (err, sessionResult) {
+            if (err) {
+              console.log("error is: " + err);
+
+            }
             res.type("application/json");
-            res.status(400)
-            res.send();
+            res.status(200);
+            res.cookie('sessionToken', session.sessionID, { sameSite: true });
+            var response = {
+              success : true
+            }
+            res.send(response);
             return;
+          })
+
+        } else {
+          console.log("User entered wrong password")
         }
-
-        let myPlaintextPassword = req.body.password;
-        let myUserName = req.body.user;
-
-          dbo.collection("users").findOne({"user" : myUserName}, (function (err, result) {
-            console.log(result);
-            bcrypt.compare(myPlaintextPassword, result.password, function(err, passwordMatched){
-              if(passwordMatched == true)
-              {
-                //connect to userSession DB
-                //Create a userSession object
-                /*
-                  sessionID : {randomGeneratedString}
-                  userID: result._id
-                */
-
-                var session = {
-                  sessionID: generateToken(),
-                  userID: result._id.toString()
-                }
-                dbo.collection("userSession").save(session, function(err, sessionResult){
-                  if(err){
-                    console.log("error is: "+ err);
-
-                  }
-                  res.type("application/json");
-                  res.status(200);
-                  res.cookie('sessionToken', session.sessionID, {sameSite: true});
-                  res.send();
-                  return;
-                })
-
-              }else{
-
-              }
-            })
-          }));
-    })
-  });
-
+      })
+    }));
+  })
+})
