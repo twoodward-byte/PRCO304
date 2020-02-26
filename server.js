@@ -39,23 +39,24 @@ client.connect(err => {
   })
 });
 
+
 //Return content for the index page
 app.get('/index', (req, res) => {
   //Connect to database
   MongoClient.connect(uri, function (err, db) {
+
+
     var cookies = req.cookies; //Get cookies
     if (cookies && cookies.sessionToken) { //If cookies and session token exist
       let userSessionToken = cookies.sessionToken;
       var dbo = db.db("FinalProject");
       //Attempt to find session token in database
-      let result = dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
+      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
         console.log("Valid user session");
         res.sendFile(path.join(__dirname + '/index.html'));
       }));
     }
     else {
-      console.log("User not logged in, error");
-      // allowed =  false;
       res.status(403);
       res.redirect("/login");
       res.send();
@@ -121,17 +122,17 @@ app.get("/getPieData", function (require, response) {
 });
 
 //Endpoint for posting new requisitions to the server
-app.post('/register', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    var dbo = db.db("FinalProject");
-    //console.log(req.body)
-    dbo.collection('users').save(req.body, (err, result) => {
-      if (err) return console.log(err)
-      console.log('saved to database')
-      res.redirect('/')
-    })
-  })
-});
+//app.post('/register', (req, res) => {
+//MongoClient.connect(uri, function (err, db) {
+//var dbo = db.db("FinalProject");
+//console.log(req.body)
+//dbo.collection('users').save(req.body, (err, result) => {
+// if (err) return console.log(err)
+// console.log('saved to database')
+// res.redirect('/')
+//})
+// })
+//});
 
 //Endpoint for deleting users
 app.post('/delete', (req, res) => {
@@ -193,41 +194,61 @@ app.post('/approve', (req, res) => {
     //Go back to homepage
     res.redirect('/approve.html')
   })
-})
+});
 
 //Endpoint for posting new requisitions to the server
 app.post('/register2', (req, res) => {
-  let myPlaintextPassword = req.body.password;
-
   MongoClient.connect(uri, function (err, db) {
+    //Get username and password
+    let myPlaintextPassword = req.body.password;
+    let myUser = req.body.user;
+    var unique = false;
+    //Now check to see if username unique:
+
     var dbo = db.db("FinalProject");
 
-    //If no request or request incomplete:
-    if (!req || !req.body || !req.body.password) {
-      res.type("application/json");
-      res.status(400);
-      res.send();
-      return;
-    }
-
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-      if (err) {
-        console.log("Error: " + err);
-      }
-      bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
-        let user = {
-          user: req.body.user, //Get username
-          password: hash, //Get bcrypt generated hash
-          status: req.body.status //Get status
+    //Check if unique
+    var test = dbo.collection('users').findOne({ user: myUser }, function (err, result) {
+      if (err) throw err;
+      if (result == null) {
+        unique = true;
+        //If no request or request incomplete:
+        if (!req || !req.body || !req.body.password) {
+          res.type("application/json");
+          res.status(400);
+          res.send();
+          return;
         }
-        dbo.collection('users').save(user, (err, result) => {
-          if (err) return console.log(err)
-          console.log('saved to database')
-          res.redirect('/login.html')
-        })
-      })
-    })
-  })
+          bcrypt.genSalt(saltRounds, function (err, salt) {
+            if (err) {
+              console.log("Error: " + err);
+            }
+            bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
+              let user = {
+                user: req.body.user, //Get username
+                password: hash, //Get bcrypt generated hash
+                status: req.body.status //Get status
+              }
+              dbo.collection('users').save(user, (err, result) => {
+                if (err) return console.log(err)
+                console.log('saved to database')
+                res.redirect('/login.html')
+              });
+            });
+          });
+  }
+  else{ //User already exists
+          console.log("User already exists");
+          res.status(200); //Unauthorised
+          res.type("application/json"); 
+          var response = {
+            unique: false,
+          }
+          res.send(response);
+          return;
+  }
+}); 
+});
 });
 
 //Endpoint for the about page
@@ -248,12 +269,13 @@ app.get('/targets', (req, res) => {
 //Endpoint for the approve page
 app.get('/approve', (req, res) => {
   res.sendFile(path.join(__dirname + '/approve.html'));
-})
+});
 
 //Generates a random salt
 function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
+
 
 //Server side login endpoint
 app.post('/login2', (req, res) => {
@@ -264,61 +286,21 @@ app.post('/login2', (req, res) => {
   MongoClient.connect(uri, function (err, db) {
     var dbo = db.db("FinalProject");
 
-    //If no request or request has incomplete information
     if (!req || !req.body || !req.body.password || !req.body.user) {
       res.type("application/json");
       res.status(400)
       res.send();
-      return;
+      return true;
     }
-    try{  
-    //Try to find user in database
-    dbo.collection("users").findOne({ "user": myUserName }, (function (err, result) {
-      if(err){
-        console.log(err);
-        return;
-      }
-      if(result == null){
-        console.log("Result does not exist");
-        res.status(200); //Unauthorised
-          res.type("application/json");
-
-          var response = {
-            authorised: false,
-          }
-          res.send(response);
+    try {
+      //Try to find user in database
+      dbo.collection("users").findOne({ "user": myUserName }, (function (err, result) {
+        if (err) { //Error occured
+          console.log(err);
           return;
-        return;
-      }
-      //Compare password to database record, hashing and salting in the process
-      bcrypt.compare(myPlaintextPassword, result.password, function (err, passwordMatched) {
-        
-        if (passwordMatched == true) {
-
-          //Generate session token
-          var session = {
-            sessionID: generateToken(),
-            userID: result._id.toString()
-          }
-
-          //Save new user session to database
-          dbo.collection("userSession").save(session, function (err, sessionResult) {
-            if (err) {
-              console.log("Error occured saving user session to db: " + err);
-            }
-            res.type("application/json");
-            res.status(200);
-            res.cookie('sessionToken', session.sessionID, { sameSite: true });
-            var response = {
-              success: true
-            }
-            res.send(response);
-            return;
-          })
-
-        } else {
-          //Wrong password entered:
-          console.log("User entered wrong password")
+        }
+        if (result == null) { //User not found in database
+          console.log("Result does not exist");
           res.status(200); //Unauthorised
           res.type("application/json");
 
@@ -328,10 +310,49 @@ app.post('/login2', (req, res) => {
           res.send(response);
           return;
         }
-      })
-    }));
-  }catch{
-    console.log("Cannot find record");
-  }
-  })
-})
+        //Compare password to database record, hashing and salting in the process
+        bcrypt.compare(myPlaintextPassword, result.password, function (err, passwordMatched) {
+
+          if (passwordMatched == true) { //Valid username and password
+
+            //Generate session token
+            var session = {
+              sessionID: generateToken(),
+              userID: result._id.toString()
+            }
+
+            //Save new user session to database
+            dbo.collection("userSession").save(session, function (err, sessionResult) {
+              if (err) {
+                console.log("Error occured saving user session to db: " + err);
+              }
+              res.type("application/json");
+              res.status(200);
+              //Save user session to clients cookies:
+              res.cookie('sessionToken', session.sessionID, { sameSite: true });
+              var response = {
+                success: true
+              }
+              res.send(response);
+              return;
+            })
+
+          } else {
+            //Wrong password entered:
+            console.log("User entered wrong password")
+            res.status(200); //Unauthorised
+            res.type("application/json");
+
+            var response = {
+              authorised: false,
+            }
+            res.send(response);
+            return;
+          }
+        });
+      }));
+    } catch{
+      console.log("Cannot find record");
+    }
+  });
+});

@@ -48,11 +48,20 @@
                 </div>
 
             </div>
+
+            <!--Register Success Alert-->
             <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertRegister">
                 <strong>Register successful.</strong>
             </div>
-            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertWarning">
+
+            <!--Caps Lock Warning Alert-->
+            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertCaps">
                 <strong>Caps Lock on.</strong> You should check the fields above.
+            </div>
+
+            <!--User not unique alert-->
+            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertUnique">
+                <strong>Username already taken</strong> Please enter a different one
             </div>
         </div>
     </div>
@@ -61,23 +70,24 @@
 <script>
     //Hide alerts
     $("#alertLogin").hide();
-    $('#alertWarning').hide();
+    $('#alertCaps').hide();
     $('#alertRegister').hide();
+    $('#alertUnique').hide();
 
     var input = document.getElementById("txtPassword");
     var text = document.getElementById("alertWarning");
     startListeningCaps();
-    startListeningEnter();
+    //startListeningEnter();
     var users;
 
     //Makes an ajax call and populates the target text boxes
-    $.get("/users", function (data) {
-      try {
-        users = data;
-      } catch (Exception) {
-        console.log(Exception)
-      }
-    });
+  //  $.get("/users", function (data) {
+  //    try {
+     //   users = data;
+     // } catch (Exception) {
+      //  console.log(Exception)
+     // }
+ //   });
 
     //Address of websocket server
     //const url = 'ws://localhost:8080';
@@ -104,18 +114,36 @@
                 type: "POST",
                 url: "/register2",
                 data: params,
-                success: function(){
-                    $('#alertRegister').show();
+                success: function(data){
+                    //$('#alertRegister').show();
                     $('#txtUserName').val("");
                     $('#txtPassword').val("");
                     $('#txtPassword2').val("");
+                     if(data.unique == false){
+                         console.log("Not unique");
+                        $('#alertUnique').show();
+                     }
                 }
 
             }).done(function (e) {
                 console.log(e);
-                $('#alertRegister').show()
             })
         //}
     }
+
+function startListeningEnter() {
+    var input = document.getElementById("txtPassword2");
+    // Execute a function when the user releases a key on the keyboard
+    input.addEventListener("keyup", function (event) {
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+            // Trigger the button element with a click
+            registerUser();
+        }
+    });
+}
+startListeningEnter();
 
 </script>
