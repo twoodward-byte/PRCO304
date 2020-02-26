@@ -14,6 +14,9 @@ app.use('/libraries', express.static('libraries'));
 app.use(express.static(__dirname + '/icons/'));
 app.use('/icons', express.static('icons'));
 
+app.use(express.static(__dirname + '/Images'));
+app.use('/Images', express.static('Images'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 const ObjectID = require('mongodb').ObjectID;
@@ -25,6 +28,8 @@ const MongoClient = require('mongodb').MongoClient;
 client = new MongoClient(uri, { useNewUrlParser: true });
 var returnData;
 var path = require("path");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 //Database connected to
 client.connect(err => {
@@ -48,16 +53,16 @@ app.get('/index', (req, res) => {
         console.log("all checks out ok ");
         res.sendFile(path.join(__dirname + '/index.html'));
       }));
-  }
-    else {
-       console.log("User not logged in, error");
-      // allowed =  false;
-       res.status(403);
-       res.redirect("/login");
-       res.send();
-       return;
     }
-});
+    else {
+      console.log("User not logged in, error");
+      // allowed =  false;
+      res.status(403);
+      res.redirect("/login");
+      res.send();
+      return;
+    }
+  });
 });
 
 app.get('/login', (req, res) => {
@@ -148,10 +153,9 @@ app.post('/delete', (req, res) => {
   })
 })
 
-
+//Endpoint for updating target 2
 app.post('/targets2', (req, res) => {
   MongoClient.connect(uri, function (err, db) {
-
     console.log(req.body.target);
     db.collection("targets").updateOne({ "line": "2" }, {
       $set: { "target": req.body.target }, function(err, obj) {
@@ -163,6 +167,7 @@ app.post('/targets2', (req, res) => {
   })
 })
 
+//Endpoint for updating target 1
 app.post('/targets1', (req, res) => {
   MongoClient.connect(uri, function (err, db) {
     console.log(req.body.target);
@@ -193,21 +198,21 @@ app.post('/approve', (req, res) => {
   })
 })
 
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-
 //Endpoint for posting new requisitions to the server
 app.post('/register2', (req, res) => {
+  let myPlaintextPassword = req.body.password;
+
   MongoClient.connect(uri, function (err, db) {
     var dbo = db.db("FinalProject");
-    //console.log(req.body)
+
+    //If no request or request incomplete:
     if (!req || !req.body || !req.body.password) {
       res.type("application/json");
       res.status(400);
       res.send();
       return;
     }
-    let myPlaintextPassword = req.body.password;
+
     bcrypt.genSalt(saltRounds, function (err, salt) {
       if (err) {
         console.log("Error: " + err);
@@ -222,31 +227,47 @@ app.post('/register2', (req, res) => {
           if (err) return console.log(err)
           console.log('saved to database')
           res.redirect('/login.html')
-        }) //Why doesn't this work?
-
+        })
       })
     })
   })
 });
 
-app.get('/about', (req, res)=>{
+//Endpoint for the about page
+app.get('/about', (req, res) => {
   res.sendFile(path.join(__dirname + '/about.html'));
 });
 
-app.get('/help', (req, res) =>{
+//Endpoint for the help page
+app.get('/help', (req, res) => {
   res.sendFile(path.join(__dirname + '/help.html'));
 });
+
+//Endpoint for the targets page
+app.get('/targets', (req, res) => {
+  res.sendFile(path.join(__dirname + '/targets.html'));
+});
+
+//Endpoint for the approve page
+app.get('/approve', (req, res) => {
+  res.sendFile(path.join(__dirname + '/approve.html'));
+})
 
 //Generates a random salt
 function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-//New server side login function
+//Server side login endpoint
 app.post('/login2', (req, res) => {
+  let myPlaintextPassword = req.body.password;
+  let myUserName = req.body.user;
+
+  //Connect to database
   MongoClient.connect(uri, function (err, db) {
     var dbo = db.db("FinalProject");
-    //console.log(req.body)
+
+    //If no request or request has incomplete information
     if (!req || !req.body || !req.body.password || !req.body.user) {
       res.type("application/json");
       res.status(400)
@@ -254,39 +275,36 @@ app.post('/login2', (req, res) => {
       return;
     }
 
-    let myPlaintextPassword = req.body.password;
-    let myUserName = req.body.user;
-
+    //Try to find user in database
     dbo.collection("users").findOne({ "user": myUserName }, (function (err, result) {
-      console.log(result);
+      //Compare password to database record, hashing and salting in the process
       bcrypt.compare(myPlaintextPassword, result.password, function (err, passwordMatched) {
+        
         if (passwordMatched == true) {
-          //connect to userSession DB
-          //Create a userSession object
-          /*
-            sessionID : {randomGeneratedString}
-            userID: result._id
-          */
+
+          //Generate session token
           var session = {
             sessionID: generateToken(),
             userID: result._id.toString()
           }
+
+          //Save new user session to database
           dbo.collection("userSession").save(session, function (err, sessionResult) {
             if (err) {
-              console.log("error is: " + err);
-
+              console.log("Error occured saving user session to db: " + err);
             }
             res.type("application/json");
             res.status(200);
             res.cookie('sessionToken', session.sessionID, { sameSite: true });
             var response = {
-              success : true
+              success: true
             }
             res.send(response);
             return;
           })
 
         } else {
+          //Wrong password entered:
           console.log("User entered wrong password")
         }
       })
