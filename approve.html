@@ -7,7 +7,9 @@
 
   <!--Bootstrap CSS CDN-->
   <link rel="stylesheet" href="libraries/bootstrap.min.css">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 
   <!--Custom font-->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
@@ -18,7 +20,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!--Popper CDN-->
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
 
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
@@ -34,7 +38,7 @@
 
   <div style="clear:both;"></div>
   <div id="navDiv"></div>
-<h2><span class="badge badge-warning ml-1">Waiting for Approval</span></h2>
+  <h2><span class="badge badge-warning ml-1">Waiting for Approval</span></h2>
   <div class="table-responsive container-fluid mr-0 pl-0 pr-0" style="width:99.9999%">
     <!--Main table-->
     <table style="width:inherit" class="table table-striped table-bordered table-hover table-dark mr-0 pr-0"
@@ -51,16 +55,16 @@
   </div>
   <h2><span class="badge badge-primary ml-1">All Users</span></h2>
   <div class="table-responsive container-fluid mr-0 pl-0 pr-0" style="width:99.9999%">
-  <table style="width:inherit" class="table table-striped table-bordered table-hover table-dark mr-0 pr-0"
-  id="allUsersTable">
-  <tr>
-    <th>User</th>
-    <th>Status </th>
+    <table style="width:inherit" class="table table-striped table-bordered table-hover table-dark mr-0 pr-0"
+      id="allUsersTable">
+      <tr>
+        <th>User</th>
+        <th>Status </th>
 
-    <th class="table-responsive">Actions<button
-        style="position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;" class="btn btn-success ml-1"
-        onclick="refreshPage()">Refresh</button></th>
-  </table>
+        <th class="table-responsive">Actions<button
+            style="position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;" class="btn btn-success ml-1"
+            onclick="refreshPage()">Refresh</button></th>
+    </table>
   </div>
 
   <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertApprove">
@@ -69,8 +73,6 @@
   <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertDelete">
     <strong>User deleted</strong>
   </div>
-
-
 
   <script>
     var users;
@@ -81,7 +83,7 @@
       sendUsersRequest();
     });
 
-    function hideAlerts(){
+    function hideAlerts() {
       $('#alertApprove').hide();
       $('#alertDelete').hide();
     }
@@ -116,7 +118,7 @@
         type: "POST",
         url: '/delete',
         data: params,
-        success: function () { 
+        success: function () {
           $('#alertDelete').show();
           //Now refresh table UI
           var table = document.getElementById('itemTable');
@@ -140,27 +142,25 @@
       var i;
       var iterator = 0;
       users.forEach(function (object) {
-        if(object.status == "waiting"){
-
-      
-        iterator++;
-        var tr = document.createElement('tr');
-        var i = object._id;
-        var i = i.toString();
-        iterator = iterator.toString(); 
-        tr.innerHTML =
-          //Item description
-          '<td>' + object.user + '</td>'
-          + '<td>' + object.status + ' </td>' + '<td>'
-          + `<button class='btn btn-success ml-1' style='position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;' onclick='approveBtn(\"${i}\", \"${iterator}\")'>Approve</button><button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
-        +'</td>';
-        apprTable.appendChild(tr);
-          }
+        if (object.status == "waiting") {
+          iterator++;
+          var tr = document.createElement('tr');
+          var i = object._id;
+          var i = i.toString();
+          iterator = iterator.toString();
+          tr.innerHTML =
+            //Item description
+            '<td>' + object.user + '</td>'
+            + '<td>' + object.status + ' </td>' + '<td>'
+            + `<button class='btn btn-success ml-1' style='position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;' onclick='approveBtn(\"${i}\", \"${iterator}\")'>Approve</button><button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
+            + '</td>';
+          apprTable.appendChild(tr);
+        }
       });
     }
 
-        //Fills the table with the users data
-        function fillTableAllUsers(users) {
+    //Fills the table with the users data
+    function fillTableAllUsers(users) {
       var apprTable = document.getElementById('allUsersTable');
       $('#allUsersTable tr:gt(0)').remove()
       var i;
@@ -170,30 +170,44 @@
         var tr = document.createElement('tr');
         var i = object._id;
         var i = i.toString();
-        iterator = iterator.toString(); 
+        iterator = iterator.toString();
         tr.innerHTML =
           //Item description
           '<td>' + object.user + '</td>'
           + '<td>' + object.status + ' </td>' + '<td>'
           + `<button class='btn btn-success ml-1' style='position: relative; right: 0px; padding: 0px 0px; margin: 0px 0px;' onclick='approveBtn(\"${i}\", \"${iterator}\")'>Approve</button><button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
-        +'</td>';
+          + '</td>';
         apprTable.appendChild(tr);
       });
     }
 
     //Sends request for user data and populates table with data
-    function sendUsersRequest(){
+    function sendUsersRequest2() {
       $.get("/users", function (data) {
-      try {
-        //console.log(data);
-        users = data;
-        fillTable(users)
-        fillTableAllUsers(users)
+        try {
+          //console.log(data);
+          users = data;
+          fillTable(users)
+          fillTableAllUsers(users)
 
-      } catch (Exception) {
-        console.log(Exception)
-      }
-    });
+        } catch (Exception) {
+          console.log(Exception)
+        }
+      });
+    }
+
+    function sendUsersRequest(){
+      $.ajax({
+                type: "GET",
+                url: "/users",
+                //data: params,
+                success: function(data){
+                  fillTable(data);
+                  fillTableAllUsers(data);
+                }
+            }).done(function (e) {
+                console.log(e);
+            })
     }
   </script>
 </body>

@@ -19,6 +19,7 @@ app.use('/Images', express.static('Images'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 const ObjectID = require('mongodb').ObjectID;
 var dbResult;
 var db;
@@ -246,22 +247,90 @@ app.post('/register2', (req, res) => {
 
 //Endpoint for the about page
 app.get('/about', (req, res) => {
-  res.sendFile(path.join(__dirname + '/about.html'));
+  MongoClient.connect(uri, function (err, db) {
+    var cookies = req.cookies; //Get cookies
+    if (cookies && cookies.sessionToken) { //If cookies and session token exist
+      let userSessionToken = cookies.sessionToken;
+      var dbo = db.db("FinalProject");
+      //Attempt to find session token in database
+      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
+        console.log("Valid user session");
+        res.sendFile(path.join(__dirname + '/about.html'));
+      }));
+    }
+    else {
+      res.status(403);
+      res.redirect("/login");
+      res.send();
+      return;
+    }
+  });
 });
 
 //Endpoint for the help page
 app.get('/help', (req, res) => {
-  res.sendFile(path.join(__dirname + '/help.html'));
+  MongoClient.connect(uri, function (err, db) {
+    var cookies = req.cookies; //Get cookies
+    if (cookies && cookies.sessionToken) { //If cookies and session token exist
+      let userSessionToken = cookies.sessionToken;
+      var dbo = db.db("FinalProject");
+      //Attempt to find session token in database
+      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
+        console.log("Valid user session");
+        res.sendFile(path.join(__dirname + '/help.html'));
+      }));
+    }
+    else {
+      res.status(403);
+      res.redirect("/login");
+      res.send();
+      return;
+    }
+  });
 });
 
 //Endpoint for the targets page
 app.get('/targets', (req, res) => {
-  res.sendFile(path.join(__dirname + '/targets.html'));
+  MongoClient.connect(uri, function (err, db) {
+    var cookies = req.cookies; //Get cookies
+    if (cookies && cookies.sessionToken) { //If cookies and session token exist
+      let userSessionToken = cookies.sessionToken;
+      var dbo = db.db("FinalProject");
+      //Attempt to find session token in database
+      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
+        console.log("Valid user session");
+        res.sendFile(path.join(__dirname + '/targets.html'));
+      }));
+    }
+    else {
+      res.status(403);
+      res.redirect("/login");
+      res.send();
+      return;
+    }
+  });
 });
 
 //Endpoint for the approve page
 app.get('/approve', (req, res) => {
-  res.sendFile(path.join(__dirname + '/approve.html'));
+  MongoClient.connect(uri, function (err, db) {
+    var cookies = req.cookies; //Get cookies
+    if (cookies && cookies.sessionToken) { //If cookies and session token exist
+      let userSessionToken = cookies.sessionToken;
+      var dbo = db.db("FinalProject");
+      //Attempt to find session token in database
+      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
+        console.log("Valid user session");
+        res.sendFile(path.join(__dirname + '/approve.html'));
+      }));
+    }
+    else {
+      res.status(403);
+      res.redirect("/login");
+      res.send();
+      return;
+    }
+  });
 });
 
 //Generates a random salt
@@ -348,4 +417,9 @@ app.post('/login2', (req, res) => {
       console.log("Cannot find record");
     }
   });
+});
+
+// Route not found (404)
+app.use(function(req, res, next) {
+  return res.status(404).sendFile(__dirname + '/login.html');
 });
