@@ -44,8 +44,6 @@ client.connect(err => {
 app.get('/index', (req, res) => {
   //Connect to database
   MongoClient.connect(uri, function (err, db) {
-
-
     var cookies = req.cookies; //Get cookies
     if (cookies && cookies.sessionToken) { //If cookies and session token exist
       let userSessionToken = cookies.sessionToken;
@@ -65,6 +63,7 @@ app.get('/index', (req, res) => {
   });
 });
 
+//Endpoint for login page
 app.get('/login', (req, res) => {
   //delete session
   res.cookie('sessionToken', "", { sameSite: true });
@@ -120,19 +119,6 @@ app.get("/getPieData", function (require, response) {
     });
   })
 });
-
-//Endpoint for posting new requisitions to the server
-//app.post('/register', (req, res) => {
-//MongoClient.connect(uri, function (err, db) {
-//var dbo = db.db("FinalProject");
-//console.log(req.body)
-//dbo.collection('users').save(req.body, (err, result) => {
-// if (err) return console.log(err)
-// console.log('saved to database')
-// res.redirect('/')
-//})
-// })
-//});
 
 //Endpoint for deleting users
 app.post('/delete', (req, res) => {
