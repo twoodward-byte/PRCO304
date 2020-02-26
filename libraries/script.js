@@ -1,30 +1,18 @@
-
-
 //Sets session as logged out and reloads window to log user out
 function logout() {
   console.log("log out clicked");
- // sessionStorage.setItem('loggedIn', 'false');
+  // sessionStorage.setItem('loggedIn', 'false');
   document.location.assign("/login");
 }
-
-function checkIfLoggedIn() {
-//  if (sessionStorage.loggedIn == "true") {
-  //  console.log("user logged in")
- // }
- // else {
-  //  document.location.assign("login.html");
-  //}
-}
-
 
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
 // draws it.
 function drawChart(amount1, amount2) {
-  try{
+  try {
     var bracket = amount1;
     var sidewall = amount2;
-  }catch{
+  } catch{
     console.log("error")
   }
 
@@ -80,9 +68,10 @@ function drawBasic() {
   chart.draw(data, options);
 }
 
-function loadNavbar(){
-  $('#navDiv').load("navbar.html", function() {
+//Uses Jquery to load navbar from file
+function loadNavbar() {
+  $('#navDiv').load("navbar.html", function () {
     var pathname = window.location.pathname;
     $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
-});
+  });
 }

@@ -10,6 +10,8 @@
 
     <!--Bootstrap library-->
     <link rel="stylesheet" href="libraries/bootstrap.min.css">
+
+    <!--My stylesheet-->
     <link rel="stylesheet" href="style.css">
 
     <!--Custom font-->
@@ -22,7 +24,7 @@
     <script type="text/javascript" src="libraries/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="libraries/popper.min.js"></script>
     <script type="text/javascript" src="libraries/hashes.min.js"></script>
-    <script src="loginScript.js"></script>
+    <script src="libraries/loginScript.js.js"></script>
 
 </head>
 
@@ -35,7 +37,7 @@
             <h3 class="mt-4 mb-5">Register</h3>
             <div class="form-group mb-2">
 
-                <input type="text" class="form-control" id="txtUserName" placeholder="Create Username *" name="user"
+                <input type="email" class="form-control" id="txtUserName" placeholder="Enter email address *" name="user"
                     required><br>
                 <input type="password" class="form-control" id="txtPassword" placeholder="Create Password *"
                     name="password" required><br>
@@ -68,29 +70,22 @@
 </body>
 
 <script>
-    //Hide alerts
-    $("#alertLogin").hide();
-    $('#alertCaps').hide();
-    $('#alertRegister').hide();
-    $('#alertUnique').hide();
-
     var input = document.getElementById("txtPassword");
     var text = document.getElementById("alertWarning");
-    startListeningCaps();
-    //startListeningEnter();
     var users;
 
-    //Makes an ajax call and populates the target text boxes
-  //  $.get("/users", function (data) {
-  //    try {
-     //   users = data;
-     // } catch (Exception) {
-      //  console.log(Exception)
-     // }
- //   });
+    //Hide alerts
+    function hideAlerts(){
+        $("#alertLogin").hide();
+        $('#alertCaps').hide();
+        $('#alertRegister').hide();
+        $('#alertUnique').hide();
+    }
 
-    //Address of websocket server
-    //const url = 'ws://localhost:8080';
+    hideAlerts();
+
+
+    startListeningCaps();
 
     function check(input) {
         if (input.value != document.getElementById('txtPassword').value) {
