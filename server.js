@@ -231,7 +231,11 @@ app.post('/register2', (req, res) => {
 
 app.get('/about', (req, res)=>{
   res.sendFile(path.join(__dirname + '/about.html'));
-})
+});
+
+app.get('/help', (req, res) =>{
+  res.sendFile(path.join(__dirname + '/help.html'));
+});
 
 //Generates a random salt
 function generateToken() {
