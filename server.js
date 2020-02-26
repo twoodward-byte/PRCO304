@@ -229,10 +229,17 @@ app.post('/register2', (req, res) => {
                 password: hash, //Get bcrypt generated hash
                 status: req.body.status //Get status
               }
-              dbo.collection('users').save(user, (err, result) => {
+              dbo.collection('users').save(user, (err, result) => { //Register successful
                 if (err) return console.log(err)
-                console.log('saved to database')
-                res.redirect('/login.html')
+                console.log('saved to database');
+                var response = {
+                  success: true,
+                }
+                res.status(200);
+                res.type("application/json");
+                res.send(response);
+                return;
+                //res.redirect('/login.html');
               });
             });
           });
@@ -246,7 +253,7 @@ app.post('/register2', (req, res) => {
           }
           res.send(response);
           return;
-  }
+      }
 }); 
 });
 });

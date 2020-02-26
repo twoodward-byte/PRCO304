@@ -57,7 +57,7 @@
             </div>
 
             <!--Caps Lock Warning Alert-->
-            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertCaps">
+            <div class="alert alert-warning alert-dismissible fade show collapse" role="alert" id="alertCaps">
                 <strong>Caps Lock on.</strong> You should check the fields above.
             </div>
 
@@ -86,7 +86,7 @@
     hideAlerts();
 
 
-    startListeningCaps();
+    //startListeningCaps();
 
     function check(input) {
         if (input.value != document.getElementById('txtPassword').value) {
@@ -119,6 +119,9 @@
                          console.log("Not unique");
                         $('#alertUnique').show();
                      }
+                     if(data.success == true){
+                        $('#alertRegister').show();
+                     }
                 }
 
             }).done(function (e) {
@@ -140,6 +143,23 @@ function startListeningEnter() {
         }
     });
 }
+
+function startListeningCaps(element) {
+    var text = document.getElementById("alertCaps");
+    element.addEventListener("keyup", function (event) {
+        if (event.getModifierState("CapsLock")) {
+            text.style.display = "block";
+            console.log("hello");
+        } else {
+            text.style.display = "none"
+        }
+    });
+}
+
+var input = document.getElementById("txtPassword2");
+startListeningCaps(input);
+input = document.getElementById("txtPassword");
+startListeningCaps(input);
 startListeningEnter();
 
 </script>

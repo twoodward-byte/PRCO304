@@ -24,8 +24,6 @@ function startListeningEnter() {
     });
 }
 
-
-
 //MAKE this self contained function getting user list through argument
 function getUserSalt(username, data) {
     for (i = 0; i < data.length; i++) {
