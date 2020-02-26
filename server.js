@@ -41,16 +41,15 @@ client.connect(err => {
 
 //Return content for the index page
 app.get('/index', (req, res) => {
+  //Connect to database
   MongoClient.connect(uri, function (err, db) {
-    //var allowed = false; //Set to false by default
-    var cookies = req.cookies;
-    if (cookies && cookies.sessionToken) {
+    var cookies = req.cookies; //Get cookies
+    if (cookies && cookies.sessionToken) { //If cookies and session token exist
       let userSessionToken = cookies.sessionToken;
       var dbo = db.db("FinalProject");
+      //Attempt to find session token in database
       let result = dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
         console.log("Valid user session");
-        //allowed = true; 
-        console.log("all checks out ok ");
         res.sendFile(path.join(__dirname + '/index.html'));
       }));
     }
@@ -92,7 +91,6 @@ app.get("/getMyData", function (require, response) {
   })
 });
 
-
 //Endpoint for sending the users data to the client
 app.get("/users", function (require, response) {
   MongoClient.connect(uri, function (err, db) {
@@ -106,7 +104,6 @@ app.get("/users", function (require, response) {
     response.json(dbResult);
   })
 });
-
 
 //Endpoint for the pie chart data
 app.get("/getPieData", function (require, response) {
@@ -274,9 +271,25 @@ app.post('/login2', (req, res) => {
       res.send();
       return;
     }
-
+    try{  
     //Try to find user in database
     dbo.collection("users").findOne({ "user": myUserName }, (function (err, result) {
+      if(err){
+        console.log(err);
+        return;
+      }
+      if(result == null){
+        console.log("Result does not exist");
+        res.status(200); //Unauthorised
+          res.type("application/json");
+
+          var response = {
+            authorised: false,
+          }
+          res.send(response);
+          return;
+        return;
+      }
       //Compare password to database record, hashing and salting in the process
       bcrypt.compare(myPlaintextPassword, result.password, function (err, passwordMatched) {
         
@@ -306,8 +319,19 @@ app.post('/login2', (req, res) => {
         } else {
           //Wrong password entered:
           console.log("User entered wrong password")
+          res.status(200); //Unauthorised
+          res.type("application/json");
+
+          var response = {
+            authorised: false,
+          }
+          res.send(response);
+          return;
         }
       })
     }));
+  }catch{
+    console.log("Cannot find record");
+  }
   })
 })

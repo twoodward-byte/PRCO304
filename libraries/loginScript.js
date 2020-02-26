@@ -65,11 +65,15 @@ function loginButton() {
                 console.log("redirecting");
                 window.location.assign("/index");
             }
+            else if(data.authorised == false){
+                console.log("Not authorised");
+                $("#alertLogin").show();
+            }
             // window.location.reload();
         },
-        error: function (req, err) {
-            console.log('my message' + err);
-        },
+        error: function (data) {
+        
+        }
     });
 
 }
