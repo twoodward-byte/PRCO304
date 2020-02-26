@@ -9,7 +9,11 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/libraries/'));
-app.use('/libraries', express.static('libraries'))
+app.use('/libraries', express.static('libraries'));
+
+app.use(express.static(__dirname + '/icons/'));
+app.use('/icons', express.static('icons'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 const ObjectID = require('mongodb').ObjectID;
@@ -22,6 +26,7 @@ client = new MongoClient(uri, { useNewUrlParser: true });
 var returnData;
 var path = require("path");
 
+//Database connected to
 client.connect(err => {
   //db = client.db("FinalProject");
   app.listen(9000, '0.0.0.0', () => {
@@ -32,26 +37,24 @@ client.connect(err => {
 //Return content for the index page
 app.get('/index', (req, res) => {
   MongoClient.connect(uri, function (err, db) {
-    var allowed = false; //Set to false by default
+    //var allowed = false; //Set to false by default
     var cookies = req.cookies;
     if (cookies && cookies.sessionToken) {
       let userSessionToken = cookies.sessionToken;
       var dbo = db.db("FinalProject");
       let result = dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
         console.log("Valid user session");
-        allowed = true; 
+        //allowed = true; 
         console.log("all checks out ok ");
         res.sendFile(path.join(__dirname + '/index.html'));
-        //res.redirect("/index.html");
-        //res.send(path.join(__dirname + '/index.html'));
       }));
   }
     else {
-       allowed =  false;
+       console.log("User not logged in, error");
+      // allowed =  false;
        res.status(403);
        res.redirect("/login");
        res.send();
-       console.log("User not logged in, error");
        return;
     }
 });
@@ -60,7 +63,6 @@ app.get('/index', (req, res) => {
 app.get('/login', (req, res) => {
   //delete session
   res.cookie('sessionToken', "", { sameSite: true });
-
   res.contentType("html");
   res.sendFile(path.join(__dirname + '/login.html'));
 });
@@ -226,11 +228,15 @@ app.post('/register2', (req, res) => {
     })
   })
 });
+
+app.get('/about', (req, res)=>{
+  res.sendFile(path.join(__dirname + '/about.html'));
+})
+
 //Generates a random salt
 function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
-
 
 //New server side login function
 app.post('/login2', (req, res) => {

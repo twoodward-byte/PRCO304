@@ -37,7 +37,8 @@
                 <input type="password" class="form-control" id="txtPassword" placeholder="Your Password *"><br>
                 <div style="text-align:center;">
                     <input type="submit" value="Login" class="btnSubmit" onclick="loginButton()"><br><br>
-                    <input type="submit" value="Register" class="btnRegister" onclick="window.location.assign('/register')">
+                    <input type="submit" value="Register" class="btnRegister"
+                        onclick="window.location.assign('/register')">
                 </div>
             </div>
             <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
@@ -54,42 +55,15 @@
 </body>
 
 <script>
-    //Hide alerts
-
     var input = document.getElementById("txtPassword");
     var text = document.getElementById("alertWarning");
     startListeningCaps();
     startListeningEnter();
     var result;
-    var users;
-
-     //Makes an ajax call and populates the target text boxes
-    /// $.get("/users", function (data) {
-    //  try {
-    //    users = data;
-    //  } catch (Exception) {
-    //    console.log(Exception)
-    //  }
-   // });
-   jQuery(document).ready(function () {
-    $("#alertLogin").hide();
-    $('#alertWarning').hide();
-    $('#alertApproved').hide();
-    $.ajax({
-        type: "GET",
-        url: '/users',
-        dataType: 'text',
-       // data: params,
-        success: function (data) {
-          users = JSON.parse(data);
-         // window.location.reload();
-        },
-        error: function(req, err){ console.log('my message' + err);
-        },
+    jQuery(document).ready(function () {
+        //Hide alerts
+        $("#alertLogin").hide();
+        $('#alertWarning').hide();
+        $('#alertApproved').hide();
     });
-});
-    
-
-
-    
 </script>

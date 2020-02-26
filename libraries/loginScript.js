@@ -33,7 +33,7 @@ function getUserSalt(username, data) {
     }
 }
 
-function checkUserUnique(username, users){
+function checkUserUnique(username, users) {
     var unique = true;
     for (i = 0; i < users.length; i++) {
         if (users[i].user == username) {
@@ -49,66 +49,37 @@ function loginButton() {
     var userName = $("#txtUserName").val();
     //Get password entered
     var password = $("#txtPassword").val();
-    //window.location.reload();
-    //Find correct user's salt in database
-   // $.ajax({
-     //   type: "GET",
-     //   url: '/users',
-      //  dataType: 'text',
-       // data: params,
-      //  success: function (data) {
-           // var users = JSON.parse(data);
-            //var salt = getUserSalt(userName, users);
-                //Now hash the password with the correct salt
-   // var hashPass = new Hashes.MD5().hex(password + salt);
-  //  var k; //k is used in loop below to find user
-   // var wrongPassword = true; //Set password as wrong by default
-    //var notApproved;
-    //console.log(hashPass);
-    //for (k in users) { //For each user in the database
-   //     if (userName == users[k].user && hashPass == users[k].password) { //Check if the username and password match up
-     //       wrongPassword = false;
-         //   if(users[k].status == "approved"){
-           //     sessionStorage.setItem('loggedIn', 'true');
-           //     sessionStorage.setItem('role', users[k].role);
-                //wrongPassword = false;
-                //Go to main page
-              //  document.location.assign("index.html");
-           /// }
-           // else{
-              //  notApproved = true;
-           // }
-       // }
-var params = {
-    user: userName,
-    password: password
-}
-       $.ajax({
+    var params = {
+        user: userName,
+        password: password
+    }
+    $.ajax({
         type: "POST",
         url: '/login2',
-       // dataType: 'text',
+        // dataType: 'text',
         data: params,
         success: function (data) {
-         // users = JSON.parse(data);
-         console.log("success logging in");
-         if(data.success == true){
-             console.log("redirecting");
-             window.location.assign("/index");
-         }
-         // window.location.reload();
+            // users = JSON.parse(data);
+            console.log("success logging in");
+            if (data.success == true) {
+                console.log("redirecting");
+                window.location.assign("/index");
+            }
+            // window.location.reload();
         },
-        error: function(req, err){ console.log('my message' + err);
+        error: function (req, err) {
+            console.log('my message' + err);
         },
     });
 
-    }
+}
 
-    //if (wrongPassword == true) {
-  //      $('#alertLogin').show();
-  //  }
-  //  if(notApproved == true){
-    //    $('#alertApproved').show();
-   // }
+//if (wrongPassword == true) {
+//      $('#alertLogin').show();
+//  }
+//  if(notApproved == true){
+//    $('#alertApproved').show();
+// }
 
 
 //Generates a random salt
@@ -119,7 +90,7 @@ function generateSalt() {
 
 function userRegistered() {
     var userName = $("#txtUserName").val();
-    if (checkUserUnique(userName)){ //If desired username is unique
+    if (checkUserUnique(userName)) { //If desired username is unique
         var salt = generateSalt(); //Generate random salt
         var password = $("#txtPassword").val(); //Get password
         var passwordSalt = password + salt;
@@ -130,7 +101,7 @@ function userRegistered() {
             .attr("value", salt.toString())
             .appendTo("#registerForm");
     }
-    else{
+    else {
         //Go back to login page
         document.location.assign("login.html");
     }
