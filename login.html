@@ -10,6 +10,8 @@
 
     <!--Bootstrap library-->
     <link rel="stylesheet" href="libraries/bootstrap.min.css">
+    <script src = "libraries/bootstrap.min.js"></script>
+    <script src = "libraries/bootstrap-alerts.min.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <!--Custom font-->
@@ -41,8 +43,10 @@
                         onclick="window.location.assign('/register')">
                 </div>
             </div>
-            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertLogin">
-                <strong>Login incorrect.</strong> You should check in on some of those fields below.
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alertLogin">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertLogin').hide();">&times;</a>
+                <strong>Login incorrect.</strong> You should check some of the fields above.
+                
             </div>
             <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertWarning">
                 <strong>Caps Lock on.</strong> You should check in on some of those fields below.
