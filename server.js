@@ -97,13 +97,24 @@ app.get("/users", function (require, response) {
   MongoClient.connect(uri, function (err, db) {
     if (err) throw err;
     var dbo = db.db("FinalProject");
-    dbo.collection("users").find({}).toArray(function (err, result) {
+    dbo.collection("users").find({}, 'user status').toArray(function (err, result) {
       if (err) throw err;
       dbResult = result;
+      response.json(dbResult);
       db.close();
     });
-    response.json(dbResult);
+    
   })
+});
+
+//Async function to return the users in the database (does not return passwords)
+app.get("/usersasync", async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  let array = await dbo.collection("users").find({}, { projection: {user: 1, status: 1}}).toArray();
+  console.log(array);
+  res.json(array);
+  await db.close();
 });
 
 //Endpoint for the pie chart data
@@ -310,6 +321,7 @@ app.get('/targets', (req, res) => {
     }
   });
 });
+
 
 //Endpoint for the approve page
 app.get('/approve', (req, res) => {

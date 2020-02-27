@@ -199,7 +199,7 @@
     function sendUsersRequest(){
       $.ajax({
                 type: "GET",
-                url: "/users",
+                url: "/usersasync",
                 //data: params,
                 success: function(data){
                   fillTable(data);
