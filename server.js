@@ -92,21 +92,6 @@ app.get("/getMyData", function (require, response) {
   })
 });
 
-//Endpoint for sending the users data to the client
-app.get("/users", function (require, response) {
-  MongoClient.connect(uri, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db("FinalProject");
-    dbo.collection("users").find({}, 'user status').toArray(function (err, result) {
-      if (err) throw err;
-      dbResult = result;
-      response.json(dbResult);
-      db.close();
-    });
-    
-  })
-});
-
 //Async function to return the users in the database (does not return passwords)
 app.get("/usersasync", async function(req, res){
   let db = await MongoClient.connect(uri);
@@ -117,19 +102,12 @@ app.get("/usersasync", async function(req, res){
   await db.close();
 });
 
-//Endpoint for the pie chart data
-app.get("/getPieData", function (require, response) {
-  MongoClient.connect(uri, function (err, db) {
-    var dbo = db.db("FinalProject");
-    var resultPie;
-    dbo.collection("partsProduced").find({}).toArray(function (err, result) {
-      if (err) throw err;
-      console.log(result);
-      resultPie = result;
-      db.close();
-      response.json(resultPie);
-    });
-  })
+app.get("/getPieDataAsync", async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  let array = await dbo.collection("partsProduced").find({}, {projection:{amount: 1, name: 1}}).toArray();
+  res.json(array);
+  await db.close();
 });
 
 //Endpoint for deleting users
