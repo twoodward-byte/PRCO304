@@ -116,15 +116,16 @@
       }
       $.ajax({
         type: "POST",
-        url: '/delete',
+        url: '/deleteAsync',
         data: params,
         success: function () {
           $('#alertDelete').show();
           //Now refresh table UI
-          var table = document.getElementById('itemTable');
-          table.deleteRow(parseInt(index));
+          //var table = document.getElementById('itemTable');
+          //table.deleteRow(parseInt(index));
           //sleep(500);
           //window.location.reload();
+          sendUsersRequest();
         },
       }).done(function (e) {
         console.log(e);

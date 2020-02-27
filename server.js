@@ -77,6 +77,7 @@ app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname + '/register.html'));
 });
 
+//Async function to get the targets for the production lines
 app.get("/getTargetsAsync", async function(req, res){
   let db = await MongoClient.connect(uri);
   let dbo = db.db("FinalProject");
@@ -119,6 +120,16 @@ app.post('/delete', (req, res) => {
     res.redirect('/')
   })
 })
+
+app.post('/deleteAsync', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  var id = req.body.id;
+  let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(id) });
+  res.status(200);
+  res.send();
+  await db.close();
+});
 
 //Endpoint for updating target 2
 app.post('/targets2', (req, res) => {
