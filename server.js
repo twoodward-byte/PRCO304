@@ -77,19 +77,12 @@ app.get("/register", (req, res) => {
   res.sendFile(path.join(__dirname + '/register.html'));
 });
 
-//Endpoint for the line target data
-app.get("/getMyData", function (require, response) {
-  MongoClient.connect(uri, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db("FinalProject");
-    dbo.collection("targets").find({}).toArray(function (err, result) {
-      if (err) throw err;
-      console.log("Get my data successful" + result);
-      returnData = result;
-      response.json(returnData);
-      db.close();
-    });
-  })
+app.get("/getTargetsAsync", async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  let array = await dbo.collection("targets").find({}, { projection: {line: 1, target: 1}}).toArray();
+  res.json(array);
+  await db.close();
 });
 
 //Async function to return the users in the database (does not return passwords)
