@@ -106,9 +106,6 @@
 
     hideAlerts();
 
-
-    //startListeningCaps();
-
     function check(input) {
         if (input.value != document.getElementById('txtPassword').value) {
             input.setCustomValidity('Password Must be Matching.');
@@ -124,24 +121,28 @@
         return re.test(email);
     }
 
+    function resetInputFields() {
+        $('#txtUserName').val("");
+        $('#txtPassword').val("");
+        $('#txtPassword2').val("");
+    }
+
     //Returns true if parameters match
-    function passwordMatch(password1, password2){
-        if(password1 == password2){
+    function passwordMatch(password1, password2) {
+        if (password1 == password2) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
+
     function registerUser() {
-        var userName = $("#txtUserName").val();
-        // if (checkUserUnique(userName, users)) { //If desired username is unique
-        var password = $("#txtPassword").val(); //Get password
         if (validateEmail(userName)) { //If email valid
             if (passwordMatch($('#txtPassword').val(), $('#txtPassword2').val())) { //If passwords match
                 var params = {
-                    user: userName,
-                    password: password,
+                    user: $("#txtUserName").val(),
+                    password: $("#txtPassword").val(),
                     status: "waiting"
                 };
                 $.ajax({
@@ -149,28 +150,20 @@
                     url: "/register2",
                     data: params,
                     success: function (data) {
-                        //$('#alertRegister').show();
-                        $('#txtUserName').val("");
-                        $('#txtPassword').val("");
-                        $('#txtPassword2').val("");
+                        resetInputFields();
                         if (data.unique == false) {
-                            console.log("Not unique");
                             $('#alertUnique').show();
                         }
                         if (data.success == true) {
                             $('#alertRegister').show();
                         }
                     }
-
                 }).done(function (e) {
-                    console.log(e);
                 })
                 //}
             }
-        else{ //Passwords do not match
-            $('#alertPassword').show();
+            else { $('#alertPassword').show(); } //Passwords don't match
         }
-    }
         else { //Email not valid
             $('#alertEmail').show();
         }
@@ -203,10 +196,7 @@
         });
     }
 
-    var input = document.getElementById("txtPassword2");
-    startListeningCaps(input);
-    input = document.getElementById("txtPassword");
-    startListeningCaps(input);
+    startListeningCaps(document.getElementById("txtPassword2"));
+    startListeningCaps(document.getElementById("txtPassword"));
     startListeningEnter();
-
 </script>
