@@ -55,7 +55,6 @@ app.get('/index', async function (req, res) {
       await db.close();
       return;
     }
-
   }
   else {
     await db.close();
@@ -140,7 +139,22 @@ app.post('/approveAsync', async function(req, res){
   let updateStatus = dbo.collection("users").updateOne({ _id: new mongo.ObjectId(req.body.id) }, newvalues);
   res.status(200);
   res.send();
-})
+});
+
+app.get('/aboutAsync', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  if (req.cookies && req.cookies.sessionToken) { 
+    let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
+    res.sendFile(path.join(__dirname + '/about.html'));
+  }
+  else{
+    res.status(403);
+      res.redirect("/login");
+      res.send();
+      return;
+  }
+});
 
 //Endpoint for posting new requisitions to the server
 app.post('/register2', (req, res) => {
@@ -201,28 +215,6 @@ app.post('/register2', (req, res) => {
         return;
       }
     });
-  });
-});
-
-//Endpoint for the about page
-app.get('/about', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    var cookies = req.cookies; //Get cookies
-    if (cookies && cookies.sessionToken) { //If cookies and session token exist
-      let userSessionToken = cookies.sessionToken;
-      var dbo = db.db("FinalProject");
-      //Attempt to find session token in database
-      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
-        console.log("Valid user session");
-        res.sendFile(path.join(__dirname + '/about.html'));
-      }));
-    }
-    else {
-      res.status(403);
-      res.redirect("/login");
-      res.send();
-      return;
-    }
   });
 });
 
