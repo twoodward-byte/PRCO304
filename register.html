@@ -55,7 +55,6 @@
             <div class=" alert alert-success alert-dismissible fade show collapse" role="alert" id="alertRegister">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close"
                         onclick="$('#alertRegister').hide()">&times;</a>
-
                     <strong>Register successful.</strong>
                 </div>
 
@@ -78,6 +77,14 @@
                     <strong>Email not valid</strong> Please check again
                 </div>
 
+                <!--Passwords not matching alert-->
+                <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertPassword">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+                        onclick="$('#alertPassword').hide()">&times;</a>
+                    <strong>Passwords do not match</strong> Check again
+                </div>
+
+
             </div>
         </div>
 </body>
@@ -94,6 +101,7 @@
         $('#alertRegister').hide();
         $('#alertUnique').hide();
         $('#alertEmail').hide();
+        $('#alertPassword').hide();
     }
 
     hideAlerts();
@@ -110,48 +118,63 @@
         }
     }
 
+    //Returns true if parameter is a valid email
     function validateEmail(email) {
         var re = /\S+@\S+\.\S+/;
         return re.test(email);
     }
 
+    //Returns true if parameters match
+    function passwordMatch(password1, password2){
+        if(password1 == password2){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     function registerUser() {
         var userName = $("#txtUserName").val();
         // if (checkUserUnique(userName, users)) { //If desired username is unique
         var password = $("#txtPassword").val(); //Get password
-        if(validateEmail(userName)){
-            var params = {
-            user: userName,
-            password: password,
-            status: "waiting"
-        };
-        $.ajax({
-            type: "POST",
-            url: "/register2",
-            data: params,
-            success: function (data) {
-                //$('#alertRegister').show();
-                $('#txtUserName').val("");
-                $('#txtPassword').val("");
-                $('#txtPassword2').val("");
-                if (data.unique == false) {
-                    console.log("Not unique");
-                    $('#alertUnique').show();
-                }
-                if (data.success == true) {
-                    $('#alertRegister').show();
-                }
-            }
+        if (validateEmail(userName)) { //If email valid
+            if (passwordMatch($('#txtPassword').val(), $('#txtPassword2').val())) { //If passwords match
+                var params = {
+                    user: userName,
+                    password: password,
+                    status: "waiting"
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/register2",
+                    data: params,
+                    success: function (data) {
+                        //$('#alertRegister').show();
+                        $('#txtUserName').val("");
+                        $('#txtPassword').val("");
+                        $('#txtPassword2').val("");
+                        if (data.unique == false) {
+                            console.log("Not unique");
+                            $('#alertUnique').show();
+                        }
+                        if (data.success == true) {
+                            $('#alertRegister').show();
+                        }
+                    }
 
-        }).done(function (e) {
-            console.log(e);
-        })
-        //}
+                }).done(function (e) {
+                    console.log(e);
+                })
+                //}
+            }
+        else{ //Passwords do not match
+            $('#alertPassword').show();
         }
-        else{
+    }
+        else { //Email not valid
             $('#alertEmail').show();
         }
-     
+
     }
 
     function startListeningEnter() {
