@@ -84,8 +84,9 @@ app.get("/getTargetsAsync", async function (req, res) {
   let dbo = await (await MongoClient.connect(uri)).db("FinalProject");
   //let dbo = db.db("FinalProject");
   let array = await dbo.collection("targets").find({}, { projection: { line: 1, target: 1 } }).toArray();
+  //res.status(200);
   res.json(array);
-  await db.close();
+  //res.send();
 });
 
 //Async function to return the users in the database (does not return passwords)
@@ -95,7 +96,6 @@ app.get("/usersasync", async function (req, res) {
   let array = await dbo.collection("users").find({}, { projection: { user: 1, status: 1 } }).toArray();
   console.log(array);
   res.json(array);
-  await db.close();
 });
 
 app.get("/getPieDataAsync", async function (req, res) {
@@ -103,7 +103,6 @@ app.get("/getPieDataAsync", async function (req, res) {
   let dbo = db.db("FinalProject");
   let array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
   res.json(array);
-  await db.close();
 });
 
 app.post('/deleteAsync', async function (req, res) {
@@ -113,7 +112,6 @@ app.post('/deleteAsync', async function (req, res) {
   let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(id) });
   res.status(200);
   res.send();
-  await db.close();
 });
 
 app.post('/targets2Async', async function(req, res){
@@ -123,39 +121,26 @@ app.post('/targets2Async', async function(req, res){
     $set: { "target": req.body.target }});
   res.status(200);
   res.send();
-  await db.close();
 })
 
-//Endpoint for updating target 1
-app.post('/targets1', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    console.log(req.body.target);
-    db.collection("targets").updateOne({ "line": "1" }, {
-      $set: { "target": req.body.target }, function(err, obj) {
-        if (err) throw err;
-        console.log("Line updated")
-      }
-    });
-    res.redirect('/targets.html');
-  })
-})
 
-//Approval post request made to server
-app.post('/approve', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    var dbo = db.db("FinalProject");
-    console.log("approve POST request recieved");
-    console.log("body of request" + req.body.id);
-    var id = req.body.id;
-    var newvalues = { $set: { status: "approved" } };
-    dbo.collection("users").updateOne({ _id: new mongo.ObjectId(id) }, newvalues, function (err, obj) {
-      if (err) throw err;
-      // db.close();
-    });
-    //Go back to homepage
-    res.redirect('/approve.html')
-  })
+app.post('/targets1Async', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  let updateStatus = dbo.collection("targets").updateOne({ "line": "1" }, {
+    $set: { "target": req.body.target }});
+  res.status(200);
+  res.send();
 });
+
+app.post('/approveAsync', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  var newvalues = { $set: { status: "approved" } };
+  let updateStatus = dbo.collection("users").updateOne({ _id: new mongo.ObjectId(req.body.id) }, newvalues);
+  res.status(200);
+  res.send();
+})
 
 //Endpoint for posting new requisitions to the server
 app.post('/register2', (req, res) => {

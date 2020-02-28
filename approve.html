@@ -96,12 +96,11 @@
       }
       $.ajax({
         type: "POST",
-        url: "/approve",
+        url: "/approveAsync",
         data: params,
         success: function () {
           $('#alertApprove').show();
-          var table = document.getElementById('itemTable');
-          table.deleteRow(parseInt(index));
+          sendUsersRequest();
         },
         error: function () {
           console.log("error");
