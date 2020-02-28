@@ -106,23 +106,6 @@ app.get("/getPieDataAsync", async function (req, res) {
   await db.close();
 });
 
-//Endpoint for deleting users
-app.post('/delete', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    var dbo = db.db("FinalProject");
-    console.log("delete POST request recieved");
-    console.log(req.body.id);
-    var id = req.body.id;
-    dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(id) }, function (err, obj) {
-      if (err) throw err;
-      console.log("1 user deleted");
-      // db.close();
-    });
-    //Go back to homepage
-    res.redirect('/')
-  })
-})
-
 app.post('/deleteAsync', async function (req, res) {
   let db = await MongoClient.connect(uri);
   let dbo = db.db("FinalProject");
@@ -133,18 +116,14 @@ app.post('/deleteAsync', async function (req, res) {
   await db.close();
 });
 
-//Endpoint for updating target 2
-app.post('/targets2', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    console.log(req.body.target);
-    db.collection("targets").updateOne({ "line": "2" }, {
-      $set: { "target": req.body.target }, function(err, obj) {
-        if (err) throw err;
-        console.log("Line updated")
-      }
-    });
-    res.redirect('/targets.html');
-  })
+app.post('/targets2Async', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  let updateStatus = dbo.collection("targets").updateOne({ "line": "2" }, {
+    $set: { "target": req.body.target }});
+  res.status(200);
+  res.send();
+  await db.close();
 })
 
 //Endpoint for updating target 1

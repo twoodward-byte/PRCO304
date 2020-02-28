@@ -84,12 +84,11 @@
     };
     $.ajax({
       type: method,
-      url: "/targets2",
+      url: "/targets2Async",
       data: params
     }).done(function (e) {
       console.log(e);
-      $('#targetAlert').show()
-      
+      $('#targetAlert').show();
     })
   });
 
