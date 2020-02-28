@@ -24,8 +24,7 @@
     <script type="text/javascript" src="libraries/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="libraries/popper.min.js"></script>
     <script type="text/javascript" src="libraries/hashes.min.js"></script>
-    <script src="libraries/loginScript.js.js"></script>
-
+    <script src="libraries/loginScript.js"></script>
 </head>
 
 <body>
@@ -36,23 +35,20 @@
             </h1>
             <h3 class="mt-4 mb-5">Register</h3>
             <div class="form-group mb-2">
-
                 <input type="email" class="form-control" id="txtUserName" placeholder="Enter email address *"
                     name="user" required><br>
                 <input type="password" class="form-control" id="txtPassword" placeholder="Create Password *"
                     name="password" required><br>
                 <input type="password" class="form-control" id="txtPassword2" placeholder="Repeat Password *" required
                     oninput="check(this)"><br>
-
                 <div style="text-align:center;">
                     <input type="submit" value="Submit" class="btnRegister" onclick="registerUser()"> <br><br>
                     <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('/login')"">
                 </div>
-
             </div>
 
             <!--Register Success Alert-->
-            <div class=" alert alert-success alert-dismissible fade show collapse" role="alert" id="alertRegister">
+                <div class=" alert alert-success alert-dismissible fade show collapse" role="alert" id="alertRegister">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close"
                         onclick="$('#alertRegister').hide()">&times;</a>
                     <strong>Register successful.</strong>
@@ -83,8 +79,6 @@
                         onclick="$('#alertPassword').hide()">&times;</a>
                     <strong>Passwords do not match</strong> Check again
                 </div>
-
-
             </div>
         </div>
 </body>
@@ -138,7 +132,7 @@
     }
 
     function registerUser() {
-        if (validateEmail(userName)) { //If email valid
+        if (validateEmail($('#txtUserName').val())) { //If email valid
             if (passwordMatch($('#txtPassword').val(), $('#txtPassword2').val())) { //If passwords match
                 var params = {
                     user: $("#txtUserName").val(),
@@ -171,9 +165,7 @@
     }
 
     function startListeningEnter() {
-        var input = document.getElementById("txtPassword2");
-        // Execute a function when the user releases a key on the keyboard
-        input.addEventListener("keyup", function (event) {
+        document.getElementById("txtPassword2").addEventListener("keyup", function (event) {
             // Number 13 is the "Enter" key on the keyboard
             if (event.keyCode === 13) {
                 // Cancel the default action, if needed
