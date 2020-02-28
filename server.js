@@ -41,30 +41,32 @@ client.connect(err => {
 });
 
 
-//Return content for the index page
-app.get('/index', (req, res) => {
-  //Connect to database
-  MongoClient.connect(uri, function (err, db) {
-    var cookies = req.cookies; //Get cookies
-    if (cookies && cookies.sessionToken) { //If cookies and session token exist
-      let userSessionToken = cookies.sessionToken;
-      var dbo = db.db("FinalProject");
-      //Attempt to find session token in database
-      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
-        console.log("Valid user session");
-        res.sendFile(path.join(__dirname + '/index.html'));
-      }));
-    }
-    else {
-      res.status(403);
-      res.redirect("/login");
-      res.send();
+
+app.get('/index', async function (req, res) {
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
+    let userSessionToken = cookies.sessionToken;
+    //Attempt to find session token in database
+    var array = await dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
+    if (array != null) {
+      res.sendFile(path.join(__dirname + '/index.html'));
+      await db.close();
       return;
     }
-  });
+
+  }
+  else {
+    await db.close();
+    res.status(403);
+    res.redirect("/login");
+    res.send();
+    return;
+  }
 });
 
-//Endpoint for login page
+//Get Endpoint for login page
 app.get('/login', (req, res) => {
   //delete session
   res.cookie('sessionToken', "", { sameSite: true });
@@ -78,28 +80,28 @@ app.get("/register", (req, res) => {
 });
 
 //Async function to get the targets for the production lines
-app.get("/getTargetsAsync", async function(req, res){
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
-  let array = await dbo.collection("targets").find({}, { projection: {line: 1, target: 1}}).toArray();
+app.get("/getTargetsAsync", async function (req, res) {
+  let dbo = await (await MongoClient.connect(uri)).db("FinalProject");
+  //let dbo = db.db("FinalProject");
+  let array = await dbo.collection("targets").find({}, { projection: { line: 1, target: 1 } }).toArray();
   res.json(array);
   await db.close();
 });
 
 //Async function to return the users in the database (does not return passwords)
-app.get("/usersasync", async function(req, res){
+app.get("/usersasync", async function (req, res) {
   let db = await MongoClient.connect(uri);
   let dbo = db.db("FinalProject");
-  let array = await dbo.collection("users").find({}, { projection: {user: 1, status: 1}}).toArray();
+  let array = await dbo.collection("users").find({}, { projection: { user: 1, status: 1 } }).toArray();
   console.log(array);
   res.json(array);
   await db.close();
 });
 
-app.get("/getPieDataAsync", async function(req, res){
+app.get("/getPieDataAsync", async function (req, res) {
   let db = await MongoClient.connect(uri);
   let dbo = db.db("FinalProject");
-  let array = await dbo.collection("partsProduced").find({}, {projection:{amount: 1, name: 1}}).toArray();
+  let array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
   res.json(array);
   await db.close();
 });
@@ -121,7 +123,7 @@ app.post('/delete', (req, res) => {
   })
 })
 
-app.post('/deleteAsync', async function(req, res){
+app.post('/deleteAsync', async function (req, res) {
   let db = await MongoClient.connect(uri);
   let dbo = db.db("FinalProject");
   var id = req.body.id;
@@ -199,43 +201,43 @@ app.post('/register2', (req, res) => {
           res.send();
           return;
         }
-          bcrypt.genSalt(saltRounds, function (err, salt) {
-            if (err) {
-              console.log("Error: " + err);
+        bcrypt.genSalt(saltRounds, function (err, salt) {
+          if (err) {
+            console.log("Error: " + err);
+          }
+          bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
+            let user = {
+              user: req.body.user, //Get username
+              password: hash, //Get bcrypt generated hash
+              status: req.body.status //Get status
             }
-            bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
-              let user = {
-                user: req.body.user, //Get username
-                password: hash, //Get bcrypt generated hash
-                status: req.body.status //Get status
+            dbo.collection('users').save(user, (err, result) => { //Register successful
+              if (err) return console.log(err)
+              console.log('saved to database');
+              var response = {
+                success: true,
               }
-              dbo.collection('users').save(user, (err, result) => { //Register successful
-                if (err) return console.log(err)
-                console.log('saved to database');
-                var response = {
-                  success: true,
-                }
-                res.status(200);
-                res.type("application/json");
-                res.send(response);
-                return;
-                //res.redirect('/login.html');
-              });
+              res.status(200);
+              res.type("application/json");
+              res.send(response);
+              return;
+              //res.redirect('/login.html');
             });
           });
-  }
-  else{ //User already exists
-          console.log("User already exists");
-          res.status(200); //Unauthorised
-          res.type("application/json"); 
-          var response = {
-            unique: false,
-          }
-          res.send(response);
-          return;
+        });
       }
-}); 
-});
+      else { //User already exists
+        console.log("User already exists");
+        res.status(200); //Unauthorised
+        res.type("application/json");
+        var response = {
+          unique: false,
+        }
+        res.send(response);
+        return;
+      }
+    });
+  });
 });
 
 //Endpoint for the about page
@@ -414,6 +416,6 @@ app.post('/login2', (req, res) => {
 });
 
 // Route not found (404)
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   return res.status(404).sendFile(__dirname + '/login.html');
 });

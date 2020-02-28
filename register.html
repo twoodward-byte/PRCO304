@@ -37,8 +37,8 @@
             <h3 class="mt-4 mb-5">Register</h3>
             <div class="form-group mb-2">
 
-                <input type="email" class="form-control" id="txtUserName" placeholder="Enter email address *" name="user"
-                    required><br>
+                <input type="email" class="form-control" id="txtUserName" placeholder="Enter email address *"
+                    name="user" required><br>
                 <input type="password" class="form-control" id="txtPassword" placeholder="Create Password *"
                     name="password" required><br>
                 <input type="password" class="form-control" id="txtPassword2" placeholder="Repeat Password *" required
@@ -52,24 +52,34 @@
             </div>
 
             <!--Register Success Alert-->
-            <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertRegister">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertRegister').hide()">&times;</a>
+            <div class=" alert alert-success alert-dismissible fade show collapse" role="alert" id="alertRegister">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+                        onclick="$('#alertRegister').hide()">&times;</a>
 
-                <strong>Register successful.</strong>
-            </div>
+                    <strong>Register successful.</strong>
+                </div>
 
-            <!--Caps Lock Warning Alert-->
-            <div class="alert alert-warning alert-dismissible fade show collapse" role="alert" id="alertCaps">
-                <strong>Caps Lock on.</strong> You should check the fields above.
-            </div>
+                <!--Caps Lock Warning Alert-->
+                <div class="alert alert-warning alert-dismissible fade show collapse" role="alert" id="alertCaps">
+                    <strong>Caps Lock on.</strong> You should check the fields above.
+                </div>
 
-            <!--User not unique alert-->
-            <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertUnique">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertUnique').hide()">&times;</a>
-                <strong>Username already taken</strong> Please enter a different one
+                <!--User not unique alert-->
+                <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertUnique">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+                        onclick="$('#alertUnique').hide()">&times;</a>
+                    <strong>Username already taken</strong> Please enter a different one
+                </div>
+
+                <!--Email not valid alert-->
+                <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertEmail">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+                        onclick="$('#alertEmail').hide()">&times;</a>
+                    <strong>Email not valid</strong> Please check again
+                </div>
+
             </div>
         </div>
-    </div>
 </body>
 
 <script>
@@ -78,11 +88,12 @@
     var users;
 
     //Hide alerts
-    function hideAlerts(){
+    function hideAlerts() {
         $("#alertLogin").hide();
         $('#alertCaps').hide();
         $('#alertRegister').hide();
         $('#alertUnique').hide();
+        $('#alertEmail').hide();
     }
 
     hideAlerts();
@@ -99,69 +110,80 @@
         }
     }
 
-    function registerUser() {
-        var userName = $("#txtUserName").val();
-       // if (checkUserUnique(userName, users)) { //If desired username is unique
-            var password = $("#txtPassword").val(); //Get password
-            var params = {
-                user: userName,
-                password: password,
-                status: "waiting"
-            };
-            $.ajax({
-                type: "POST",
-                url: "/register2",
-                data: params,
-                success: function(data){
-                    //$('#alertRegister').show();
-                    $('#txtUserName').val("");
-                    $('#txtPassword').val("");
-                    $('#txtPassword2').val("");
-                     if(data.unique == false){
-                         console.log("Not unique");
-                        $('#alertUnique').show();
-                     }
-                     if(data.success == true){
-                        $('#alertRegister').show();
-                     }
-                }
-
-            }).done(function (e) {
-                console.log(e);
-            })
-        //}
+    function validateEmail(email) {
+        var re = /\S+@\S+\.\S+/;
+        return re.test(email);
     }
 
-function startListeningEnter() {
+    function registerUser() {
+        var userName = $("#txtUserName").val();
+        // if (checkUserUnique(userName, users)) { //If desired username is unique
+        var password = $("#txtPassword").val(); //Get password
+        if(validateEmail(userName)){
+            var params = {
+            user: userName,
+            password: password,
+            status: "waiting"
+        };
+        $.ajax({
+            type: "POST",
+            url: "/register2",
+            data: params,
+            success: function (data) {
+                //$('#alertRegister').show();
+                $('#txtUserName').val("");
+                $('#txtPassword').val("");
+                $('#txtPassword2').val("");
+                if (data.unique == false) {
+                    console.log("Not unique");
+                    $('#alertUnique').show();
+                }
+                if (data.success == true) {
+                    $('#alertRegister').show();
+                }
+            }
+
+        }).done(function (e) {
+            console.log(e);
+        })
+        //}
+        }
+        else{
+            $('#alertEmail').show();
+        }
+     
+    }
+
+    function startListeningEnter() {
+        var input = document.getElementById("txtPassword2");
+        // Execute a function when the user releases a key on the keyboard
+        input.addEventListener("keyup", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                registerUser();
+            }
+        });
+    }
+
+    function startListeningCaps(element) {
+        var text = document.getElementById("alertCaps");
+        element.addEventListener("keyup", function (event) {
+            if (event.getModifierState("CapsLock")) {
+                text.style.display = "block";
+                console.log("hello");
+            } else {
+                text.style.display = "none"
+            }
+        });
+    }
+
     var input = document.getElementById("txtPassword2");
-    // Execute a function when the user releases a key on the keyboard
-    input.addEventListener("keyup", function (event) {
-        // Number 13 is the "Enter" key on the keyboard
-        if (event.keyCode === 13) {
-            // Cancel the default action, if needed
-            event.preventDefault();
-            // Trigger the button element with a click
-            registerUser();
-        }
-    });
-}
-
-function startListeningCaps(element) {
-    var text = document.getElementById("alertCaps");
-    element.addEventListener("keyup", function (event) {
-        if (event.getModifierState("CapsLock")) {
-            text.style.display = "block";
-            console.log("hello");
-        } else {
-            text.style.display = "none"
-        }
-    });
-}
-
-var input = document.getElementById("txtPassword2");
-startListeningCaps(input);
-input = document.getElementById("txtPassword");
-startListeningCaps(input);
-startListeningEnter();
+    startListeningCaps(input);
+    input = document.getElementById("txtPassword");
+    startListeningCaps(input);
+    startListeningEnter();
 
 </script>
