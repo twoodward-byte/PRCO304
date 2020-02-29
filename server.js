@@ -245,29 +245,6 @@ app.get('/targetsAsync', async function(req, res){
   } 
   });
 
-
-//Endpoint for the approve page
-app.get('/approve', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    var cookies = req.cookies; //Get cookies
-    if (cookies && cookies.sessionToken) { //If cookies and session token exist
-      let userSessionToken = cookies.sessionToken;
-      var dbo = db.db("FinalProject");
-      //Attempt to find session token in database
-      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
-        console.log("Valid user session");
-        res.sendFile(path.join(__dirname + '/approve.html'));
-      }));
-    }
-    else {
-      res.status(403);
-      res.redirect("/login");
-      res.send();
-      return;
-    }
-  });
-});
-
 //Endpoint for the approve page
 app.get('/approveAsync', async function(req, res){
   let db = await MongoClient.connect(uri);
@@ -296,11 +273,9 @@ function generateToken() {
 app.post('/login2', (req, res) => {
   let myPlaintextPassword = req.body.password;
   let myUserName = req.body.user;
-
   //Connect to database
   MongoClient.connect(uri, function (err, db) {
     var dbo = db.db("FinalProject");
-
     if (!req || !req.body || !req.body.password || !req.body.user) {
       res.type("application/json");
       res.status(400)
@@ -318,7 +293,6 @@ app.post('/login2', (req, res) => {
           console.log("Result does not exist");
           res.status(200); //Unauthorised
           res.type("application/json");
-
           var response = {
             authorised: false,
           }
@@ -327,15 +301,12 @@ app.post('/login2', (req, res) => {
         }
         //Compare password to database record, hashing and salting in the process
         bcrypt.compare(myPlaintextPassword, result.password, function (err, passwordMatched) {
-
           if (passwordMatched == true) { //Valid username and password
-
             //Generate session token
             var session = {
               sessionID: generateToken(),
               userID: result._id.toString()
             }
-
             //Save new user session to database
             dbo.collection("userSession").save(session, function (err, sessionResult) {
               if (err) {
@@ -351,13 +322,11 @@ app.post('/login2', (req, res) => {
               res.send(response);
               return;
             })
-
           } else {
             //Wrong password entered:
             console.log("User entered wrong password")
             res.status(200); //Unauthorised
             res.type("application/json");
-
             var response = {
               authorised: false,
             }
@@ -372,7 +341,6 @@ app.post('/login2', (req, res) => {
   });
 });
 
-// Route not found (404)
-app.use(function (req, res, next) {
+app.use(function (req, res, next) { // Route not found (404)
   return res.status(404).sendFile(__dirname + '/login.html');
 });
