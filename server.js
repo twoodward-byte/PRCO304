@@ -251,6 +251,25 @@ app.get('/targets', (req, res) => {
   });
 });
 
+//Endpoint for the targets page
+app.get('/targetsAsync', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
+    let userSessionToken = cookies.sessionToken;
+      //Attempt to find session token in database
+    var dbStatus = dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
+    res.sendFile(path.join(__dirname + '/targets.html'));
+  }
+  else {
+     res.status(403);
+     res.redirect("/login");
+     res.send();
+     return;
+  }
+  });
+
 
 //Endpoint for the approve page
 app.get('/approve', (req, res) => {
