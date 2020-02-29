@@ -10,24 +10,19 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/libraries/'));
 app.use('/libraries', express.static('libraries'));
-
 app.use(express.static(__dirname + '/icons/'));
 app.use('/icons', express.static('icons'));
-
 app.use(express.static(__dirname + '/Images'));
 app.use('/Images', express.static('Images'));
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const ObjectID = require('mongodb').ObjectID;
-var dbResult;
 var db;
 var client;
 const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
 const MongoClient = require('mongodb').MongoClient;
 client = new MongoClient(uri, { useNewUrlParser: true });
-var returnData;
 var path = require("path");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
@@ -39,8 +34,6 @@ client.connect(err => {
     console.log('listening on 9000')
   })
 });
-
-
 
 app.get('/index', async function (req, res) {
   let db = await MongoClient.connect(uri);
@@ -83,9 +76,7 @@ app.get("/getTargetsAsync", async function (req, res) {
   let dbo = await (await MongoClient.connect(uri)).db("FinalProject");
   //let dbo = db.db("FinalProject");
   let array = await dbo.collection("targets").find({}, { projection: { line: 1, target: 1 } }).toArray();
-  //res.status(200);
   res.json(array);
-  //res.send();
 });
 
 //Async function to return the users in the database (does not return passwords)
@@ -141,18 +132,37 @@ app.post('/approveAsync', async function(req, res){
   res.send();
 });
 
+//Async function to return the about page
 app.get('/aboutAsync', async function(req, res){
   let db = await MongoClient.connect(uri);
   let dbo = db.db("FinalProject");
   if (req.cookies && req.cookies.sessionToken) { 
     let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
     res.sendFile(path.join(__dirname + '/about.html'));
-  }
-  else{
+    return;
+  } else {
     res.status(403);
       res.redirect("/login");
       res.send();
       return;
+  }
+});
+
+app.get('/helpAsync', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  dbo = db.db("FinalProject");
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
+    let userSessionToken = cookies.sessionToken;
+      //Attempt to find session token in database
+      var dbStatus = await dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
+      if(dbStatus!=null) res.sendFile(path.join(__dirname + '/help.html'));
+  }
+  else {
+    res.status(403);
+    res.redirect("/login");
+    res.send();
+    return;
   }
 });
 
@@ -218,27 +228,6 @@ app.post('/register2', (req, res) => {
   });
 });
 
-//Endpoint for the help page
-app.get('/help', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    var cookies = req.cookies; //Get cookies
-    if (cookies && cookies.sessionToken) { //If cookies and session token exist
-      let userSessionToken = cookies.sessionToken;
-      var dbo = db.db("FinalProject");
-      //Attempt to find session token in database
-      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
-        console.log("Valid user session");
-        res.sendFile(path.join(__dirname + '/help.html'));
-      }));
-    }
-    else {
-      res.status(403);
-      res.redirect("/login");
-      res.send();
-      return;
-    }
-  });
-});
 
 //Endpoint for the targets page
 app.get('/targets', (req, res) => {

@@ -79,6 +79,13 @@
                         onclick="$('#alertPassword').hide()">&times;</a>
                     <strong>Passwords do not match</strong> Check again
                 </div>
+
+                <!--Password empty-->
+                <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertPasswordEmpty">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+                        onclick="$('#alertPasswordEmpty').hide()">&times;</a>
+                    <strong>Passwords is empty</strong> Check again
+                </div>
             </div>
         </div>
 </body>
@@ -96,6 +103,7 @@
         $('#alertUnique').hide();
         $('#alertEmail').hide();
         $('#alertPassword').hide();
+        $('#alertPasswordEmpty').hide();
     }
 
     hideAlerts();
@@ -131,32 +139,43 @@
         }
     }
 
+    function passwordEmpty(password) {
+        if (password == "") {
+            return true;
+        }
+    }
+
     function registerUser() {
         if (validateEmail($('#txtUserName').val())) { //If email valid
-            if (passwordMatch($('#txtPassword').val(), $('#txtPassword2').val())) { //If passwords match
-                var params = {
-                    user: $("#txtUserName").val(),
-                    password: $("#txtPassword").val(),
-                    status: "waiting"
-                };
-                $.ajax({
-                    type: "POST",
-                    url: "/register2",
-                    data: params,
-                    success: function (data) {
-                        resetInputFields();
-                        if (data.unique == false) {
-                            $('#alertUnique').show();
+            if (!passwordEmpty($('#txtPassword').val())) {
+                if (passwordMatch($('#txtPassword').val(), $('#txtPassword2').val())) { //If passwords match
+                    var params = {
+                        user: $("#txtUserName").val(),
+                        password: $("#txtPassword").val(),
+                        status: "waiting"
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: "/register2",
+                        data: params,
+                        success: function (data) {
+                            resetInputFields();
+                            if (data.unique == false) {
+                                $('#alertUnique').show();
+                            }
+                            if (data.success == true) {
+                                $('#alertRegister').show();
+                            }
                         }
-                        if (data.success == true) {
-                            $('#alertRegister').show();
-                        }
-                    }
-                }).done(function (e) {
-                })
-                //}
+                    }).done(function (e) {
+                    })
+                    //}
+                }
+                else { $('#alertPassword').show(); } //Passwords don't match
+            } else {
+                //password empty
+                $('#alertPasswordEmpty').show();
             }
-            else { $('#alertPassword').show(); } //Passwords don't match
         }
         else { //Email not valid
             $('#alertEmail').show();
