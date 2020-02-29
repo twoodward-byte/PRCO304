@@ -228,29 +228,6 @@ app.post('/register2', (req, res) => {
   });
 });
 
-
-//Endpoint for the targets page
-app.get('/targets', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    var cookies = req.cookies; //Get cookies
-    if (cookies && cookies.sessionToken) { //If cookies and session token exist
-      let userSessionToken = cookies.sessionToken;
-      var dbo = db.db("FinalProject");
-      //Attempt to find session token in database
-      dbo.collection("userSession").findOne({ "sessionID": userSessionToken }, (function (err, result) {
-        console.log("Valid user session");
-        res.sendFile(path.join(__dirname + '/targets.html'));
-      }));
-    }
-    else {
-      res.status(403);
-      res.redirect("/login");
-      res.send();
-      return;
-    }
-  });
-});
-
 //Endpoint for the targets page
 app.get('/targetsAsync', async function(req, res){
   let db = await MongoClient.connect(uri);
