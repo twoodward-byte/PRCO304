@@ -234,9 +234,7 @@ app.get('/targetsAsync', async function(req, res){
   let dbo = db.db("FinalProject");
   var cookies = req.cookies; //Get cookies
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
-    let userSessionToken = cookies.sessionToken;
-      //Attempt to find session token in database
-    var dbStatus = dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
+    var dbStatus = dbo.collection("userSession").findOne({ "sessionID": cookies.sessionToken });
     res.sendFile(path.join(__dirname + '/targets.html'));
   }
   else {
@@ -244,7 +242,7 @@ app.get('/targetsAsync', async function(req, res){
      res.redirect("/login");
      res.send();
      return;
-  }
+  } 
   });
 
 
@@ -269,6 +267,24 @@ app.get('/approve', (req, res) => {
     }
   });
 });
+
+//Endpoint for the approve page
+app.get('/approveAsync', async function(req, res){
+  let db = await MongoClient.connect(uri);
+  let dbo = db.db("FinalProject");
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
+      let userSessionToken = cookies.sessionToken;
+      var dbStatus = await dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
+      res.sendFile(path.join(__dirname + '/approve.html'));
+  }
+  else {
+      res.status(403);
+      res.redirect("/login");
+      res.send();
+      return;
+  }
+  });
 
 //Generates a random salt
 function generateToken() {
