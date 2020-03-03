@@ -9,9 +9,12 @@
   <!--Jquery library-->
   <script src="libraries/jquery-3.4.1.min.js"></script>
 
-
+  <!--Test Libraries-->
+  <script src="https://unpkg.com/chai/chai.js"></script>
+  <script src="https://unpkg.com/mocha/mocha.js"></script>
   <!--My functions library-->
   <script type="text/javascript" src="/libraries/script.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/mocha/mocha.css" />
 
   <!--Bootstrap CSS CDN-->
   <link rel="stylesheet" href="libraries/bootstrap.min.css">
@@ -152,6 +155,7 @@
     <h2>Line 1: <small id="line1Target"></small></h2>
     <h2>Line 2: <small id="line2Target"></small></h2>
   </div>
+  <div id="mocha"></div>
 
 
   <script>
@@ -180,6 +184,15 @@
     });
 
   </script>
+   <script class="mocha-init">
+    mocha.setup('tdd');
+    //mocha.checkLeaks();
+  </script>
+    <script src="/libraries/tests.js"></script>
+    <script class="mocha-exec">
+  
+      mocha.run();
+    </script>
 </body>
 
 </html>

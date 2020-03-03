@@ -37,17 +37,10 @@ client.connect(err => {
 
 app.get('/index', async function (req, res) {
   if (req.cookies && req.cookies.sessionToken) { //If cookies and session token exist
-    var array = await dbo.collection("userSession").findOne({ "sessionID": req.cookies.sessionToken });
-    if (array != null) {
+    if(validSession()){
       res.sendFile(path.join(__dirname + '/index.html'));
       return;
     }
-  }
-  else {
-    res.status(403);
-    res.redirect("/login");
-    res.send();
-    return;
   }
 });
 
@@ -87,22 +80,24 @@ app.post('/deleteAsync', async function (req, res) {
   res.send();
 });
 
-app.post('/targets2Async', async function(req, res){
+app.post('/targets2Async', async function (req, res) {
   let updateStatus = dbo.collection("targets").updateOne({ "line": "2" }, {
-    $set: { "target": req.body.target }});
+    $set: { "target": req.body.target }
+  });
   res.status(200);
   res.send();
 })
 
 
-app.post('/targets1Async', async function(req, res){
+app.post('/targets1Async', async function (req, res) {
   let updateStatus = dbo.collection("targets").updateOne({ "line": "1" }, {
-    $set: { "target": req.body.target }});
+    $set: { "target": req.body.target }
+  });
   res.status(200);
   res.send();
 });
 
-app.post('/approveAsync', async function(req, res){
+app.post('/approveAsync', async function (req, res) {
   var newvalues = { $set: { status: "approved" } };
   let updateStatus = dbo.collection("users").updateOne({ _id: new mongo.ObjectId(req.body.id) }, newvalues);
   res.status(200);
@@ -110,41 +105,35 @@ app.post('/approveAsync', async function(req, res){
 });
 
 //Async function to return the about page
-app.get('/aboutAsync', async function(req, res){
-  if (req.cookies && req.cookies.sessionToken) { 
-    if(validSession(req)){
+app.get('/aboutAsync', async function (req, res) {
+  if (req.cookies && req.cookies.sessionToken) {
+    if (validSession(req)) {
       res.sendFile(path.join(__dirname + '/about.html'));
       return;
     }
   }
 });
 
-function validSession(req){
+function validSession(req) { //Also can move cookie check into this function to minimise endpoint size
   let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
-    if(dbStatus!=null){
-      return true;
-    }
-    else {
-      res.status(403);
-      res.redirect("/login");
-      res.send();
-      return;
-  }
-}
-
-app.get('/helpAsync', async function(req, res){
-  var cookies = req.cookies; //Get cookies
-  if (cookies && cookies.sessionToken) { //If cookies and session token exist
-    let userSessionToken = cookies.sessionToken;
-      //Attempt to find session token in database
-      var dbStatus = await dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
-      if(dbStatus!=null) res.sendFile(path.join(__dirname + '/help.html'));
+  if (dbStatus != null) {
+    return true;
   }
   else {
     res.status(403);
     res.redirect("/login");
     res.send();
     return;
+  }
+}
+
+app.get('/helpAsync', async function (req, res) {
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
+    if (validSession()) {
+      res.sendFile(path.join(__dirname + '/help.html'));
+      return
+    }
   }
 });
 
@@ -209,41 +198,30 @@ app.post('/register2', (req, res) => {
 });
 
 //Endpoint for the targets page
-app.get('/targetsAsync', async function(req, res){
-  var cookies = req.cookies; //Get cookies
-  if (cookies && cookies.sessionToken) { //If cookies and session token exist
-    var dbStatus = dbo.collection("userSession").findOne({ "sessionID": cookies.sessionToken });
-    res.sendFile(path.join(__dirname + '/targets.html'));
+app.get('/targetsAsync', async function (req, res) {
+  if (req.cookies && req.cookies.sessionToken) { //If cookies and session token exist
+    if (validSession()) {
+      res.sendFile(path.join(__dirname + '/targets.html'));
+      return;
+    }
   }
-  else {
-     res.status(403);
-     res.redirect("/login");
-     res.send();
-     return;
-  } 
-  });
+});
 
 //Endpoint for the approve page
-app.get('/approveAsync', async function(req, res){
+app.get('/approveAsync', async function (req, res) {
   var cookies = req.cookies; //Get cookies
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
-      let userSessionToken = cookies.sessionToken;
-      var dbStatus = await dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
+    if (validSession()) {
       res.sendFile(path.join(__dirname + '/approve.html'));
-  }
-  else {
-      res.status(403);
-      res.redirect("/login");
-      res.send();
       return;
+    }
   }
-  });
+});
 
 //Generates a random salt - Potentially replace with bcrypt for security
 function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
-
 
 //Server side login endpoint
 app.post('/login2', (req, res) => {
