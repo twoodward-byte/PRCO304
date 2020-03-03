@@ -18,7 +18,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const ObjectID = require('mongodb').ObjectID;
-var db;
 var client;
 const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
 const MongoClient = require('mongodb').MongoClient;
@@ -26,31 +25,25 @@ client = new MongoClient(uri, { useNewUrlParser: true });
 var path = require("path");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+var dbo;
 
 //Database connected to
 client.connect(err => {
-  //db = client.db("FinalProject");
+  dbo = client.db("FinalProject");
   app.listen(9000, '0.0.0.0', () => {
     console.log('listening on 9000')
   })
 });
 
 app.get('/index', async function (req, res) {
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
-  var cookies = req.cookies; //Get cookies
-  if (cookies && cookies.sessionToken) { //If cookies and session token exist
-    let userSessionToken = cookies.sessionToken;
-    //Attempt to find session token in database
-    var array = await dbo.collection("userSession").findOne({ "sessionID": userSessionToken });
+  if (req.cookies && req.cookies.sessionToken) { //If cookies and session token exist
+    var array = await dbo.collection("userSession").findOne({ "sessionID": req.cookies.sessionToken });
     if (array != null) {
       res.sendFile(path.join(__dirname + '/index.html'));
-      await db.close();
       return;
     }
   }
   else {
-    await db.close();
     res.status(403);
     res.redirect("/login");
     res.send();
@@ -60,8 +53,7 @@ app.get('/index', async function (req, res) {
 
 //Get Endpoint for login page
 app.get('/login', (req, res) => {
-  //delete session
-  res.cookie('sessionToken', "", { sameSite: true });
+  res.cookie('sessionToken', "", { sameSite: true });   //delete session
   res.contentType("html");
   res.sendFile(path.join(__dirname + '/login.html'));
 });
@@ -74,39 +66,28 @@ app.get("/register", (req, res) => {
 //Async function to get the targets for the production lines
 app.get("/getTargetsAsync", async function (req, res) {
   let dbo = await (await MongoClient.connect(uri)).db("FinalProject");
-  //let dbo = db.db("FinalProject");
   let array = await dbo.collection("targets").find({}, { projection: { line: 1, target: 1 } }).toArray();
   res.json(array);
 });
 
 //Async function to return the users in the database (does not return passwords)
 app.get("/usersasync", async function (req, res) {
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   let array = await dbo.collection("users").find({}, { projection: { user: 1, status: 1 } }).toArray();
-  console.log(array);
   res.json(array);
 });
 
 app.get("/getPieDataAsync", async function (req, res) {
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   let array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
   res.json(array);
 });
 
 app.post('/deleteAsync', async function (req, res) {
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
-  var id = req.body.id;
-  let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(id) });
+  let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(req.body.id) });
   res.status(200);
   res.send();
 });
 
 app.post('/targets2Async', async function(req, res){
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   let updateStatus = dbo.collection("targets").updateOne({ "line": "2" }, {
     $set: { "target": req.body.target }});
   res.status(200);
@@ -115,8 +96,6 @@ app.post('/targets2Async', async function(req, res){
 
 
 app.post('/targets1Async', async function(req, res){
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   let updateStatus = dbo.collection("targets").updateOne({ "line": "1" }, {
     $set: { "target": req.body.target }});
   res.status(200);
@@ -124,8 +103,6 @@ app.post('/targets1Async', async function(req, res){
 });
 
 app.post('/approveAsync', async function(req, res){
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   var newvalues = { $set: { status: "approved" } };
   let updateStatus = dbo.collection("users").updateOne({ _id: new mongo.ObjectId(req.body.id) }, newvalues);
   res.status(200);
@@ -134,23 +111,28 @@ app.post('/approveAsync', async function(req, res){
 
 //Async function to return the about page
 app.get('/aboutAsync', async function(req, res){
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   if (req.cookies && req.cookies.sessionToken) { 
-    let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
-    res.sendFile(path.join(__dirname + '/about.html'));
-    return;
-  } else {
-    res.status(403);
+    if(validSession(req)){
+      res.sendFile(path.join(__dirname + '/about.html'));
+      return;
+    }
+  }
+});
+
+function validSession(req){
+  let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
+    if(dbStatus!=null){
+      return true;
+    }
+    else {
+      res.status(403);
       res.redirect("/login");
       res.send();
       return;
   }
-});
+}
 
 app.get('/helpAsync', async function(req, res){
-  let db = await MongoClient.connect(uri);
-  dbo = db.db("FinalProject");
   var cookies = req.cookies; //Get cookies
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
     let userSessionToken = cookies.sessionToken;
@@ -174,9 +156,7 @@ app.post('/register2', (req, res) => {
     let myUser = req.body.user;
     var unique = false;
     //Now check to see if username unique:
-
     var dbo = db.db("FinalProject");
-
     //Check if unique
     var test = dbo.collection('users').findOne({ user: myUser }, function (err, result) {
       if (err) throw err;
@@ -216,7 +196,7 @@ app.post('/register2', (req, res) => {
       }
       else { //User already exists
         console.log("User already exists");
-        res.status(200); //Unauthorised
+        res.status(200); //Unauthorised (This should be the correct HTTP code not 200)
         res.type("application/json");
         var response = {
           unique: false,
@@ -230,8 +210,6 @@ app.post('/register2', (req, res) => {
 
 //Endpoint for the targets page
 app.get('/targetsAsync', async function(req, res){
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   var cookies = req.cookies; //Get cookies
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
     var dbStatus = dbo.collection("userSession").findOne({ "sessionID": cookies.sessionToken });
@@ -247,8 +225,6 @@ app.get('/targetsAsync', async function(req, res){
 
 //Endpoint for the approve page
 app.get('/approveAsync', async function(req, res){
-  let db = await MongoClient.connect(uri);
-  let dbo = db.db("FinalProject");
   var cookies = req.cookies; //Get cookies
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
       let userSessionToken = cookies.sessionToken;
@@ -263,7 +239,7 @@ app.get('/approveAsync', async function(req, res){
   }
   });
 
-//Generates a random salt
+//Generates a random salt - Potentially replace with bcrypt for security
 function generateToken() {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
