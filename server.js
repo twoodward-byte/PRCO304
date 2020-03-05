@@ -37,7 +37,7 @@ client.connect(err => {
 
 app.get('/index', async function (req, res) {
   if (req.cookies && req.cookies.sessionToken) { //If cookies and session token exist
-    if(validSession()){
+    if (validSession(req)) {
       res.sendFile(path.join(__dirname + '/index.html'));
       return;
     }
@@ -130,77 +130,48 @@ function validSession(req) { //Also can move cookie check into this function to 
 app.get('/helpAsync', async function (req, res) {
   var cookies = req.cookies; //Get cookies
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
-    if (validSession()) {
+    if (validSession(req)) {
       res.sendFile(path.join(__dirname + '/help.html'));
       return
     }
   }
 });
 
-//Endpoint for posting new requisitions to the server
-app.post('/register2', (req, res) => {
-  MongoClient.connect(uri, function (err, db) {
-    //Get username and password
-    let myPlaintextPassword = req.body.password;
-    let myUser = req.body.user;
-    var unique = false;
-    //Now check to see if username unique:
-    var dbo = db.db("FinalProject");
-    //Check if unique
-    var test = dbo.collection('users').findOne({ user: myUser }, function (err, result) {
-      if (err) throw err;
-      if (result == null) {
-        unique = true;
-        //If no request or request incomplete:
-        if (!req || !req.body || !req.body.password) {
+//Endpoint for posting new registrations to the server
+app.post('/register2', async function (req, res) {
+  //Check if unique
+  var userExists = await dbo.collection('users').findOne({ user: req.body.user });
+  if (userExists == null && req && !req.body && !req.body.password) { //User does not exist and request valid
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+      if (err) console.log("Error: " + err);
+      bcrypt.hash(req.body.password, salt, function (err, hash) {
+        let user = {
+          user: req.body.user, //Get username
+          password: hash, //Get bcrypt generated hash
+          status: req.body.status //Get status
+        }
+        var saveStatus = await dbo.collection('users').save(user); //Register successful
+        if(saveStatus){
+          console.log('saved to database');
+          res.status(200);
           res.type("application/json");
-          res.status(400);
-          res.send();
+          res.send({success: true,});
           return;
         }
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-          if (err) {
-            console.log("Error: " + err);
-          }
-          bcrypt.hash(myPlaintextPassword, salt, function (err, hash) {
-            let user = {
-              user: req.body.user, //Get username
-              password: hash, //Get bcrypt generated hash
-              status: req.body.status //Get status
-            }
-            dbo.collection('users').save(user, (err, result) => { //Register successful
-              if (err) return console.log(err)
-              console.log('saved to database');
-              var response = {
-                success: true,
-              }
-              res.status(200);
-              res.type("application/json");
-              res.send(response);
-              return;
-              //res.redirect('/login.html');
-            });
-          });
-        });
-      }
-      else { //User already exists
-        console.log("User already exists");
-        res.status(200); //Unauthorised (This should be the correct HTTP code not 200)
-        res.type("application/json");
-        var response = {
-          unique: false,
-        }
-        res.send(response);
-        return;
-      }
+      });
     });
-  });
+  } else { //User already exists
+    res.status(200); //Unauthorised (This should be the correct HTTP code not 200)
+    res.type("application/json");
+    res.send({unique: false,});
+    return;
+  }
 });
 
 //Endpoint for the targets page
 app.get('/targetsAsync', async function (req, res) {
   if (req.cookies && req.cookies.sessionToken) { //If cookies and session token exist
-    if (validSession()) {
+    if (validSession(req)) {
       res.sendFile(path.join(__dirname + '/targets.html'));
       return;
     }
@@ -211,7 +182,7 @@ app.get('/targetsAsync', async function (req, res) {
 app.get('/approveAsync', async function (req, res) {
   var cookies = req.cookies; //Get cookies
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
-    if (validSession()) {
+    if (validSession(req)) {
       res.sendFile(path.join(__dirname + '/approve.html'));
       return;
     }

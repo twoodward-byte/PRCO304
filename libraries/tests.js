@@ -3,8 +3,8 @@ suite("HTML tests", function() {
         chai.assert($("#navDiv").length != 0, "Wrong number of divs in the page");
     });
 
-    test("Button to submit adding new item present", function() {
-        chai.assert($("#btnSubmitItem").length > 0, "Btn submit button not in DOM");
+    test("Button to refresh targets present", function() {
+        chai.assert($("#btnRefresh").length > 0, "Btn submit button not in DOM");
     });
 
     test("Page title present", function() {
