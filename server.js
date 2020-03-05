@@ -151,11 +151,11 @@ app.post('/register2', async function (req, res) {
           status: req.body.status //Get status
         }
         var saveStatus = await dbo.collection('users').save(user); //Register successful
-        if(saveStatus){
+        if (saveStatus) {
           console.log('saved to database');
           res.status(200);
           res.type("application/json");
-          res.send({success: true,});
+          res.send({ success: true, });
           return;
         }
       });
@@ -163,7 +163,7 @@ app.post('/register2', async function (req, res) {
   } else { //User already exists
     res.status(200); //Unauthorised (This should be the correct HTTP code not 200)
     res.type("application/json");
-    res.send({unique: false,});
+    res.send({ unique: false, });
     return;
   }
 });
@@ -195,75 +195,51 @@ function generateToken() {
 }
 
 //Server side login endpoint
-app.post('/login2', (req, res) => {
-  let myPlaintextPassword = req.body.password;
-  let myUserName = req.body.user;
-  //Connect to database
-  MongoClient.connect(uri, function (err, db) {
-    var dbo = db.db("FinalProject");
-    if (!req || !req.body || !req.body.password || !req.body.user) {
+app.post('/login2', async function (req, res) {
+  if (!req || !req.body || !req.body.password || !req.body.user) {
+    res.type("application/json");
+    res.status(400)
+    res.send();
+    return true;
+  }
+  try {    //Try to find user in database
+    var result = await dbo.collection("users").findOne({ "user": req.body.user });
+    if (result == null) { //User not found in database
+      res.status(200); //Need to change to correct http code Unauthorised
       res.type("application/json");
-      res.status(400)
-      res.send();
-      return true;
+      res.send({ authorised: false, });
+      return;
     }
-    try {
-      //Try to find user in database
-      dbo.collection("users").findOne({ "user": myUserName }, (function (err, result) {
-        if (err) { //Error occured
-          console.log(err);
-          return;
+    //Compare password to database record, hashing and salting in the process
+    bcrypt.compare(req.body.password, result.password, function (err, passwordMatched) {
+      if (passwordMatched == true) { //Valid username and password
+        //Generate session token
+        var session = {
+          sessionID: generateToken(),
+          userID: result._id.toString()
         }
-        if (result == null) { //User not found in database
-          console.log("Result does not exist");
-          res.status(200); //Unauthorised
+        //Save new user session to database
+        var saveStatus = await dbo.collection("userSession").save(session);
+        if(saveStatus){
           res.type("application/json");
+          res.status(200);
+          //Save user session to clients cookies:
+          res.cookie('sessionToken', session.sessionID, { sameSite: true });
           var response = {
-            authorised: false,
+            success: true
           }
           res.send(response);
           return;
         }
-        //Compare password to database record, hashing and salting in the process
-        bcrypt.compare(myPlaintextPassword, result.password, function (err, passwordMatched) {
-          if (passwordMatched == true) { //Valid username and password
-            //Generate session token
-            var session = {
-              sessionID: generateToken(),
-              userID: result._id.toString()
-            }
-            //Save new user session to database
-            dbo.collection("userSession").save(session, function (err, sessionResult) {
-              if (err) {
-                console.log("Error occured saving user session to db: " + err);
-              }
-              res.type("application/json");
-              res.status(200);
-              //Save user session to clients cookies:
-              res.cookie('sessionToken', session.sessionID, { sameSite: true });
-              var response = {
-                success: true
-              }
-              res.send(response);
-              return;
-            })
-          } else {
-            //Wrong password entered:
-            console.log("User entered wrong password")
-            res.status(200); //Unauthorised
-            res.type("application/json");
-            var response = {
-              authorised: false,
-            }
-            res.send(response);
-            return;
-          }
-        });
-      }));
+      } else {
+        res.status(200); //Need to change to http Unauthorised code
+        res.type("application/json");
+        res.send({authorised: false,});
+        return;
+      }
+    });
     } catch{
-      console.log("Cannot find record");
-    }
-  });
+}
 });
 
 app.use(function (req, res, next) { // Route not found (404)
