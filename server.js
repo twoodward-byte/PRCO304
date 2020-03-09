@@ -14,6 +14,7 @@ app.use(express.static(__dirname + '/icons/'));
 app.use('/icons', express.static('icons'));
 app.use(express.static(__dirname + '/Images'));
 app.use('/Images', express.static('Images'));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
@@ -36,11 +37,16 @@ client.connect(err => {
 });
 
 app.get('/index', async function (req, res) {
-  if (req.cookies && req.cookies.sessionToken) { //If cookies and session token exist
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
     if (validSession(req)) {
       res.sendFile(path.join(__dirname + '/index.html'));
       return;
     }
+  }
+  else{
+    res.contentType("html");
+    res.sendFile(path.join(__dirname + '/login.html'));
   }
 });
 
@@ -58,7 +64,6 @@ app.get("/register", (req, res) => {
 
 //Async function to get the targets for the production lines
 app.get("/getTargetsAsync", async function (req, res) {
-  let dbo = await (await MongoClient.connect(uri)).db("FinalProject");
   let array = await dbo.collection("targets").find({}, { projection: { line: 1, target: 1 } }).toArray();
   res.json(array);
 });
@@ -150,7 +155,7 @@ app.post('/register2', async function (req, res) {
           password: hash, //Get bcrypt generated hash
           status: req.body.status //Get status
         }
-        var saveStatus = await dbo.collection('users').save(user); //Register successful
+        var saveStatus = dbo.collection('users').save(user); //Register successful
         if (saveStatus) {
           console.log('saved to database');
           res.status(200);
@@ -219,7 +224,7 @@ app.post('/login2', async function (req, res) {
           userID: result._id.toString()
         }
         //Save new user session to database
-        var saveStatus = await dbo.collection("userSession").save(session);
+        var saveStatus =  dbo.collection("userSession").save(session);
         if(saveStatus){
           res.type("application/json");
           res.status(200);
