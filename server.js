@@ -74,6 +74,12 @@ app.get("/usersasync", async function (req, res) {
   res.json(array);
 });
 
+//Async function to return the users in the database (does not return passwords)
+app.get("/partsasync", async function (req, res) {
+  let array = await dbo.collection("parts").find({}, { projection: { name: 1, description: 1 } }).toArray();
+  res.json(array);
+});
+
 app.get("/getPieDataAsync", async function (req, res) {
   let array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
   res.json(array);
@@ -193,6 +199,17 @@ app.get('/approveAsync', async function (req, res) {
     }
   }
 });
+
+app.get('/confirmProduced', async function (req, res) {
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
+    if (validSession(req)) {
+      res.sendFile(path.join(__dirname + '/confirmProduced.html'));
+      return
+    }
+  }
+});
+
 
 //Generates a random salt - Potentially replace with bcrypt for security
 function generateToken() {

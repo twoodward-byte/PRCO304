@@ -18,8 +18,12 @@
 
   <!--Bootstrap CSS CDN-->
   <link rel="stylesheet" href="libraries/bootstrap.min.css">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
 
 
   <!--My stylesheet-->
@@ -133,29 +137,30 @@
 
   <div style="clear:both;"></div>
   <div id="navDiv"></div>
-   <h2>Analytics</h2>
-    <table class="table-responsive container-fluid mr-0 pl-0 pr-0">
-      <tr>
-        <td>
-    <!--Div that will hold the pie chart-->
-    <div id="chart_div" style="max-width: 600px; width: 400px"></div>
-        </td>
-        <td>
-    <!--Div that will hold the line chart-->
-    <div id="line_chart_div" style="max-height: 400px; max-width: 600px; width: 400px"></div>
-        </td>
-      </tr>
-    </table>
+
+  <h2 class="ml-4">Analytics</h2>
+  <table class="table-responsive container-fluid  pl-0 pr-0 ml-0" style="margin-left: -50px !important;">
+  <tr>
+    <td>
+      <!--Div that will hold the pie chart-->
+      <div id="chart_div" style="max-width: 600px; width: 400px"></div>
+    </td>
+    <td>
+      <!--Div that will hold the line chart-->
+      <div id="line_chart_div" style="max-height: 400px; max-width: 800px; width: 400px"></div>
+    </td>
+  </tr>
+  </table>
 
 
 
+
+  <h1 class="ml-3" style="display:inline-block;">Targets:</h1><button class="btn btn-primary mb-3 mt-2 ml-2" value="Refresh"
+    id="btnRefresh" onclick="document.location.reload()">Refresh</button>
+  <h2 class="ml-3">Line 1: <small id="line1Target"></small></h2>
+  <h2 class="ml-3">Line 2: <small id="line2Target"></small></h2>
   </div>
-  <h1 style="display: inline-block;">Targets:</h1><button class="btn btn-primary" value="Refresh" id="btnRefresh"
-    onclick="document.location.reload()">Refresh</button>
-    <h2>Line 1: <small id="line1Target"></small></h2>
-    <h2>Line 2: <small id="line2Target"></small></h2>
-  </div>
-  <div id="mocha"></div>
+  <div id="mocha" class="ml-0 pl-0"></div>
 
 
   <script>
@@ -184,15 +189,16 @@
     });
 
   </script>
-   <script class="mocha-init">
+  <script class="mocha-init">
     mocha.setup('tdd');
     //mocha.checkLeaks();
   </script>
-    <script src="/libraries/tests.js"></script>
-    <script class="mocha-exec">
-  
-      mocha.run();
-    </script>
+  <script src="/libraries/tests.js"></script>
+  <script class="mocha-exec">
+
+    mocha.run();
+  </script>
+
 </body>
 
 </html>
