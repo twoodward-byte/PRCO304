@@ -81,7 +81,12 @@ app.get("/partsasync", async function (req, res) {
 });
 
 app.get("/getPieDataAsync", async function (req, res) {
-  let array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
+  let array = await dbo.collection("partsProduced").find({name: "Bracket #423"}, { projection: { amount: 1, name: 1 } }).toArray();
+  res.json(array);
+});
+
+app.get("/getSidewallData", async function (req, res){
+  let array = await dbo.collection("partsProduced").find({name: "Sidewall #323"}, { projection: { amount: 1, name: 1 } }).toArray();
   res.json(array);
 });
 
@@ -95,6 +100,13 @@ app.post('/targets2Async', async function (req, res) {
   let updateStatus = dbo.collection("targets").updateOne({ "line": "2" }, {
     $set: { "target": req.body.target }
   });
+  res.status(200);
+  res.send();
+})
+
+app.post('/confirmPart', async function (req, res) {
+  var myobj = { amount: req.body.amount, name: req.body.name };
+  let updateStatus = dbo.collection("partsProduced").insertOne(myobj);
   res.status(200);
   res.send();
 })

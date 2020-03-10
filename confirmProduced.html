@@ -42,9 +42,6 @@
     <div class="input-group">
       <label class="ml-1 mt-1" for="prodLine1Input">Part name:</label>
       <select id="prodNameSelect" class="form-control ml-1" type="select" placeholder="Enter new value"></select>
-      <div class="input-group-append">
-        <input class="btn btn-primary" type="button" id="btnProdLine1" value="Update">
-      </div>
     </div>
 
 
@@ -54,7 +51,7 @@
       </label>
       <input type="number" min="0" class="form-control ml-1" name="target" id="target" placeholder="Enter value">
       <div class="input-group-append">
-        <input class="btn btn-primary" id="btnProdLine2" type="button" value="Update">
+        <input class="btn btn-primary" id="btnConfirmPart" type="button" value="Update">
       </div>
 
     </div>
@@ -85,59 +82,7 @@
 
 
     var dropdown = $("#prodNameSelect");
-    var data = [{
-    "name": "Alberta",
-    "abbreviation": "AB"
-  },
-  {
-    "name": "British Columbia",
-    "abbreviation": "BC"
-  },
-  {
-    "name": "Manitoba",
-    "abbreviation": "MB"
-  },
-  {
-    "name": "New Brunswick",
-    "abbreviation": "NB"
-  },
-  {
-    "name": "Newfoundland and Labrador",
-    "abbreviation": "NL"
-  },
-  {
-    "name": "Nova Scotia",
-    "abbreviation": "NS"
-  },
-  {
-    "name": "Northwest Territories",
-    "abbreviation": "NT"
-  },
-  {
-    "name": "Nunavut",
-    "abbreviation": "NU"
-  },
-  {
-    "name": "Ontario",
-    "abbreviation": "ON"
-  },
-  {
-    "name": "Prince Edward Island",
-    "abbreviation": "PE"
-  },
-  {
-    "name": "Quebec",
-    "abbreviation": "QC"
-  },
-  {
-    "name": "Saskatchewan",
-    "abbreviation": "SK"
-  },
-  {
-    "name": "Yukon",
-    "abbreviation": "YT"
-  }
-]
+
 $.getJSON("http://localhost:9000/partsasync", function (data) {
     $.each(data, function (key, entry) {
         dropdown.append($('<option></option>').attr('value', entry.abbreviation).text(entry.name));
@@ -146,6 +91,22 @@ $.getJSON("http://localhost:9000/partsasync", function (data) {
   });
   
 
+  $('#btnConfirmPart').click(function () {
+    var method = "POST";
+
+    var params = {
+      amount: $('#target').val(),
+      name: $('#prodNameSelect').val()
+    };
+    $.ajax({
+      type: method,
+      url: "/confirmPart",
+      data: params
+    }).done(function (e) {
+      console.log(e);
+      $('#targetAlert').show();
+    })
+  });
 
 
 
