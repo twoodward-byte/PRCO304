@@ -80,13 +80,18 @@ app.get("/partsasync", async function (req, res) {
   res.json(array);
 });
 
-app.get("/getPieDataAsync", async function (req, res) {
+app.get("/getPieDataAsync", async function (req, res) { //Gets bracket 423 data
   let array = await dbo.collection("partsProduced").find({name: "Bracket #423"}, { projection: { amount: 1, name: 1 } }).toArray();
   res.json(array);
 });
 
-app.get("/getSidewallData", async function (req, res){
+app.get("/getSidewallData", async function (req, res){ //Gets sidewall 323 data
   let array = await dbo.collection("partsProduced").find({name: "Sidewall #323"}, { projection: { amount: 1, name: 1 } }).toArray();
+  res.json(array);
+});
+
+app.get("/getAllConf", async function (req, res){ //Gets all confirmations
+  let array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
   res.json(array);
 });
 
@@ -137,6 +142,15 @@ app.get('/aboutAsync', async function (req, res) {
   }
 });
 
+//Async function to return the about page
+app.get('/allConfirmations', async function (req, res) {
+  if (req.cookies && req.cookies.sessionToken) {
+    if (validSession(req)) {
+      res.sendFile(path.join(__dirname + '/allConf.html'));
+      return;
+    }
+  }
+});
 function validSession(req) { //Also can move cookie check into this function to minimise endpoint size
   let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
   if (dbStatus != null) {
