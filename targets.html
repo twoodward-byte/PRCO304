@@ -89,16 +89,17 @@
   var method = "POST";
 
   $('#btnProdLine2').click(function () {
-    if($('#prodLine1Input').val() == ""){
+    if($('#prodLine2Input').val() == ""){
       $('#noValueAlert').show();
     }
     else{
     var params = {
+      line: "2",
       target: $('#target').val()
     };
     $.ajax({
       type: method,
-      url: "/targets2Async",
+      url: "/targetsAsync",
       data: params
     }).done(function (e) {
       console.log(e);
@@ -114,11 +115,12 @@
     }
     else{
       params = {
+      line: "1",
       target: $('#prodLine1Input').val()
     };
     $.ajax({
       type: method,
-      url: "/targets1Async",
+      url: "/targetsAsync",
       data: params
     }).done(function (e) {
       console.log(e);

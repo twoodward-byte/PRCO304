@@ -74,11 +74,13 @@ app.get("/usersasync", async function (req, res) {
   res.json(array);
 });
 
+//Gets all parts in the database
 app.get("/partsasync", async function (req, res) {
   let array = await dbo.collection("parts").find({}, { projection: { name: 1, description: 1 } }).toArray();
   res.json(array);
 });
 
+//Gets confirmation data either depending on name or returning all data in database
 app.post("/getConfData", async function (req, res){ //Gets confirmations with the specified name
   var name = req.body.name;
   var array;
@@ -97,13 +99,13 @@ app.post('/deleteAsync', async function (req, res) {
   res.send();
 });
 
-app.post('/targets2Async', async function (req, res) {
-  let updateStatus = dbo.collection("targets").updateOne({ "line": "2" }, {
+app.post('/targetsAsync', async function (req, res) {
+  let updateStatus = dbo.collection("targets").updateOne({ "line": req.body.line }, {
     $set: { "target": req.body.target }
   });
   res.status(200);
   res.send();
-})
+});
 
 app.post('/confirmPart', async function (req, res) {
   var myobj = { amount: req.body.amount, name: req.body.name };
@@ -111,16 +113,6 @@ app.post('/confirmPart', async function (req, res) {
   res.status(200);
   res.send();
 })
-
-
-app.post('/targets1Async', async function (req, res) {
-  let updateStatus = dbo.collection("targets").updateOne({ "line": "1" }, {
-    $set: { "target": req.body.target }
-  });
-  res.status(200);
-  res.send();
-});
-
 app.post('/approveAsync', async function (req, res) {
   var newvalues = { $set: { status: "approved" } };
   let updateStatus = dbo.collection("users").updateOne({ _id: new mongo.ObjectId(req.body.id) }, newvalues);
