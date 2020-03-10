@@ -74,24 +74,20 @@ app.get("/usersasync", async function (req, res) {
   res.json(array);
 });
 
-//Async function to return the users in the database (does not return passwords)
 app.get("/partsasync", async function (req, res) {
   let array = await dbo.collection("parts").find({}, { projection: { name: 1, description: 1 } }).toArray();
   res.json(array);
 });
 
-app.get("/getPieDataAsync", async function (req, res) { //Gets bracket 423 data
-  let array = await dbo.collection("partsProduced").find({name: "Bracket #423"}, { projection: { amount: 1, name: 1 } }).toArray();
-  res.json(array);
-});
-
-app.get("/getSidewallData", async function (req, res){ //Gets sidewall 323 data
-  let array = await dbo.collection("partsProduced").find({name: "Sidewall #323"}, { projection: { amount: 1, name: 1 } }).toArray();
-  res.json(array);
-});
-
-app.get("/getAllConf", async function (req, res){ //Gets all confirmations
-  let array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
+app.post("/getConfData", async function (req, res){ //Gets confirmations with the specified name
+  var name = req.body.name;
+  var array;
+  if(name==null){
+    array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
+  }
+  else{
+    array = await dbo.collection("partsProduced").find({name: req.body.name}, { projection: { amount: 1, name: 1 } }).toArray();
+  }
   res.json(array);
 });
 

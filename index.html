@@ -39,44 +39,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script>
-    var amount1 = 1;
-    var amount2 = 1;
-    //Makes an ajax call and populates the pie chart
-    $.get("/getPieDataAsync", function (data) {
-      try {
-        var piedata = data;
-        //   $('#line1Target').text(bottle[0].target);
-        //$('#line2Target').text(bottle[1].target);
-        var amount= 0 ;
-        for(i = 0; i<piedata.length; i++){
-          amount+= parseInt(piedata[i].amount);
+    var amount1 = 1; //Bracket Data
+    var amount2 = 1; //Sidewall Data
+
+    $.ajax({ //Get bracket 423 data
+      type: "POST",
+      url: "/getConfData",
+      data: { name: "Bracket #423" },
+      success: function(response){
+        var arr = response;
+        var amount = 0;
+        for(i = 0; i < arr.length; i++){
+          amount += parseInt(arr[i].amount);
         }
         amount1 = amount; //Bracket data
-      } catch (Exception) {
-        console.log(Exception)
       }
+    }).done(function (e) {
+      console.log(e);
     });
 
-    $.get("/getSidewallData", function (data) {
-      try {
-        var piedata = data;
-        //   $('#line1Target').text(bottle[0].target);
-        //$('#line2Target').text(bottle[1].target);
-        var amount= 0 ;
-        for(i = 0; i<piedata.length; i++){
-          amount+= parseInt(piedata[i].amount);
+
+    $.ajax({ //Get sidewall 323 data
+      type: "POST",
+      url: "/getConfData",
+      data: { name: "Sidewall #323" },
+      success: function(response){
+        var arr = response;
+        var amount = 0;
+        for(i = 0; i < arr.length; i++){
+          amount += parseInt(arr[i].amount);
         }
         amount2 = amount; //Bracket data
-      } catch (Exception) {
-        console.log(Exception)
       }
+    }).done(function (e) {
+      console.log(e);
     });
-    var result;
 
     jQuery(document).ready(function () {
       loadNavbar();
-
-
       var params = {
         target: 123
       };
@@ -163,10 +163,9 @@
 
 
 
-  <h1 class="ml-3" style="display:inline-block;">Targets:</h1><button class="btn btn-primary mb-3 mt-2 ml-2" value="Refresh"
-    id="btnRefresh" onclick="document.location.reload()">Refresh</button>
-  <h2 class="ml-3">Line 1: <small id="line1Target"></small></h2>
-  <h2 class="ml-3">Line 2: <small id="line2Target"></small></h2>
+  <h1 class="ml-3" style="display:inline-block;">Targets:</h1>
+  <h2 style="display: inline" class="ml-3"><span class="badge badge-warning ml-1">Line 1: <small id="line1Target"></small></span></h2>
+  <h2 style="display: inline" class="ml-3"><span class="badge badge-warning ml-1">Line 2: <small id="line2Target"></small></span></h2>
   </div>
   <div id="mocha" class="ml-0 pl-0"></div>
 
@@ -188,6 +187,9 @@
           console.log('my message' + err);
         },
       });
+
+
+
 
       function testFunc(input) {
         data = JSON.parse(input);
