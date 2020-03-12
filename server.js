@@ -18,7 +18,7 @@ app.use('/Images', express.static('Images'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const ObjectID = require('mongodb').ObjectID;
+//const ObjectID = require('mongodb').ObjectID;
 var client;
 const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
 const MongoClient = require('mongodb').MongoClient;
@@ -82,13 +82,12 @@ app.get("/partsasync", async function (req, res) {
 
 //Gets confirmation data either depending on name or returning all data in database
 app.post("/getConfData", async function (req, res){ //Gets confirmations with the specified name
-  var name = req.body.name;
   var array;
-  if(name==null){
-    array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1 } }).toArray();
+  if(req.body.name==null){
+    array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1, date: 1 } }).toArray();
   }
   else{
-    array = await dbo.collection("partsProduced").find({name: req.body.name}, { projection: { amount: 1, name: 1 } }).toArray();
+    array = await dbo.collection("partsProduced").find({name: req.body.name}, { projection: { amount: 1, name: 1, date: 1 } }).toArray();
   }
   res.json(array);
 });
@@ -108,7 +107,7 @@ app.post('/targetsAsync', async function (req, res) {
 });
 
 app.post('/confirmPart', async function (req, res) {
-  var myobj = { amount: req.body.amount, name: req.body.name };
+  var myobj = { amount: req.body.amount, name: req.body.name, date: req.body.date };
   let updateStatus = dbo.collection("partsProduced").insertOne(myobj);
   res.status(200);
   res.send();
@@ -237,8 +236,7 @@ app.post('/login2', async function (req, res) {
     res.status(400)
     res.send();
     return true;
-  }
-  try {    //Try to find user in database
+  } try {    //Try to find user in database
     var result = await dbo.collection("users").findOne({ "user": req.body.user });
     if (result == null) { //User not found in database
       res.status(200); //Need to change to correct http code Unauthorised
@@ -249,21 +247,17 @@ app.post('/login2', async function (req, res) {
     //Compare password to database record, hashing and salting in the process
     bcrypt.compare(req.body.password, result.password, function (err, passwordMatched) {
       if (passwordMatched == true) { //Valid username and password
-        //Generate session token
-        var session = {
+        var session = { //Generate session token
           sessionID: generateToken(),
           userID: result._id.toString()
         }
         //Save new user session to database
         var saveStatus =  dbo.collection("userSession").save(session);
-        if(saveStatus){
+        if(saveStatus){ //If saved successfully
           res.type("application/json");
           res.status(200);
-          //Save user session to clients cookies:
-          res.cookie('sessionToken', session.sessionID, { sameSite: true });
-          var response = {
-            success: true
-          }
+          res.cookie('sessionToken', session.sessionID, { sameSite: true }); //Save user session to clients cookies:
+          var response = { success: true }
           res.send(response);
           return;
         }

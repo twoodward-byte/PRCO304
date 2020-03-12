@@ -93,10 +93,12 @@ $.getJSON("http://localhost:9000/partsasync", function (data) {
 
   $('#btnConfirmPart').click(function () {
     var method = "POST";
-
+    var d = new Date()
+    d = d.toString();
     var params = {
       amount: $('#target').val(),
-      name: $('#prodNameSelect').val()
+      name: $('#prodNameSelect').val(),
+      date: d
     };
     $.ajax({
       type: method,

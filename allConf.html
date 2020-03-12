@@ -48,8 +48,7 @@
       <tr>
         <th>Amount</th>
         <th>Name </th>
-
-        
+        <th>Date Confirmed</th>
       </tr>
     </table>
   </div>
@@ -95,7 +94,8 @@
           tr.innerHTML =
             //Item description
             '<td>' + object.amount + '</td>'
-            + '<td>' + object.name + ' </td>';
+            + '<td>' + object.name + ' </td>'
+            + '<td>' + object.date + '</td>'
           apprTable.appendChild(tr);
       });
     }

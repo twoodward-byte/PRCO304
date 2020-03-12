@@ -39,6 +39,8 @@
   <script>
     var amount1 = 1; //Bracket Data
     var amount2 = 1; //Sidewall Data
+    var canopyAmount = 1; //Canopy 211 Data
+    var brckt555Amount = 1; //Bracket 555 Data
 
 
 
@@ -75,7 +77,26 @@
     }).done(function (e) {
       console.log(e);
     });
+
+    $.ajax({ //Get sidewall 323 data
+      type: "POST",
+      url: "/getConfData",
+      data: { name: "Canopy #211" },
+      success: function (response) {
+        var arr = response;
+        var amount = 0;
+        for (i = 0; i < arr.length; i++) {
+          amount += parseInt(arr[i].amount);
+        }
+        canopyAmount = amount; //Bracket data
+      }
+    }).done(function (e) {
+      console.log(e);
     });
+
+
+
+    }); //End of document ready
 
 
 
@@ -116,6 +137,15 @@
         var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
         var chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
         chart.draw(data, options);
+    
+
+        data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+          ['Canopy #211', parseInt(canopyAmount)],
+          ['Sidewall #323', parseInt(sidewall)]
+        ]);
         options.title = "Assembled part #21"
         chart2.draw(data, options);
       }
