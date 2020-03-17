@@ -186,8 +186,8 @@
 
     }
 
-    function startListeningEnter() {
-        document.getElementById("txtPassword2").addEventListener("keyup", function (event) {
+    function startListeningEnter(element) {
+        element.addEventListener("keyup", function (event) {
             // Number 13 is the "Enter" key on the keyboard
             if (event.keyCode === 13) {
                 // Cancel the default action, if needed
@@ -202,5 +202,5 @@
 
     startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
     startListeningCaps(document.getElementById("txtPassword2"), $('#alertCaps'));
-    startListeningEnter();
+    startListeningEnter(document.getElementById("txtPassword2"));
 </script>

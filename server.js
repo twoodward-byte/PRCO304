@@ -166,7 +166,7 @@ function validSession(req) { //Also can move cookie check into this function to 
 app.post('/register2', async function (req, res) {
   //Check if unique
   var userExists = await dbo.collection('users').findOne({ user: req.body.user });
-  if (userExists == null && req && !req.body && !req.body.password) { //User does not exist and request valid
+  if (userExists == null && req && req.body && req.body.password) { //User does not exist and request valid
     bcrypt.genSalt(saltRounds, function (err, salt) {
       if (err) console.log("Error: " + err);
       bcrypt.hash(req.body.password, salt, function (err, hash) {
