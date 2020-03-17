@@ -83,7 +83,8 @@
                 </div>
 
                 <!--Password empty-->
-                <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertPasswordEmpty">
+                <div class="alert alert-danger alert-dismissible fade show collapse" role="alert"
+                    id="alertPasswordEmpty">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close"
                         onclick="$('#alertPasswordEmpty').hide()">&times;</a>
                     <strong>Passwords is empty</strong> Check again
@@ -198,18 +199,19 @@
     }
 
     //Turns caps lock alert on or off depending on users caps lock key status
+    //Element: The element to monitor
+    //Alert: the alert to toggle
     function startListeningCaps(element, alert) {
         element.addEventListener("keyup", function (event) {
             if (event.getModifierState("CapsLock")) {
-                alert.style.display = "block";
-                console.log("hello");
+                alert.show();
             } else {
-                alert.style.display = "none"
+                alert.hide();
             }
         });
     }
 
-    startListeningCaps(document.getElementById("txtPassword2"), document.getElementById("alertCaps"));
-    startListeningCaps(document.getElementById("txtPassword"), document.getElementById("alertCaps"));
+    startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
+    startListeningCaps(document.getElementById("txtPassword2"), $('#alertCaps'));
     startListeningEnter();
 </script>
