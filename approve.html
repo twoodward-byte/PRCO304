@@ -74,7 +74,8 @@
   <!--Add new user div-->
   <div class="mt-1 mr-3 ml-1" style="max-width: 375px">
     <h3>Add New User</h3>
-    <div class="input-group"> <!--Input group for email-->
+    <div class="input-group">
+      <!--Input group for email-->
       <label class="ml-1 mt-1 mr-1">Email:</label>
       <input type="text" class="form-control" placeholder="Enter email" id="txtEmail">
     </div>
@@ -85,7 +86,7 @@
         <input class="btn btn-primary mt-1" id="btnConfirmPart" type="button" value="Submit" onclick="registerButton()">
       </div>
     </div>
-    
+
   </div>
 
 
@@ -100,6 +101,10 @@
   <div class="alert alert-danger alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertCaps">
     <strong>Caps Lock On</strong>
   </div>
+  <div class="alert alert-success alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertAdded">
+    <strong>User Added</strong>
+  </div>
+
 
   <script>
     var users;
@@ -114,14 +119,24 @@
 
 
     //Event handler for register button click event
-    function registerButton(){
-      registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val())
+    function registerButton() {
+      const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+      }
+      registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val());
+      sleep(500).then(() => {
+        sendUsersRequest();
+        $('#txtEmail').val("");
+        $('#txtPass').val("");
+        $('#alertAdded').show();
+      })
     }
 
     function hideAlerts() {
       $('#alertApprove').hide();
       $('#alertDelete').hide();
       $('#alertCaps').hide();
+      $('#alertAdded').hide();
     }
 
     //Approves the user with the specified ID
