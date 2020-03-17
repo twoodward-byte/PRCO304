@@ -7,6 +7,7 @@
 
     <!--Make website responsive-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="libraries/jquery-3.4.1.min.js"></script>
 
     <!--Bootstrap library-->
     <link rel="stylesheet" href="libraries/bootstrap.min.css">
@@ -21,7 +22,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
 
     <!--Includes for various javascript libraries-->
-    <script type="text/javascript" src="libraries/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="libraries/popper.min.js"></script>
     <script type="text/javascript" src="libraries/hashes.min.js"></script>
     <script src="/libraries/loginScript.js"></script>
@@ -59,10 +59,8 @@
 </body>
 
 <script>
-    var input = document.getElementById("txtPassword");
-    var text = document.getElementById("alertWarning");
     startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
-    startListeningEnter();
+    startListeningEnter(document.getElementById("txtPassword"), loginButton);
     var result;
     jQuery(document).ready(function () {
         //Hide alerts
