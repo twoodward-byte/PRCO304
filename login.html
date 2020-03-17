@@ -46,7 +46,6 @@
             <div class="alert alert-danger alert-dismissible fade show" role="alert" id="alertLogin">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertLogin').hide();">&times;</a>
                 <strong>Login incorrect.</strong> You should check some of the fields above.
-                
             </div>
             <div class="alert alert-warning alert-dismissible fade show collapse" role="alert" id="alertCaps">
                 <strong>Caps Lock on.</strong> You should check in on some of those fields below.
@@ -61,7 +60,6 @@
 <script>
     startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
     startListeningEnter(document.getElementById("txtPassword"), loginButton);
-    var result;
     jQuery(document).ready(function () {
         //Hide alerts
         $("#alertLogin").hide();

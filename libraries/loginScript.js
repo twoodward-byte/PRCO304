@@ -11,7 +11,7 @@ function startListeningEnter(element, func) {
     });
 }
 
-//MAKE this self contained function getting user list through argument
+//Returns the salt of the username present in the specified data parameter
 function getUserSalt(username, data) {
     for (i = 0; i < data.length; i++) {
         if (data[i].user == username) {
@@ -44,7 +44,6 @@ function startListeningCaps(element, alert) {
 }
 
 function loginButton() {
-
     //Get username entered
     var userName = $("#txtUserName").val();
     //Get password entered
@@ -69,11 +68,9 @@ function loginButton() {
                 console.log("Not authorised");
                 $("#alertLogin").show();
             }
-
             // window.location.reload();
         },
         error: function (data) {
-
         }
     });
 
@@ -92,16 +89,16 @@ function generateSalt() {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
 
-
+//Make this more self contained
 function userRegistered() {
     var userName = $("#txtUserName").val();
     if (checkUserUnique(userName)) { //If desired username is unique
         var salt = generateSalt(); //Generate random salt
         var password = $("#txtPassword").val(); //Get password
-        var passwordSalt = password + salt;
+        var passwordSalt = password + salt; //Add salt
         var hashPass = new Hashes.MD5().hex(password + salt); //Hash password for security
         $("#txtPassword").val(hashPass.toString()); //Store hashed password on form
-        $("<input />").attr("type", "hidden") //Store salt on form
+        $("<input />").attr("type", "hidden") //Store salt on form - Could be converted to ajax for simplicity
             .attr("name", "salt")
             .attr("value", salt.toString())
             .appendTo("#registerForm");
@@ -110,5 +107,4 @@ function userRegistered() {
         //Go back to login page
         document.location.assign("login.html");
     }
-
 }
