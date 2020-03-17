@@ -77,13 +77,11 @@
       <label class="ml-1 mt-1 mr-1">Email:</label>
       <input type="text" class="form-control" placeholder="Enter email" id="txtEmail">
     </div>
-
     <div class="input-group">
-      <label class="ml-1 mt-1 mr-1">      Password:
-      </label>
-      <input type="password" class="form-control" placeholder="Enter password" id="txtPass">
+      <label class="ml-1 mt-2 mr-1">Password:</label>
+      <input type="password" class="form-control mt-1" placeholder="Enter password" id="txtPass">
       <div class="input-group-append">
-        <input class="btn btn-primary" id="btnConfirmPart" type="button" value="Submit" onclick="registerButton()">
+        <input class="btn btn-primary mt-1" id="btnConfirmPart" type="button" value="Submit" onclick="registerButton()">
       </div>
     </div>
     
@@ -109,7 +107,8 @@
       loadNavbar();
       hideAlerts();
       sendUsersRequest();
-      startListeningCaps(document.getElementById('txtPass'), $('#alertCaps'))
+      startListeningCaps(document.getElementById('txtPass'), $('#alertCaps'));
+      startListeningEnter(document.getElementById('txtPass'), registerButton);
     });
 
 
