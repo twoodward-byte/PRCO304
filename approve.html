@@ -69,6 +69,29 @@
     </table>
   </div>
 
+
+  <!--Add new user div-->
+  <div class="mt-1 mr-3" style="max-width: 375px">
+    <h3>Add New User</h3>
+    <div class="input-group"> <!--Input group for email-->
+      <label class="ml-1 mt-1 mr-1">Email:</label>
+      <input type="text" class="form-control" placeholder="Enter email">
+    </div>
+
+    <div class="input-group">
+      <label class="ml-1 mt-1 mr-1">      Password:
+      </label>
+      <input type="password" class="form-control" placeholder="Enter password">
+      <div class="input-group-append">
+        <input class="btn btn-primary" id="btnConfirmPart" type="button" value="Submit">
+      </div>
+    </div>
+    
+  </div>
+
+
+
+  <!--Alerts-->
   <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertApprove">
     <strong>User approved</strong>
   </div>
@@ -170,19 +193,19 @@
       users.forEach(function (object) {
         if (object.status == "approved") {
 
-        iterator++;
-        var tr = document.createElement('tr');
-        var i = object._id;
-        var i = i.toString();
-        iterator = iterator.toString();
-        tr.innerHTML =
-          //Item description
-          '<td>' + object.user + '</td>'
-          + '<td>' + object.status + ' </td>' + '<td>'
-          + `<button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
-          + '</td>';
-        apprTable.appendChild(tr);
-          }
+          iterator++;
+          var tr = document.createElement('tr');
+          var i = object._id;
+          var i = i.toString();
+          iterator = iterator.toString();
+          tr.innerHTML =
+            //Item description
+            '<td>' + object.user + '</td>'
+            + '<td>' + object.status + ' </td>' + '<td>'
+            + `<button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
+            + '</td>';
+          apprTable.appendChild(tr);
+        }
       });
     }
 
@@ -201,18 +224,18 @@
       });
     }
 
-    function sendUsersRequest(){
+    function sendUsersRequest() {
       $.ajax({
-                type: "GET",
-                url: "/usersasync",
-                //data: params,
-                success: function(data){
-                  fillTable(data);
-                  fillTableAllUsers(data);
-                }
-            }).done(function (e) {
-                console.log(e);
-            })
+        type: "GET",
+        url: "/usersasync",
+        //data: params,
+        success: function (data) {
+          fillTable(data);
+          fillTableAllUsers(data);
+        }
+      }).done(function (e) {
+        console.log(e);
+      })
     }
   </script>
 </body>

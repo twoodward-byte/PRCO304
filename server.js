@@ -1,7 +1,6 @@
 //To run this application refer to the readme.txt file, or follow the steps below
 //run "node server.js"
 //In a modern web browser navigate to "locahost:9000"
-
 const express = require('express');
 const mongo = require('mongodb');
 const bodyParser = require('body-parser');
@@ -34,6 +33,16 @@ client.connect(err => {
   app.listen(9000, '0.0.0.0', () => {
     console.log('listening on 9000')
   })
+});
+
+app.get('/helpAsync', async function (req, res) {
+  var cookies = req.cookies; //Get cookies
+  if (cookies && cookies.sessionToken) { //If cookies and session token exist
+    if (validSession(req)) {
+      res.sendFile(path.join(__dirname + '/help.html'));
+      return
+    }
+  }
 });
 
 app.get('/index', async function (req, res) {
@@ -151,15 +160,7 @@ function validSession(req) { //Also can move cookie check into this function to 
   }
 }
 
-app.get('/helpAsync', async function (req, res) {
-  var cookies = req.cookies; //Get cookies
-  if (cookies && cookies.sessionToken) { //If cookies and session token exist
-    if (validSession(req)) {
-      res.sendFile(path.join(__dirname + '/help.html'));
-      return
-    }
-  }
-});
+
 
 //Endpoint for posting new registrations to the server
 app.post('/register2', async function (req, res) {
