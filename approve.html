@@ -75,7 +75,7 @@
     <h3>Add New User</h3>
     <div class="input-group"> <!--Input group for email-->
       <label class="ml-1 mt-1 mr-1">Email:</label>
-      <input type="text" class="form-control" placeholder="Enter email">
+      <input type="text" class="form-control" placeholder="Enter email" id="txtEmail">
     </div>
 
     <div class="input-group">
@@ -83,7 +83,7 @@
       </label>
       <input type="password" class="form-control" placeholder="Enter password" id="txtPass">
       <div class="input-group-append">
-        <input class="btn btn-primary" id="btnConfirmPart" type="button" value="Submit">
+        <input class="btn btn-primary" id="btnConfirmPart" type="button" value="Submit" onclick="registerButton()">
       </div>
     </div>
     
@@ -111,6 +111,12 @@
       sendUsersRequest();
       startListeningCaps(document.getElementById('txtPass'), $('#alertCaps'))
     });
+
+
+    //Event handler for register button click event
+    function registerButton(){
+      registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val())
+    }
 
     function hideAlerts() {
       $('#alertApprove').hide();

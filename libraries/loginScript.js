@@ -108,3 +108,85 @@ function userRegistered() {
         document.location.assign("login.html");
     }
 }
+
+//Event handler function for register button click event
+async function registerBtnClick() {
+    var status = await registerUser($('#txtUserName').val(),
+        $('#txtPassword').val(), $('#txtPassword2').val());
+    switch (status) { //Perform different tasks depending on status of registration
+        case "notUnique":
+            $('#alertUnique').show();
+            break;
+        case "success": //Registration successful
+            $('#alertRegister').show(); //Success registering alert
+            resetInputFields();
+            break;
+        case "passwordNotMatch":
+            $('#alertPassword').show();
+            break;
+        case "passwordEmpty":
+            $('#alertPasswordEmpty').show();
+            break;
+        case "emailInvalid":
+            $('#alertEmail').show();
+            resetInputFields();
+            break;
+        default:
+            $('#alertRegister').show(); //Success registering alert
+            resetInputFields();
+            break;
+    }
+}
+
+   //Returns true if parameter is a valid email
+   function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+}
+
+//Registers user with specified username and password
+async function registerUser(username, password, password2) {
+    if (validateEmail(username)) { //If email valid
+        if (!passwordEmpty(password)) {
+            if (passwordMatch(password, password2)) { //If passwords match
+                var params = {
+                    user: username, password: password, status: "waiting"
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/register2",
+                    data: params,
+                    success: async function (data) {
+                        if (data.unique == false) return "notUnique";
+                        if (data.success == true) return "success";
+                    }
+                }).done(function (e) {
+                })
+            }
+            else { return "passwordNotMatch" } //Passwords don't match
+        } else {
+            //password empty
+            return "passwordEmpty";
+        }
+    }
+    else { //Email not valid
+        return "emailInvalid";
+    }
+}
+
+
+//Returns true if parameters match
+function passwordMatch(password1, password2) {
+    if (password1 == password2) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function passwordEmpty(password) {
+    if (password == "") {
+        return true;
+    }
+}

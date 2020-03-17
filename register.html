@@ -42,7 +42,7 @@
                 <input type="password" class="form-control" id="txtPassword2" placeholder="Repeat Password *" required
                     oninput="check(this)"><br>
                 <div style="text-align:center;">
-                    <input type="submit" value="Submit" class="btnRegister" onclick="registerUser()"> <br><br>
+                    <input type="submit" value="Submit" class="btnRegister" onclick="registerBtnClick()"> <br><br>
                     <input type="button" value="Back" class="btnSubmit" onclick="window.location.assign('/login')"">
                 </div>
             </div>
@@ -120,75 +120,14 @@
         }
     }
 
-    //Returns true if parameter is a valid email
-    function validateEmail(email) {
-        var re = /\S+@\S+\.\S+/;
-        return re.test(email);
-    }
+ 
 
+    //Resets all input fields on the register page
     function resetInputFields() {
         $('#txtUserName').val("");
         $('#txtPassword').val("");
         $('#txtPassword2').val("");
     }
-
-    //Returns true if parameters match
-    function passwordMatch(password1, password2) {
-        if (password1 == password2) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    function passwordEmpty(password) {
-        if (password == "") {
-            return true;
-        }
-    }
-
-    function registerUser() {
-        if (validateEmail($('#txtUserName').val())) { //If email valid
-            if (!passwordEmpty($('#txtPassword').val())) {
-                if (passwordMatch($('#txtPassword').val(), $('#txtPassword2').val())) { //If passwords match
-                    var params = {
-                        user: $("#txtUserName").val(),
-                        password: $("#txtPassword").val(),
-                        status: "waiting"
-                    };
-                    $.ajax({
-                        type: "POST",
-                        url: "/register2",
-                        data: params,
-                        success: function (data) {
-                            resetInputFields();
-                            if (data.unique == false) {
-                                $('#alertUnique').show();
-                            }
-                            if (data.success == true) {
-                                $('#alertRegister').show();
-                            }
-                        }
-                    }).done(function (e) {
-                    })
-                    //}
-                }
-                else { $('#alertPassword').show(); } //Passwords don't match
-            } else {
-                //password empty
-                $('#alertPasswordEmpty').show();
-            }
-        }
-        else { //Email not valid
-            $('#alertEmail').show();
-        }
-
-    }
-
-
-
-
 
     startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
     startListeningCaps(document.getElementById("txtPassword2"), $('#alertCaps'));
