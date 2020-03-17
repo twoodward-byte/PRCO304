@@ -197,19 +197,19 @@
         });
     }
 
-    function startListeningCaps(element) {
-        var text = document.getElementById("alertCaps");
+    //Turns caps lock alert on or off depending on users caps lock key status
+    function startListeningCaps(element, alert) {
         element.addEventListener("keyup", function (event) {
             if (event.getModifierState("CapsLock")) {
-                text.style.display = "block";
+                alert.style.display = "block";
                 console.log("hello");
             } else {
-                text.style.display = "none"
+                alert.style.display = "none"
             }
         });
     }
 
-    startListeningCaps(document.getElementById("txtPassword2"));
-    startListeningCaps(document.getElementById("txtPassword"));
+    startListeningCaps(document.getElementById("txtPassword2"), document.getElementById("alertCaps"));
+    startListeningCaps(document.getElementById("txtPassword"), document.getElementById("alertCaps"));
     startListeningEnter();
 </script>
