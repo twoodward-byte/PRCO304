@@ -198,18 +198,7 @@
         });
     }
 
-    //Turns caps lock alert on or off depending on users caps lock key status
-    //Element: The element to monitor
-    //Alert: the alert to toggle
-    function startListeningCaps(element, alert) {
-        element.addEventListener("keyup", function (event) {
-            if (event.getModifierState("CapsLock")) {
-                alert.show();
-            } else {
-                alert.hide();
-            }
-        });
-    }
+
 
     startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
     startListeningCaps(document.getElementById("txtPassword2"), $('#alertCaps'));

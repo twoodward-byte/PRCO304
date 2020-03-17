@@ -1,15 +1,3 @@
-//const e = require("express");
-
-function startListeningCaps() {
-    input.addEventListener("keyup", function (event) {
-        if (event.getModifierState("CapsLock")) {
-            text.style.display = "block";
-            console.log("hello");
-        } else {
-            text.style.display = "none"
-        }
-    });
-}
 
 function startListeningEnter() {
     // Execute a function when the user releases a key on the keyboard
@@ -43,6 +31,19 @@ function checkUserUnique(username, users) {
     return unique;
 }
 
+//Turns caps lock alert on or off depending on users caps lock key status
+//Element: The element to monitor
+//Alert: the alert to toggle
+function startListeningCaps(element, alert) {
+    element.addEventListener("keyup", function (event) {
+        if (event.getModifierState("CapsLock")) {
+            alert.show();
+        } else {
+            alert.hide();
+        }
+    });
+}
+
 function loginButton() {
 
     //Get username entered
@@ -61,19 +62,19 @@ function loginButton() {
         success: function (data) {
             // users = JSON.parse(data);
             console.log("success logging in");
-            if (data.success == true) { 
+            if (data.success == true) {
                 console.log("redirecting");
                 window.location.assign("/index");
             }
-            else if(data.authorised == false){
+            else if (data.authorised == false) {
                 console.log("Not authorised");
                 $("#alertLogin").show();
             }
-           
+
             // window.location.reload();
         },
         error: function (data) {
-        
+
         }
     });
 

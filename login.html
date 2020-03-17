@@ -48,7 +48,7 @@
                 <strong>Login incorrect.</strong> You should check some of the fields above.
                 
             </div>
-            <div class="alert alert-warning alert-dismissible fade show collapse" role="alert" id="alertWarning">
+            <div class="alert alert-warning alert-dismissible fade show collapse" role="alert" id="alertCaps">
                 <strong>Caps Lock on.</strong> You should check in on some of those fields below.
             </div>
             <div class="alert alert-warning alert-dismissible fade show collapse" role="alert" id="alertApproved">
@@ -61,13 +61,13 @@
 <script>
     var input = document.getElementById("txtPassword");
     var text = document.getElementById("alertWarning");
-    startListeningCaps();
+    startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
     startListeningEnter();
     var result;
     jQuery(document).ready(function () {
         //Hide alerts
         $("#alertLogin").hide();
-        $('#alertWarning').hide();
+        $('#alertCaps').hide();
         $('#alertApproved').hide();
     });
 </script>
