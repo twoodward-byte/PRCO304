@@ -93,19 +93,28 @@
 
   <!--Alerts-->
   <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertApprove">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>User approved</strong>
   </div>
   <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertDelete">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>User deleted</strong>
   </div>
   <div class="alert alert-danger alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertCaps">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>Caps Lock On</strong>
   </div>
   <div class="alert alert-success alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertAdded">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>User Added</strong>
   </div>
   <div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertEmail">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>Email not valid</strong>
+  </div>
+  <div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertUnique">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
+    <strong>Email not unique</strong>
   </div>
 
 
@@ -120,36 +129,42 @@
       startListeningEnter(document.getElementById('txtPass'), registerButton);
     });
 
+    //Allows use of sleep function
     const sleep = (milliseconds) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
+      return new Promise(resolve => setTimeout(resolve, milliseconds))
     }
 
     //Event handler for register button click event
     function registerButton() {
-      //If valid email
-      if(validateEmail($('#txtEmail').val())){
-        registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val());
-      sleep(500).then(() => {
-        sendUsersRequest();
-        $('#txtEmail').val("");
-        $('#txtPass').val("");
-        $('#alertAdded').show();
-      })
-      }
-      else{ //Email not valid
+      if (validateEmail($('#txtEmail').val())) { //If valid email
+        var status = registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val()); //Try registering user
+        if (status = "notUnique") { //User not unique 
+          $('#alertUnique').show();
+        }
+        else {
+          sleep(500).then(() => {
+            sendUsersRequest();
+            $('#txtEmail').val("");
+            $('#txtPass').val("");
+            $('#alertAdded').show();
+          })
+        }
+      } else { //Email not valid
         console.log("Email not valid");
         //Display email not valid alert
         $('#alertEmail').show();
       }
-
     }
 
+
+    //Hides all alerts on page
     function hideAlerts() {
       $('#alertApprove').hide();
       $('#alertDelete').hide();
       $('#alertCaps').hide();
       $('#alertAdded').hide();
       $('#alertEmail').hide();
+      $('#alertUnique').hide();
     }
 
     //Approves the user with the specified ID
@@ -263,6 +278,8 @@
       });
     }
 
+
+    //Sends request for list of users and then populates table with data
     function sendUsersRequest() {
       $.ajax({
         type: "GET",
