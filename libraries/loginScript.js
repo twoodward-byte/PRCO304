@@ -138,8 +138,8 @@ async function registerBtnClick() {
     }
 }
 
-   //Returns true if parameter is a valid email
-   function validateEmail(email) {
+//Returns true if parameter is a valid email
+function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }

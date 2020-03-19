@@ -104,6 +104,9 @@
   <div class="alert alert-success alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertAdded">
     <strong>User Added</strong>
   </div>
+  <div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertEmail">
+    <strong>Email not valid</strong>
+  </div>
 
 
   <script>
@@ -117,19 +120,28 @@
       startListeningEnter(document.getElementById('txtPass'), registerButton);
     });
 
+    const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+    }
 
     //Event handler for register button click event
     function registerButton() {
-      const sleep = (milliseconds) => {
-        return new Promise(resolve => setTimeout(resolve, milliseconds))
-      }
-      registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val());
+      //If valid email
+      if(validateEmail($('#txtEmail').val())){
+        registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val());
       sleep(500).then(() => {
         sendUsersRequest();
         $('#txtEmail').val("");
         $('#txtPass').val("");
         $('#alertAdded').show();
       })
+      }
+      else{ //Email not valid
+        console.log("Email not valid");
+        //Display email not valid alert
+        $('#alertEmail').show();
+      }
+
     }
 
     function hideAlerts() {
@@ -137,6 +149,7 @@
       $('#alertDelete').hide();
       $('#alertCaps').hide();
       $('#alertAdded').hide();
+      $('#alertEmail').hide();
     }
 
     //Approves the user with the specified ID
