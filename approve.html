@@ -92,27 +92,26 @@
 
 
   <!--Alerts-->
-  <div class="alert alert-success alert-dismissible fade show collapse" role="alert" id="alertApprove">
+  <div class="alert alert-success alert-dismissible fade show collapse myCustomAlert" role="alert" id="alertApprove">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>User approved</strong>
   </div>
-  <div class="alert alert-danger alert-dismissible fade show collapse" role="alert" id="alertDelete">
+  <div class="alert alert-danger alert-dismissible fade show collapse myCustomAlert" role="alert" id="alertDelete">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>User deleted</strong>
   </div>
-  <div class="alert alert-danger alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertCaps">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
+  <div class="alert myCustomAlert alert-danger alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertCaps">
     <strong>Caps Lock On</strong>
   </div>
-  <div class="alert alert-success alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertAdded">
+  <div class="alert myCustomAlert alert-success alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertAdded">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>User Added</strong>
   </div>
-  <div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertEmail">
+  <div class="alert myCustomAlert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertEmail">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>Email not valid</strong>
   </div>
-  <div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertUnique">
+  <div class="alert myCustomAlert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertUnique">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
     <strong>Email not unique</strong>
   </div>
@@ -124,7 +123,7 @@
     jQuery(document).ready(function () {
       loadNavbar();
       hideAlerts();
-      sendUsersRequest();
+      populateTables();
       startListeningCaps(document.getElementById('txtPass'), $('#alertCaps'));
       startListeningEnter(document.getElementById('txtPass'), registerButton);
     });
@@ -135,9 +134,9 @@
     }
 
     //Event handler for register button click event
-    function registerButton() {
+     function registerButton() {
       if (validateEmail($('#txtEmail').val())) { //If valid email
-        var status = registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val()); //Try registering user
+        var status =  registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val()); //Try registering user
         if (status = "notUnique") { //User not unique 
           $('#alertUnique').show();
         }
@@ -156,15 +155,9 @@
       }
     }
 
-
     //Hides all alerts on page
     function hideAlerts() {
-      $('#alertApprove').hide();
-      $('#alertDelete').hide();
-      $('#alertCaps').hide();
-      $('#alertAdded').hide();
-      $('#alertEmail').hide();
-      $('#alertUnique').hide();
+      $('.myCustomAlert').hide();
     }
 
     //Approves the user with the specified ID
@@ -179,7 +172,7 @@
         data: params,
         success: function () {
           $('#alertApprove').show();
-          sendUsersRequest();
+          populateTables();
         },
         error: function () {
           console.log("error");
@@ -203,7 +196,7 @@
           //table.deleteRow(parseInt(index));
           //sleep(500);
           //window.location.reload();
-          sendUsersRequest();
+          populateTables();
         },
       }).done(function (e) {
         console.log(e);
@@ -279,15 +272,15 @@
     }
 
 
-    //Sends request for list of users and then populates table with data
-    function sendUsersRequest() {
+    //Sends request for list of users returns them
+    function populateTables() {
       $.ajax({
         type: "GET",
         url: "/usersasync",
         //data: params,
         success: function (data) {
-          fillTable(data);
           fillTableAllUsers(data);
+          fillTable(data);
         }
       }).done(function (e) {
         console.log(e);
@@ -295,5 +288,4 @@
     }
   </script>
 </body>
-
 </html>
