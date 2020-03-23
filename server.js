@@ -7,13 +7,18 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
 app.set('view engine', 'ejs');
+
 app.use(express.static(__dirname + '/libraries/'));
 app.use('/libraries', express.static('libraries'));
+
 app.use(express.static(__dirname + '/icons/'));
 app.use('/icons', express.static('icons'));
+
 app.use(express.static(__dirname + '/Images'));
 app.use('/Images', express.static('Images'));
 
+app.use(express.static(__dirname + '/helpPages'));
+app.use('/helpPages', express.static('helpPages'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 

@@ -24,6 +24,44 @@
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
+
+  <style>
+
+.sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 40;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+  </style>
 </head>
 
 <body>
@@ -37,18 +75,28 @@
   <div style="clear:both;"></div>
   <div id="navDiv"></div>
   <div id="mainContent" style="display: none;">
-  <h3>How to enter targets:</h3>
-  <p>Select the enter targets page:</p>
-  <div class="container-fluid">
-    <img src="Images/navBarTargets.png" style="max-width: 375px">
-    <p>Now find the production line you wish to edit and enter your new value, then press the update button:</p>
-    <img src="Images/targetsSubmit.PNG" style="max-width: 375px">
-  </div>
+    <div class="sidenav">
+      <a href="#" onclick="loadHelpPage()">Entering Targets</a>
+      <a href="#services">Managing Users</a>
+      <a href="#clients">Confirming parts</a>
+      <a href="#contact">Viewing Confirmations</a>
+    </div>
+    <div id="helpPageContent" class="main"> <!--This is where content will be loaded into-->
+      <h3 style="margin-left: 34%; padding-top: 23%;">Please select topic in sidebar</h3>
+  
+    </div>
   <script>
     jQuery(document).ready(function () {
       loadNavbar();
       $('#mainContent').fadeIn(200);
     });
+
+    function loadHelpPage(page){
+      $('#helpPageContent').load("/helpPages/enteringTargets.html");
+      $('#helpPageContent').css("display", "none");
+      $('#helpPageContent').fadeIn(200);
+
+  }
   </script>
   </div>
 </body>
