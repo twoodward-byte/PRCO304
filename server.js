@@ -121,6 +121,7 @@ app.post('/confirmPart', async function (req, res) {
   res.status(200);
   res.send();
 })
+
 app.post('/approveAsync', async function (req, res) {
   var newvalues = { $set: { status: "approved" } };
   let updateStatus = dbo.collection("users").updateOne({ _id: new mongo.ObjectId(req.body.id) }, newvalues);
@@ -147,6 +148,7 @@ app.get('/allConfirmations', async function (req, res) {
     }
   }
 });
+
 function validSession(req) { //Also can move cookie check into this function to minimise endpoint size
   let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
   if (dbStatus != null) {
@@ -159,8 +161,6 @@ function validSession(req) { //Also can move cookie check into this function to 
     return;
   }
 }
-
-
 
 //Endpoint for posting new registrations to the server
 app.post('/register2', async function (req, res) {
@@ -223,7 +223,6 @@ app.get('/confirmProduced', async function (req, res) {
     }
   }
 });
-
 
 //Generates a random salt - Potentially replace with bcrypt for security
 function generateToken() {

@@ -86,34 +86,16 @@
         <input class="btn btn-primary mt-1" id="btnConfirmPart" type="button" value="Submit" onclick="registerButton()">
       </div>
     </div>
-
   </div>
-
-
 
   <!--Alerts-->
-  <div class="alert alert-success alert-dismissible fade show collapse myCustomAlert" role="alert" id="alertApprove">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
-    <strong>User approved</strong>
-  </div>
-  <div class="alert alert-danger alert-dismissible fade show collapse myCustomAlert" role="alert" id="alertDelete">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
-    <strong>User deleted</strong>
-  </div>
-  <div class="alert myCustomAlert alert-danger alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertCaps">
+  <div class="alert myCustomAlert alert-danger alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert"
+    id="alertCaps">
     <strong>Caps Lock On</strong>
   </div>
-  <div class="alert myCustomAlert alert-success alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertAdded">
+  <div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertTEST">
     <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
-    <strong>User Added</strong>
-  </div>
-  <div class="alert myCustomAlert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertEmail">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
-    <strong>Email not valid</strong>
-  </div>
-  <div class="alert myCustomAlert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertUnique">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
-    <strong>Email not unique</strong>
+    <strong id="alertTestText">TEST</strong>
   </div>
 
 
@@ -134,30 +116,41 @@
     }
 
     //Event handler for register button click event
-     function registerButton() {
+    async function registerButton() {
       if (validateEmail($('#txtEmail').val())) { //If valid email
-        var status =  registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val()); //Try registering user
-        if (status = "notUnique") { //User not unique 
-          $('#alertUnique').show();
-        }
-        else {
-          sleep(500).then(() => {
-            sendUsersRequest();
-            $('#txtEmail').val("");
-            $('#txtPass').val("");
-            $('#alertAdded').show();
-          })
+        var ddd;
+        ddd = await registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val()); //Try registering user
+        switch (ddd) {
+          case "success":
+            populateTables();
+            resetAddUserInput();;
+            $('#alertTestText').text("User Added");
+            $('#alertTEST').removeClass("alert-warning");
+            $('#alertTEST').addClass("alert-success");
+            $('#alertTEST').show();
+            break;
+          case "notUnique":
+            $('#alertTestText').text("Email not unique");
+            $('#alertTEST').show();
+            break;
         }
       } else { //Email not valid
         console.log("Email not valid");
         //Display email not valid alert
-        $('#alertEmail').show();
+        $('#alertTestText').text("Email not valid");
+        $('#alertTEST').show();
       }
     }
 
     //Hides all alerts on page
     function hideAlerts() {
       $('.myCustomAlert').hide();
+      $('#alertTEST').hide();
+    }
+
+    function resetAddUserInput() {
+      $('#txtEmail').val("");
+      $('#txtPass').val("");
     }
 
     //Approves the user with the specified ID
@@ -171,7 +164,8 @@
         url: "/approveAsync",
         data: params,
         success: function () {
-          $('#alertApprove').show();
+          $('#alertTestText').text("User Approved");
+          $('#alertTEST').show();
           populateTables();
         },
         error: function () {
@@ -190,12 +184,8 @@
         url: '/deleteAsync',
         data: params,
         success: function () {
-          $('#alertDelete').show();
-          //Now refresh table UI
-          //var table = document.getElementById('itemTable');
-          //table.deleteRow(parseInt(index));
-          //sleep(500);
-          //window.location.reload();
+          $('#alertTestText').text("User Deleted");
+          $('#alertTEST').show();
           populateTables();
         },
       }).done(function (e) {
@@ -271,7 +261,6 @@
       });
     }
 
-
     //Sends request for list of users returns them
     function populateTables() {
       $.ajax({
@@ -288,4 +277,5 @@
     }
   </script>
 </body>
+
 </html>

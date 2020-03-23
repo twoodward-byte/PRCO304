@@ -152,16 +152,13 @@ async function registerUser(username, password, password2) {
                 var params = {
                     user: username, password: password, status: "waiting"
                 };
-                $.ajax({
+                var result = await $.ajax({
                     type: "POST",
                     url: "/register2",
                     data: params,
-                    success: async function (data) {
-                        if (data.unique == false) return "notUnique";
-                        if (data.success == true) return "success";
-                    }
-                }).done(function (e) {
-                })
+                });
+                if (result.unique == false) return "notUnique";
+                if (result.success == true) return "success";
             }
             else { return "passwordNotMatch" } //Passwords don't match
         } else {
