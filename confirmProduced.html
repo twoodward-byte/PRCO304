@@ -7,24 +7,25 @@
   <script src="libraries/jquery-3.4.1.min.js"></script>
 
   <!--Bootstrap Library-->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 
 
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
-  
- <!--My script-->
- <script src="script.js"></script>
+
+  <!--My script-->
+  <script src="script.js"></script>
 
   <!--Favicon Resources-->
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
   <!--Make website responsive-->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
- 
 </head>
 
 <body>
@@ -35,45 +36,48 @@
     onclick="logout()">Logout</a>
 
   <div style="clear:both;"></div>
-  <div id="navDiv"></div> <!--Navigation Bar goes here-->
-  <div id="mainContent" style="display:none;">
-  <h3>Confirm Production of Parts</h3>
-  <div class="mt-1 mr-3" style="max-width: 375px">
+  <div id="navDiv"></div>
+  <!--Navigation Bar goes here-->
+  <div id="mainContent" style="display:none;"> <!--Wrapper for all main content to all fade in-->
+    <h3>Confirm Production of Parts</h3>
+    <div class="mt-1 mr-3" style="max-width: 375px">
 
 
-    <div class="input-group">
-      <label class="ml-1 mt-1" for="prodLine1Input">Part name:</label>
-      <select id="prodNameSelect" class="form-control ml-1" type="select" placeholder="Enter new value"></select>
-    </div>
-
-
-    <div class="input-group mt-1">
-      <label class="ml-1 mt-1">
-        Part quantity:
-      </label>
-      <input type="number" min="0" class="form-control ml-1" name="target" id="target" placeholder="Enter value">
-      <div class="input-group-append">
-        <input class="btn btn-primary" id="btnConfirmPart" type="button" value="Update">
+      <div class="input-group">
+        <label class="ml-1 mt-1" for="prodLine1Input">Part name:</label>
+        <select id="prodNameSelect" class="form-control ml-1" type="select" placeholder="Enter new value"></select>
       </div>
 
+
+      <div class="input-group mt-1">
+        <label class="ml-1 mt-1">
+          Part quantity:
+        </label>
+        <input type="number" min="0" class="form-control ml-1" name="target" id="target" placeholder="Enter value">
+        <div class="input-group-append">
+          <input class="btn btn-primary" id="btnConfirmPart" type="button" value="Update">
+        </div>
+
+      </div>
+
+
+
+    </div>
+    <br>
+    <div class="alert alert-success alert-dismissible fade show ml-1" role="alert" id="targetAlert" role="alert"
+      style="width: 25%;">
+      Target successfully updated <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
 
-
-
+    <div class="alert alert-danger alert-dismissible fade show ml-1" role="alert" id="noValueAlert" role="alert"
+      style="width: 25%;">
+      Please enter a value <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
   </div>
-  <br>
-  <div class="alert alert-success alert-dismissible fade show ml-1" role="alert" id="targetAlert" role="alert" style="width: 25%;">
-    Target successfully updated <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-
-  <div class="alert alert-danger alert-dismissible fade show ml-1" role="alert" id="noValueAlert" role="alert" style="width: 25%;">
-    Please enter a value <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-</div>
 </body>
 
 </html>
@@ -87,13 +91,13 @@
 
     var dropdown = $("#prodNameSelect");
 
-$.getJSON("http://localhost:9000/partsasync", function (data) {
-    $.each(data, function (key, entry) {
+    $.getJSON("http://localhost:9000/partsasync", function (data) {
+      $.each(data, function (key, entry) {
         dropdown.append($('<option></option>').attr('value', entry.abbreviation).text(entry.name));
-    })
-});;
+      })
+    });;
   });
-  
+
 
   $('#btnConfirmPart').click(function () {
     var method = "POST";

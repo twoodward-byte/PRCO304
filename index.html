@@ -43,8 +43,6 @@
     var canopyAmount = 1; //Canopy 211 Data
     var brckt555Amount = 1; //Bracket 555 Data
 
-
-
     jQuery(document).ready(function () {
       loadNavbar();
       $.ajax({ //Get bracket 423 data
@@ -111,6 +109,7 @@
       // instantiates the pie chart, passes in the data and
       // draws it.
       function drawChart() {
+        $('#mainContent').fadeIn(200);
         try {
           var bracket = amount1;
           var sidewall = amount2;
@@ -161,7 +160,8 @@
   <a style="position: relative; float: right; text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link"
     href="#" onclick="logout()">Logout</a>
   <div style="clear:both;"></div>
-  <div id="navDiv"></div>
+  <div id="navDiv"></div> <!--Navigation Bar goes here-->
+  <div id="mainContent" style="display: none;">
   <h2 class="ml-4">Analytics</h2>
   <table class="table-responsive container-fluid  pl-0 pr-0 ml-0" style="margin-left: -50px !important;">
     <tr>
@@ -189,6 +189,7 @@
   <div id="mocha" class="ml-0 pl-0"></div>
 
   <script>
+   // $('#mainContent').fadeIn(200);
       $.ajax({
         type: 'GET',
         url: '/getTargetsAsync',
@@ -214,7 +215,7 @@
   <script class="mocha-exec">
       mocha.run();
   </script>
-
+</div>
 </body>
 
 </html>

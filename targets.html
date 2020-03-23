@@ -35,7 +35,8 @@
     onclick="logout()">Logout</a>
 
   <div style="clear:both;"></div>
-  <div id="navDiv"></div>
+  <div id="navDiv"></div> <!--Navigation Bar goes here-->
+  <div id="mainContent" style="display: none;">
   <h3>Targets per 24 hour period</h3>
   <div class="mt-1 mr-3" style="max-width: 375px">
 
@@ -75,14 +76,18 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
+</div>
 </body>
 
 </html>
+
+
 <script>
   jQuery(document).ready(function () {
     $('#targetAlert').hide();
     $('#noValueAlert').hide();
     loadNavbar();
+    $('#mainContent').fadeIn(200);
   });
   
   var x = $('#target').val();

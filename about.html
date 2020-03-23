@@ -38,7 +38,8 @@
   <a style="position:relative;float:right;text-align: right; margin-top: 10px; z-index: 1000;" class="nav-link" href="#"
     onclick="logout()">Logout</a>
   <div style="clear:both;"></div>
-  <div id="navDiv"></div>
+  <div id="navDiv"></div> <!--Navigation Bar goes here-->
+  <div id="mainContent" style="display: none;">
   <div class="jumbotron">
     <p>Font used: Roboto Condensed <br>
       Icon made by Freepik from www.flaticon.com
@@ -47,7 +48,9 @@
   <script>
     jQuery(document).ready(function () {
       loadNavbar();
+      $('#mainContent').fadeIn(200);
     });
   </script>
+  </div>
 </body>
 </html>
