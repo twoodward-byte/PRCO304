@@ -24,7 +24,8 @@ app.use(cookieParser());
 
 //const ObjectID = require('mongodb').ObjectID;
 var client;
-const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
+//const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
+const uri = "mongodb+srv://test:test@cluster0-bcfvz.mongodb.net/test?retryWrites=true&w=majority"; //Cloud connection string
 const MongoClient = require('mongodb').MongoClient;
 client = new MongoClient(uri, { useNewUrlParser: true });
 var path = require("path");
