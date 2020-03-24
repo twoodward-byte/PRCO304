@@ -31,12 +31,12 @@
   height: 100%;
   width: 160px;
   position: fixed;
-  z-index: 1;
-  top: 40;
+  z-index: 0;
+  top: 20;
   left: 0;
   background-color: #111;
   overflow-x: hidden;
-  padding-top: 20px;
+  padding-top: 0px;
 }
 
 .sidenav a {
@@ -55,6 +55,15 @@
   margin-left: 160px; /* Same as the width of the sidenav */
   font-size: 28px; /* Increased text to enable scrolling */
   padding: 0px 10px;
+  height: 100vh;
+
+}
+
+#helpPageContent{
+  overflow-x: hidden; 
+  overflow-x: auto; 
+  width: 160vh; 
+  height: 80vh;
 }
 
 @media screen and (max-height: 450px) {
