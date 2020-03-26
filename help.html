@@ -85,8 +85,8 @@
   <div id="navDiv"></div>
   <div id="mainContent" style="display: none;">
     <div class="sidenav">
-      <a href="#" onclick="loadHelpPage('/helpPages/enteringTargets.html')">Entering Targets</a>
-      <a href="#" onclick="loadHelpPage('/helpPages/managingUsers.html')">Managing Users</a>
+      <a href="#/helpPages/enteringTargets.html" onclick="loadHelpPage('/helpPages/enteringTargets.html')">Entering Targets</a>
+      <a href="#/helpPages/managingUsers.html" onclick="loadHelpPage('/helpPages/managingUsers.html')">Managing Users</a>
       <a href="#clients">Confirming parts</a>
       <a href="#contact">Viewing Confirmations</a>
     </div>
@@ -104,6 +104,15 @@
       $('#helpPageContent').load(page);
       $('#helpPageContent').css("display", "none");
       $('#helpPageContent').fadeIn(200);
+      //Make active sidebar link highlighted
+      //$('#managingUsers').css("color", "white");
+      //Reset all sidenav colors
+      $('.sidenav > a').css("color", "grey");
+
+
+
+      $('.sidenav > a[href="#' + page + '"]').css("color", "white");
+
 
   }
   </script>
