@@ -64,7 +64,7 @@ function loginButton() {
                 console.log("redirecting");
                 window.location.assign("/index");
             }
-            else if (data.authorised == false) {
+            else if (data.success == false) {
                 console.log("Not authorised");
                 $("#alertLogin").show();
             }

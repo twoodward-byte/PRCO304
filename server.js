@@ -247,12 +247,17 @@ app.post('/login2', async function (req, res) {
     if (result == null) { //User not found in database
       res.status(200); //Need to change to correct http code Unauthorised
       res.type("application/json");
-      res.send({ authorised: false, });
+      res.send({ success: false, });
       return;
     }
     //Compare password to database record, hashing and salting in the process
     bcrypt.compare(req.body.password, result.password, function (err, passwordMatched) {
       if (passwordMatched == true) { //Valid username and password
+        if(result.status != "approved"){
+          var response = { success: false }
+          res.send(response);
+          return;
+        }
         var session = { //Generate session token
           sessionID: generateToken(),
           userID: result._id.toString()
@@ -267,10 +272,10 @@ app.post('/login2', async function (req, res) {
           res.send(response);
           return;
         }
-      } else {
+      } else { //Password incorrect
         res.status(200); //Need to change to http Unauthorised code
         res.type("application/json");
-        res.send({authorised: false,});
+        res.send({success: false,});
         return;
       }
     });
