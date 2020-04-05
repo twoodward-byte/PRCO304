@@ -8,8 +8,10 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.set('view engine', 'ejs');
 
+//Both of these lines are needed
 app.use(express.static(__dirname + '/libraries/'));
 app.use('/libraries', express.static('libraries'));
+
 
 app.use(express.static(__dirname + '/icons/'));
 app.use('/icons', express.static('icons'));
@@ -17,7 +19,7 @@ app.use('/icons', express.static('icons'));
 app.use(express.static(__dirname + '/Images'));
 app.use('/Images', express.static('Images'));
 
-app.use(express.static(__dirname + '/helpPages'));
+//app.use(express.static(__dirname + '/helpPages')); //Probably not needed
 app.use('/helpPages', express.static('helpPages'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -35,7 +37,7 @@ var dbo;
 
 //Database connected to
 client.connect(err => {
-  dbo = client.db("FinalProject");
+  dbo = client.db("FinalProject"); //Set database
   app.listen(9000, '0.0.0.0', () => {
     console.log('listening on 9000')
   })
