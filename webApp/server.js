@@ -6,23 +6,26 @@ const mongo = require('mongodb');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const app = express();
-app.set('view engine', 'ejs');
-
-//Both of these lines are needed
-app.use(express.static(__dirname + '/libraries/'));
-app.use('/libraries', express.static('libraries'));
+var path = require('path');
 
 
-app.use(express.static(__dirname + '/icons/'));
-app.use('/icons', express.static('icons'));
+//Libraries
+app.use(express.static(__dirname + '/libraries/')); 
 
-app.use(express.static(__dirname + '/Images'));
-app.use('/Images', express.static('Images'));
+
+app.use(express.static(__dirname + '/webApp/icons/'));
+app.use('/webApp/icons', express.static('icons'));
+
+app.use(express.static(path.join(__dirname, '/webApp/Images')));
+app.use('/webApp/Images', express.static('Images'));
 
 //app.use(express.static(__dirname + '/helpPages')); //Probably not needed
-app.use('/helpPages', express.static('helpPages'));
+app.use('/webApp/helpPages', express.static('helpPages'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.set('view engine', 'ejs');
+
 
 //const ObjectID = require('mongodb').ObjectID;
 var client;
