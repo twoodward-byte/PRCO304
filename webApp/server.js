@@ -11,16 +11,18 @@ var path = require('path');
 
 //Libraries
 app.use(express.static(__dirname + '/libraries/')); 
+//Help Pages
+app.use(express.static(__dirname+ '/helpPages/'));
+//Images
+app.use(express.static(__dirname + '/Images/'));
 
 
 app.use(express.static(__dirname + '/webApp/icons/'));
 app.use('/webApp/icons', express.static('icons'));
 
 app.use(express.static(path.join(__dirname, '/webApp/Images')));
-app.use('/webApp/Images', express.static('Images'));
 
 //app.use(express.static(__dirname + '/helpPages')); //Probably not needed
-app.use('/webApp/helpPages', express.static('helpPages'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
