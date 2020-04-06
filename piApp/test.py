@@ -13,7 +13,7 @@ root = tk.Tk()
 root.title("Simulate Button Press")
 
 #Create label widget
-myLabel = Label(root, text="Sensor set to: Sidewall #323")
+myLabel = Label(root, text="Sensor set to: Bracket #423")
 #Attach label to screen
 myLabel.pack()
 
@@ -24,7 +24,7 @@ canvas.pack()
 def testFunc(): #Executes when button pressed
 	datetime_now = datetime.now() # pass this to a MongoDB doc
 	print("Simulate button pressed")
-	mydict = {"amount":"123", "name":"piTest", "date":datetime_now}
+	mydict = {"amount":"1", "name":"Bracket #423", "date":datetime_now}
 	x = mycol.insert_one(mydict)
 
 	
