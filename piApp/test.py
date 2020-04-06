@@ -13,7 +13,7 @@ root = tk.Tk()
 root.title("Simulate Button Press")
 
 #Create label widget
-myLabel = Label(root, text="Sensor set to: Bracket #423")
+myLabel = Label(root, text="Sensor set to: Bracket #423", font=("Arial Bold", 30))
 #Attach label to screen
 myLabel.pack()
 
