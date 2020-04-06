@@ -90,6 +90,8 @@
       var i;
       var iterator = 0;
       users.forEach(function (object) {
+        var date = new Date(object.date);
+        date.setTime( date.getTime() + date.getTimezoneOffset() * 60 * 1000 );
           iterator++;
           var tr = document.createElement('tr');
           var i = object._id;
@@ -99,7 +101,7 @@
             //Item description
             '<td>' + object.amount + '</td>'
             + '<td>' + object.name + ' </td>'
-            + '<td>' + object.date + '</td>'
+            + '<td>' + date + '</td>' //object.date
           apprTable.appendChild(tr);
       });
     }
