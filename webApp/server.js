@@ -128,7 +128,7 @@ app.post('/targetsAsync', async function (req, res) {
 });
 
 app.post('/confirmPart', async function (req, res) {
-  var myobj = { amount: req.body.amount, name: req.body.name, date: req.body.date };
+  var myobj = { amount: req.body.amount, name: req.body.name, date: req.body.date, origin: req.body.origin };
   let updateStatus = dbo.collection("partsProduced").insertOne(myobj);
   res.status(200);
   res.send();
