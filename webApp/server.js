@@ -17,8 +17,7 @@ app.use(express.static(__dirname+ '/helpPages/'));
 app.use(express.static(__dirname + '/Images/'));
 
 
-app.use(express.static(__dirname + '/webApp/icons/'));
-app.use('/webApp/icons', express.static('icons'));
+app.use(express.static(__dirname + '/icons/'));
 
 app.use(express.static(path.join(__dirname, '/webApp/Images')));
 
