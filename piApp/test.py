@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from pprint import pprint
 from datetime import datetime
 
+#Set mongo db cloud URI
 client = MongoClient("mongodb+srv://test:test@cluster0-bcfvz.mongodb.net/test?retryWrites=true&w=majority")
 db = client["FinalProject"]
 mycol = db["partsProduced"]
@@ -24,7 +25,7 @@ canvas.pack()
 def testFunc(): #Executes when button pressed
 	datetime_now = datetime.now() # pass this to a MongoDB doc
 	print("Simulate button pressed")
-	mydict = {"amount":"1", "name":"Bracket #423", "date":datetime_now}
+	mydict = {"amount":"1", "name":"Bracket #423", "date":datetime_now, "origin": "Pi"}
 	x = mycol.insert_one(mydict)
 
 	
