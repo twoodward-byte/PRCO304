@@ -105,10 +105,10 @@ app.get("/partsasync", async function (req, res) {
 app.post("/getConfData", async function (req, res){ //Gets confirmations with the specified name
   var array;
   if(req.body.name==null){
-    array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1, date: 1 } }).toArray();
+    array = await dbo.collection("partsProduced").find({}, { projection: { amount: 1, name: 1, date: 1, origin: 1 } }).toArray();
   }
   else{
-    array = await dbo.collection("partsProduced").find({name: req.body.name}, { projection: { amount: 1, name: 1, date: 1 } }).toArray();
+    array = await dbo.collection("partsProduced").find({name: req.body.name}, { projection: { amount: 1, name: 1, date: 1, origin: 1 } }).toArray();
   }
   res.json(array);
 });
@@ -128,7 +128,7 @@ app.post('/targetsAsync', async function (req, res) {
 });
 
 app.post('/confirmPart', async function (req, res) {
-  var myobj = { amount: req.body.amount, name: req.body.name, date: req.body.date };
+  var myobj = { amount: req.body.amount, name: req.body.name, date: req.body.date, origin: req.body.origin };
   let updateStatus = dbo.collection("partsProduced").insertOne(myobj);
   res.status(200);
   res.send();
