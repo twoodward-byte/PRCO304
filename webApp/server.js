@@ -8,29 +8,22 @@ const cookieParser = require('cookie-parser');
 const app = express();
 var path = require('path');
 
-
 //Libraries
 app.use(express.static(__dirname + '/libraries/')); 
 //Help Pages
 app.use(express.static(__dirname+ '/helpPages/'));
 //Images
 app.use(express.static(__dirname + '/Images/'));
-
-
+//icons
 app.use(express.static(__dirname + '/icons/'));
 
-app.use(express.static(path.join(__dirname, '/webApp/Images')));
-
-//app.use(express.static(__dirname + '/helpPages')); //Probably not needed
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 app.set('view engine', 'ejs');
 
 
 //const ObjectID = require('mongodb').ObjectID;
 var client;
-//const uri = "mongodb://localhost:27017/FinalProject" //Local connection string
 const uri = "mongodb+srv://test:test@cluster0-bcfvz.mongodb.net/test?retryWrites=true&w=majority"; //Cloud connection string
 const MongoClient = require('mongodb').MongoClient;
 client = new MongoClient(uri, { useNewUrlParser: true });
@@ -52,7 +45,7 @@ app.get('/helpAsync', async function (req, res) {
   if (cookies && cookies.sessionToken) { //If cookies and session token exist
     if (validSession(req)) {
       res.sendFile(path.join(__dirname + '/help.html'));
-      return
+      return;
     }
   }
 });
@@ -165,9 +158,8 @@ function validSession(req) { //Also can move cookie check into this function to 
   let dbStatus = dbo.collection("userSession").findOne({ "sessionID": req.cookies.userSessionToken });
   if (dbStatus != null) {
     return true;
-  }
-  else {
-    res.status(403);
+  } else {
+    res.status(403); //What http code?
     res.redirect("/login");
     res.send();
     return;
