@@ -6,6 +6,7 @@ from pprint import pprint
 from datetime import datetime
 import random
 import time
+import pymongo
 
 
 #Set mongo db cloud URI
@@ -22,9 +23,16 @@ myLabel = Label(root, text="Generate Random Testing Data", font=("Arial Bold", 3
 myLabel.pack()
 
 
+#Get all parts
+asd = db["parts"]
+post = asd.find()
+print(post)
+for x in asd.find({},{ "_id": 0, "name": 1}):
+	print(x)
+
 def btnStopClick():
-	#exit program
-	exit()
+	exit()	#exit program
+
 
 
 def btnStartClick():
