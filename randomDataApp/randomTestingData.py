@@ -23,12 +23,13 @@ myLabel = Label(root, text="Generate Random Testing Data", font=("Arial Bold", 3
 myLabel.pack()
 
 
-#Get all parts
+#Get all parts as array of strings
 asd = db["parts"]
 post = asd.find()
 print(post)
-for x in asd.find({},{ "_id": 0, "name": 1}):
-	print(x)
+x = asd.find({},{ "_id": 0, "name": 1})
+x = x.distinct('name')
+print(x[0]) 
 
 def btnStopClick():
 	exit()	#exit program
