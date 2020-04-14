@@ -28,7 +28,7 @@ asd = db["parts"]
 post = asd.find()
 print(post)
 x = asd.find({},{ "_id": 0, "name": 1})
-x = x.distinct('name')
+partsList = x.distinct('name')
 print(x[0]) 
 
 def btnStopClick():
@@ -37,23 +37,26 @@ def btnStopClick():
 
 
 def btnStartClick():
-	#random number between 1 and 10 for amount
-	x = random.randint(1, 10)
-	#random part picked
-	
-	#get parts from database in dictionary
-	#use random number to pick one as an index
-	#make a variable equal to this
-	
-	
-	#insert this into database with pi as origin
-	datetime_now = datetime.now() # pass this to a MongoDB doc
-	mydict = {"amount":x, "name":"Bracket #423", "date":datetime_now, "origin": "Pi"}
-	x = mycol.insert_one(mydict)
-	#pick random number between 1 and 10 for seconds to sleep
-	x = random.randint(1, 10)
-	#wait this long before executing again.
-	time.sleep(x)
+	while(1):
+		#random number between 1 and 10 for amount
+		x = random.randint(1, 10)
+		#random part picked
+		#get parts from database in dictionary
+		partsArray = partsList
+			#use random number to pick one as an index
+		length = len(partsArray)
+		randNum = random.randint(0,length -1)
+		#make a variable equal to this
+		randomPart = partsArray[randNum]
+		print(randomPart)
+		#insert this into database with pi as origin
+		datetime_now = datetime.now() # pass this to a MongoDB doc
+		mydict = {"amount":x, "name":randomPart, "date":datetime_now, "origin": "Pi"}
+		x = mycol.insert_one(mydict)
+		#pick random number between 1 and 10 for seconds to sleep
+		x = random.randint(1, 10)
+		#wait this long before executing again.
+		time.sleep(x)
 	
 #create canvas
 canvas = tk.Canvas(root, height=700, width=700, bg="#263D42") 
