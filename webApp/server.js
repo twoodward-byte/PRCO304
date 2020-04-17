@@ -16,6 +16,7 @@ app.use(express.static(__dirname+ '/helpPages/'));
 app.use(express.static(__dirname + '/Images/'));
 //icons
 app.use(express.static(__dirname + '/icons/'));
+app.use(express.json())// add this line
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -112,12 +113,28 @@ app.post('/deleteAsync', async function (req, res) {
   res.send();
 });
 
+
 app.post('/targetsAsync', async function (req, res) {
-  let updateStatus = dbo.collection("targets").updateOne({ "line": req.body.line }, {
-    $set: { "target": req.body.target }
-  });
-  res.status(200);
-  res.send();
+  if(req.body.username == "admin" && req.body.password == "OakTree"){
+    let updateStatus = dbo.collection("targets").updateOne({ "line": req.body.line }, {
+      $set: { "target": req.body.target }
+    }).then(function(status){
+      console.log(status); // Use this to debug
+      console.log("Database updated successfully")
+    });
+    if(updateStatus!=null){
+      res.status(200);
+      res.send(updateStatus);
+     // res.send({ saved: true, });
+    }
+    res.status(200);
+    res.send();
+  }
+  else{
+    //Unauthorised
+    res.status(401);
+    res.send();
+  }
 });
 
 app.post('/confirmPart', async function (req, res) {
