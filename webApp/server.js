@@ -108,9 +108,14 @@ app.post("/getConfData", async function (req, res){ //Gets confirmations with th
 });
 
 app.post('/deleteAsync', async function (req, res) {
-  let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(req.body.id) });
-  res.status(200);
-  res.send();
+  if(req.body.username == "admin" && req.body.password =="OakTree"){
+    let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(req.body.id) });
+    res.status(200); //Ok code
+    res.send();
+  } else{ //Unauthorised
+    res.status(401);
+    res.send({"status": "Wrong username or password"});
+  }
 });
 
 
