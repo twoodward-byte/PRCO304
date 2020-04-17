@@ -115,25 +115,25 @@ app.post('/deleteAsync', async function (req, res) {
 
 
 app.post('/targetsAsync', async function (req, res) {
-  if(req.body.username == "admin" && req.body.password == "OakTree"){
+  if(req.body.username == "admin" && req.body.password == "OakTree"){ //Authorised
     let updateStatus = dbo.collection("targets").updateOne({ "line": req.body.line }, {
       $set: { "target": req.body.target }
     }).then(function(status){
-      console.log(status); // Use this to debug
-      console.log("Database updated successfully")
+      if(status.modifiedCount == 0){ //Nothing modified
+        res.status(400);
+        res.send({"status":"Nothing modified"});
+      }
+      else{ //Item has been modified
+        console.log(status); // Use this to debug
+        console.log("Database updated successfully");
+        res.status(200);
+        res.send({"status": "Database updated"});
+      }
     });
-    if(updateStatus!=null){
-      res.status(200);
-      res.send(updateStatus);
-     // res.send({ saved: true, });
-    }
-    res.status(200);
-    res.send();
   }
-  else{
-    //Unauthorised
+  else{ //Unauthorised
     res.status(401);
-    res.send();
+    res.send({"status": "Wrong username or password"});
   }
 });
 
