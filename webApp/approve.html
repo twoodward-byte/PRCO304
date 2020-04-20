@@ -188,7 +188,9 @@
   //Deletes record with specified id and index
   function deleteBtn(id, index) {
     var params = {
-      id: id
+      id: id,
+      username: "admin",
+      password: "OakTree"
     }
     $.ajax({
       type: "POST",

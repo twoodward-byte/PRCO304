@@ -109,9 +109,19 @@ app.post("/getConfData", async function (req, res){ //Gets confirmations with th
 
 app.post('/deleteAsync', async function (req, res) {
   if(req.body.username == "admin" && req.body.password =="OakTree"){
-    let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(req.body.id) });
+    let deleteStatus = await dbo.collection("users").deleteOne({ _id: new mongo.ObjectId(req.body.id) }).then(function(status){
+      if(status.deletedCount == 0){ //Nothing deleted
+        res.status(400);
+        res.send({"status":"Nothing deleted"});
+      } else{
+        console.log(status); // Use this to debug
+        console.log("Database updated successfully");
+        res.status(200);
+        res.send({"status": "User deleted"});
+      }
+    });
     res.status(200); //Ok code
-    res.send();
+    res.send({"status": "Database updated"});
   } else{ //Unauthorised
     res.status(401);
     res.send({"status": "Wrong username or password"});
