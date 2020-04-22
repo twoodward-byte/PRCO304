@@ -43,7 +43,7 @@
     var canopyAmount = 1; //Canopy 211 Data
     var brckt555Amount = 1; //Bracket 555 Data
 
-    jQuery(document).ready(function () {
+    jQuery(document).ready(function () { //On document ready
       loadNavbar();
       $.ajax({ //Get bracket 423 data
         type: "POST",
@@ -57,8 +57,8 @@
           }
           bracket423Data = amount; //Bracket 423 data
         }
-      }).done(function (e) {
-        console.log(e);
+      }).done(function (e) { //Ajax call done
+        console.log("Bracket data recieved");
       });
 
       $.ajax({ //Get sidewall 323 data
@@ -74,7 +74,7 @@
           sidewall323Data = amount; //Bracket data
         }
       }).done(function (e) {
-        console.log(e);
+        console.log("sidewall data recieved");
       });
 
       $.ajax({ //Get Canopy 211 data
@@ -90,7 +90,7 @@
           canopyAmount = amount; //Bracket data
         }
       }).done(function (e) {
-        console.log(e);
+        console.log("canopy data recieved");
       });
 
     }); //End of document ready
@@ -211,16 +211,16 @@
 
   </script>
 
-  <!--
+
   <script class="mocha-init">
       mocha.setup('tdd');
     //mocha.checkLeaks();
   </script>
-  <script src="/libraries/tests.js"></script>
+  <script src="/tests.js"></script>
   <script class="mocha-exec">
       mocha.run();
   </script>
--->
+
   </div>
 </body>
 
