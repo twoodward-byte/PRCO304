@@ -7,137 +7,147 @@
   <script src="jquery-3.4.1.min.js"></script>
 
   <!--Bootstrap Library-->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
 
 
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
-  
- <!--My script-->
- <script src="script.js"></script>
+
+  <!--My script-->
+  <script src="script.js"></script>
 
   <!--Favicon Resources-->
   <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
   <!--Make website responsive-->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
- 
+
+
 </head>
 
 <body>
-  <div class="mt-2 mb-2" >
-    <img  style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30" height="30" alt="">
+
+  <!--Title bar-->
+  <div class="mt-2 mb-2">
+    <img style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30"
+      height="30" alt="">
     <h1 style="position: relative; float:left; margin-left: 10px">Enter Targets</h1>
-    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;" class="nav-link" href="#"
-    onclick="logout()">Logout</a>
+    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;"
+      class="nav-link" href="#" onclick="logout()">Logout</a>
   </div>
-
   <div style="clear:both;"></div>
-  <div id="navDiv"></div> <!--Navigation Bar goes here-->
+  <!--Clear float left-->
+
+  <!--Navigation Bar goes here-->
+  <div id="navDiv"></div>
+
+  <!--Main content in grey box-->
   <div class="jumbotron" id="mainContent" style="display: none;">
-  <h3>Targets per 24 hour period</h3>
-  <div class="mt-1 mr-3" style="max-width: 375px">
-
-
-    <div class="input-group">
-      <label class="ml-1 mt-1" for="prodLine1Input">Production Line 1:</label>
-      <input id="prodLine1Input" class="form-control ml-1" type="number" min="0" placeholder="Enter new value">
-      <div class="input-group-append">
-        <input class="btn btn-primary" type="button" id="btnProdLine1" value="Update">
+    <h3>Targets per 24 hour period</h3>
+    <div class="mt-1 mr-3" style="max-width: 375px">
+      <div class="input-group">
+        <label class="ml-1 mt-1" for="prodLine1Input">Production Line 1:</label>
+        <input id="prodLine1Input" class="form-control ml-1" type="number" min="0" placeholder="Enter new value">
+        <div class="input-group-append">
+          <input class="btn btn-primary" type="button" id="btnProdLine1" value="Update">
+        </div>
+      </div>
+      <div class="input-group mt-1">
+        <label class="ml-1 mt-1">
+          Production Line 2:
+        </label>
+        <input type="number" class="form-control ml-1" name="target" id="target" min="0" placeholder="Enter new value">
+        <div class="input-group-append">
+          <input class="btn btn-primary" id="btnProdLine2" type="button" value="Update">
+        </div>
       </div>
     </div>
+    <br>
 
-
-    <div class="input-group mt-1">
-      <label class="ml-1 mt-1">
-        Production Line 2:
-      </label>
-      <input type="number" class="form-control ml-1" name="target" id="target" min="0" placeholder="Enter new value">
-      <div class="input-group-append">
-        <input class="btn btn-primary" id="btnProdLine2" type="button" value="Update">
-      </div>
-
+    <!--Alerts. Hidden by default-->
+    <div class="alert alert-success alert-dismissible fade show ml-1" role="alert" id="targetAlert" role="alert"
+      style="width: 25%;">
+      Target successfully updated <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
 
+    <div class="alert alert-danger alert-dismissible fade show ml-1" role="alert" id="noValueAlert" role="alert"
+      style="width: 25%;">
+      Please enter a value <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
 
-
-  </div>
-  <br>
-  <div class="alert alert-success alert-dismissible fade show ml-1" role="alert" id="targetAlert" role="alert" style="width: 25%;">
-    Target successfully updated <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-
-  <div class="alert alert-danger alert-dismissible fade show ml-1" role="alert" id="noValueAlert" role="alert" style="width: 25%;">
-    Please enter a value <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-</div>
+  </div> <!--End of jumbotron-->
 </body>
 
 </html>
 
 
 <script>
+
+function hideAlerts(){
+  $('#targetAlert').hide();
+  $('#noValueAlert').hide();
+}
+
   jQuery(document).ready(function () {
-    $('#targetAlert').hide();
-    $('#noValueAlert').hide();
+    hideAlerts();
     loadNavbar();
     $('#mainContent').fadeIn(200);
   });
-  
-  var x = $('#target').val();
 
   var method = "POST";
 
+  //Update production line 2 button clicked
   $('#btnProdLine2').click(function () {
-    if($('#prodLine2Input').val() == ""){
+    if ($('#prodLine2Input').val() == "") {
       $('#noValueAlert').show();
     }
-    else{
-    var params = {
-      username: "admin",
-      password: "OakTree",
-      line: "2",
-      target: $('#target').val()
-    };
-    $.ajax({
-      type: method,
-      url: "/targetsAsync",
-      data: params
-    }).done(function (e) {
-      console.log(e);
-      $('#targetAlert').show();
-    })
-  }
+    else {
+      var params = {
+        username: "admin",
+        password: "OakTree",
+        line: "2",
+        target: $('#target').val()
+      };
+      $.ajax({
+        type: method,
+        url: "/targetsAsync",
+        data: params
+      }).done(function (e) {
+        console.log(e);
+        $('#targetAlert').show();
+      })
+    }
   });
 
   //Updating production line 1 button clicked
   $('#btnProdLine1').click(function () {
-    if($('#prodLine1Input').val() == ""){
+    if ($('#prodLine1Input').val() == "") {
       $('#noValueAlert').show();
     }
-    else{
+    else {
       params = {
-      username: "admin",
-      password: "OakTree",
-      line: "1",
-      target: $('#prodLine1Input').val()
-    };
-    $.ajax({
-      type: method,
-      url: "/targetsAsync",
-      data: params
-    }).done(function (e) {
-      console.log(e);
-      $('#targetAlert').show()
-    })
+        username: "admin",
+        password: "OakTree",
+        line: "1",
+        target: $('#prodLine1Input').val()
+      };
+      $.ajax({
+        type: method,
+        url: "/targetsAsync",
+        data: params
+      }).done(function (e) {
+        console.log(e);
+        $('#targetAlert').show()
+      })
     }
   });
-
 </script>
