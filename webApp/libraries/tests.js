@@ -22,4 +22,8 @@ suite("Javascript tests", function() {
     test("drawBasic function in scripts.js exists", function() {
         chai.assert(typeof(drawBasic, 'function'), "drawBasic function does not exist");
     });
+
+    test("logout function in scripts.js exists and readable", function(){
+        chai.assert(typeof(logout, 'function'), "logout function does not exist");
+    })
 });
