@@ -12,7 +12,11 @@ mycol = db["partsProduced"]
 
 root = tk.Tk()
 root.title("Simulate Button Press")
-
+menubar = Menu(root)
+filemenu = Menu(menubar, tearoff = 0)
+filemenu.add_command(label="Exit", command=root.quit)
+menubar.add_cascade(label="File", menu=filemenu)
+root.config(menu = menubar)
 #Create label widget
 myLabel = Label(root, text="Sensor set to: Bracket #423", font=("Arial Bold", 30))
 #Attach label to screen
