@@ -3,13 +3,20 @@
 
 <head>
   <title>Help</title>
+
   <!--Jquery Library-->
   <script src="jquery-3.4.1.min.js"></script>
 
   <!--Bootstrap CDN-->
   <link rel="stylesheet" href="bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+  <!--Popper CDN-->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
 
   <!--Custom font-->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
@@ -22,96 +29,57 @@
 
   <!--Favicon Resources-->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
-
-  <style>
-
-.sidenav {
-  height: 100%;
-  width: 160px;
-  position: fixed;
-  z-index: 0;
-  top: 20;
-  left: 0;
-  background-color: #111;
-  overflow-x: hidden;
-  padding-top: 0px;
-}
-
-.sidenav a {
-  padding: 6px 8px 6px 16px;
-  text-decoration: none;
-  font-size: 20px;
-  color: #818181;
-  display: block;
-}
-
-.sidenav a:hover {
-  color: #f1f1f1;
-}
-
-.main {
-  margin-left: 160px; /* Same as the width of the sidenav */
-  font-size: 28px; /* Increased text to enable scrolling */
-  padding: 0px 10px;
-  height: 100vh;
-
-}
-
-#helpPageContent{
-  overflow-x: hidden; 
-  overflow-x: auto; 
-  width: 160vh; 
-  height: 80vh;
-}
-
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-  </style>
 </head>
 
 <body>
 
-  <div class="mt-2 mb-2" >
-    <img  style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30" height="30" alt="">
+  <!--Title Bar-->
+  <div class="mt-2 mb-2">
+    <img style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30"
+      height="30" alt="">
     <h1 style="position: relative; float:left; margin-left: 10px">Help</h1>
-    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;" class="nav-link" href="#"
-    onclick="logout()">Logout</a>
+    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;"
+      class="nav-link" href="#" onclick="logout()">Logout</a>
   </div>
+  <div style="clear:both;"></div> <!--Used to clear float left-->
 
-  <div style="clear:both;"></div>
+  <!--Nav bar-->
   <div id="navDiv"></div>
+
   <div id="mainContent" style="display: none;">
     <div class="sidenav">
       <a class="mt-1" href="#/enteringTargets.html" onclick="loadHelpPage('/enteringTargets.html')">Entering Targets</a>
       <a href="#/managingUsers.html" onclick="loadHelpPage('/managingUsers.html')">Managing Users</a>
       <a href="#/confirmingParts.html" onclick="loadHelpPage('/confirmingParts.html')">Confirming parts</a>
-      <a href="#/viewingConfirmations.html" onclick="loadHelpPage('/viewingConfirmations.html')">Viewing Confirmations</a>
+      <a href="#/viewingConfirmations.html" onclick="loadHelpPage('/viewingConfirmations.html')">Viewing
+        Confirmations</a>
     </div>
-    <div id="helpPageContent" class="main"> <!--This is where content will be loaded into-->
-      <h3 style="margin-left: 34%; padding-top: 23%;">Please select topic in sidebar</h3>
-  
-    </div>
-  <script>
-    jQuery(document).ready(function () {
-      loadNavbar();
-      $('#mainContent').fadeIn(200);
-    });
 
-    function loadHelpPage(page){
-      $('#helpPageContent').load(page);
-      $('#helpPageContent').css("display", "none");
-      $('#helpPageContent').fadeIn(200);
-      //Make active sidebar link highlighted
-      //$('#managingUsers').css("color", "white");
-      //Reset all sidenav colors
-      $('.sidenav > a').css("color", "grey");
-      $('.sidenav > a[href="#' + page + '"]').css("color", "white");
-  }
-  </script>
+    <!--This is where content will be loaded into-->
+    <div id="helpPageContent" class="main">
+      <h3 style="margin-left: 34%; padding-top: 23%;">Please select topic in sidebar</h3>
+    </div>
+
+    <script>
+      jQuery(document).ready(function () {
+        loadNavbar();
+        $('#mainContent').fadeIn(200);
+      });
+
+      function loadHelpPage(page) {
+        $('#helpPageContent').load(page);
+        $('#helpPageContent').css("display", "none");
+        $('#helpPageContent').fadeIn(200);
+        //Make active sidebar link highlighted
+        //$('#managingUsers').css("color", "white");
+        //Reset all sidenav colors
+        $('.sidenav > a').css("color", "grey");
+        $('.sidenav > a[href="#' + page + '"]').css("color", "white");
+      }
+    </script>
   </div>
 </body>
 
