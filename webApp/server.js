@@ -266,7 +266,7 @@ function generateToken() {
 }
 
 //Server side login endpoint
-app.post('/login2', async function (req, res) {
+app.post('/login', async function (req, res) {
   if (!req || !req.body || !req.body.password || !req.body.user) {
     res.type("application/json");
     res.status(400)

@@ -54,7 +54,7 @@ function loginButton() {
     }
     $.ajax({
         type: "POST",
-        url: '/login2',
+        url: '/login',
         // dataType: 'text',
         data: params,
         success: function (data) {
