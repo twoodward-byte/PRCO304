@@ -1,10 +1,10 @@
-//Sets session as logged out and reloads window to log user out
+//Redirects user to the login page, which then deletes the user's session token
 function logout() {
   console.log("log out clicked");
-  // sessionStorage.setItem('loggedIn', 'false');
   document.location.assign("/login");
 }
 
+//Loads the specified help page into the helpPageContent div
 function loadHelpPage(page) {
   $('#helpPageContent').load(page);
   $('#helpPageContent').css("display", "none");
