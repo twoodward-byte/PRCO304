@@ -156,14 +156,14 @@ app.post('/confirmPart', async function (req, res) {
   var myobj = { amount: req.body.amount, name: req.body.name, date: req.body.date, origin: req.body.origin };
   let updateStatus = dbo.collection("partsProduced").insertOne(myobj);
   res.status(200);
-  res.send();
+  res.send({status: 'inserted correctly'});
 })
 
 app.post('/approveAsync', async function (req, res) {
   var newvalues = { $set: { status: "approved" } };
   let updateStatus = dbo.collection("users").updateOne({ _id: new mongo.ObjectId(req.body.id) }, newvalues);
   res.status(200);
-  res.send();
+  res.send({status: 'updated correctly'});
 });
 
 //Async function to return the about page
@@ -193,7 +193,7 @@ function validSession(req) { //Also can move cookie check into this function to 
   } else {
     res.status(403); //What http code?
     res.redirect("/login");
-    res.send();
+    res.send({validSession: false});
     return;
   }
 }
