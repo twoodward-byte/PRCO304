@@ -75,7 +75,7 @@
       jQuery(document).ready(function () {
         loadNavbar();
         hideAlerts();
-        sendUsersRequest();
+        sendConfRequest();
       });
 
       function hideAlerts() {
@@ -90,12 +90,11 @@
       }
 
       //Fills the table with the users data
-      function fillTable(users) {
-        var apprTable = document.getElementById('itemTable');
+      function fillTable(data) {
         $('#itemTable tr:gt(0)').remove()
         var i;
         var iterator = 0;
-        users.forEach(function (object) {
+        data.forEach(function (object) {
           var date = new Date(object.date);
           date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
           iterator++;
@@ -109,58 +108,17 @@
             + '<td>' + object.name + ' </td>'
             + '<td>' + object.origin + '</td>'
             + '<td>' + date + '</td>' //object.date
-          apprTable.appendChild(tr);
+          $('#itemTable').append(tr);
         });
       }
 
-      //Fills the table with the users data
-      function fillTableAllUsers(users) {
-        var apprTable = document.getElementById('allUsersTable');
-        $('#allUsersTable tr:gt(0)').remove()
-        var i;
-        var iterator = 0;
-        users.forEach(function (object) {
-          if (object.status == "approved") {
-
-            iterator++;
-            var tr = document.createElement('tr');
-            var i = object._id;
-            var i = i.toString();
-            iterator = iterator.toString();
-            tr.innerHTML =
-              //Item description
-              '<td>' + object.user + '</td>'
-              + '<td>' + object.status + ' </td>' + '<td>'
-              + `<button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
-              + '</td>';
-            apprTable.appendChild(tr);
-          }
-        });
-      }
-
-      //Sends request for user data and populates table with data
-      function sendUsersRequest2() {
-        $.get("/users", function (data) {
-          try {
-            //console.log(data);
-            users = data;
-            fillTable(users)
-            fillTableAllUsers(users)
-
-          } catch (Exception) {
-            console.log(Exception)
-          }
-        });
-      }
-
-      function sendUsersRequest() {
+      function sendConfRequest() {
         $.ajax({
           type: "POST",
           url: "/getConfData",
           //data: {name: "*"},
           success: function (data) {
             fillTable(data);
-            fillTableAllUsers(data);
           }
         }).done(function (e) {
           console.log(e);
