@@ -8,7 +8,7 @@ function logout() {
 function loadHelpPage(page) {
   $('#helpPageContent').load(page);
   $('#helpPageContent').css("display", "none");
-  $('#helpPageContent').fadeIn(200);
+  $('#helpPageContent').fadeIn(600);
   //Make active sidebar link highlighted
   //$('#managingUsers').css("color", "white");
   //Reset all sidenav colors
