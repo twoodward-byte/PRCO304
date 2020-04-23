@@ -11,6 +11,7 @@
   <!--Test Libraries-->
   <script src="chai.js"></script>
   <script src="mocha.js"></script>
+
   <!--My functions library-->
   <script type="text/javascript" src="script.js"></script>
   <link rel="stylesheet" href="mocha.css" />
@@ -134,7 +135,6 @@
       var chart2 = new google.visualization.PieChart(document.getElementById('chart_div2'));
       chart.draw(data, options);
 
-
       data = new google.visualization.DataTable();
       data.addColumn('string', 'Topping');
       data.addColumn('number', 'Slices');
@@ -199,7 +199,7 @@
       dataType: 'text',
       success: testFunc,
       error: function (req, err) {
-        console.log('my message' + err);
+        console.log('Error occured: ' + err);
       },
     });
 
@@ -208,10 +208,7 @@
       $('#line1Target').text(data[0].target);
       $('#line2Target').text(data[1].target);
     }
-
   </script>
-
-
   <script class="mocha-init">
       mocha.setup('tdd');
     //mocha.checkLeaks();
@@ -220,8 +217,6 @@
   <script class="mocha-exec">
       mocha.run();
   </script>
-
   </div>
 </body>
-
 </html>
