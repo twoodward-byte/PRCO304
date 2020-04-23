@@ -5,6 +5,17 @@ function logout() {
   document.location.assign("/login");
 }
 
+function loadHelpPage(page) {
+  $('#helpPageContent').load(page);
+  $('#helpPageContent').css("display", "none");
+  $('#helpPageContent').fadeIn(200);
+  //Make active sidebar link highlighted
+  //$('#managingUsers').css("color", "white");
+  //Reset all sidenav colors
+  $('.sidenav > a').css("color", "grey");
+  $('.sidenav > a[href="#' + page + '"]').css("color", "white");
+}
+
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and
 // draws it.
