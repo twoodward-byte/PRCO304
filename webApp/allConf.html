@@ -79,10 +79,7 @@
       });
 
       function hideAlerts() {
-        $('#alertApprove').hide();
-        $('#alertDelete').hide();
-        //
-        $('#mainContent').fadeIn(200);
+        $('.alert').hide();
       }
 
       function refreshPage() {
@@ -110,6 +107,7 @@
             + '<td>' + date + '</td>' //object.date
           $('#itemTable').append(tr);
         });
+        $('#mainContent').fadeIn(200);
       }
 
       function sendConfRequest() {
