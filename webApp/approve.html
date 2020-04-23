@@ -20,20 +20,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!--Favicon Resources-->
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <!--Popper CDN-->
   <script src="popper.min.js"></script>
 
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <div class="mt-2 mb-2" >
-    <img  style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30" height="30" alt="">
+  <div class="mt-2 mb-2">
+    <img style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30"
+      height="30" alt="">
     <h1 style="position: relative; float:left; margin-left: 10px">Manage Users</h1>
-    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;" class="nav-link" href="#"
-    onclick="logout()">Logout</a>
+    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;"
+      class="nav-link" href="#" onclick="logout()">Logout</a>
   </div>
   <div style="clear:both;"></div>
 
@@ -208,7 +210,7 @@
     document.location.reload();
   }
 
-  //Fills the table with the users data
+  //Fills the users waiting table with the users data
   function fillTable(users) {
     var apprTable = document.getElementById('tblUsersWaiting');
     $('#tblUsersWaiting tr:gt(0)').remove() //Remove all table rows in table
@@ -236,7 +238,7 @@
     });
   }
 
-  //Fills the table with the users data
+  //Fills the approved users table with the users data
   function fillTableAllUsers(users) {
     var apprTable = document.getElementById('allUsersTable');
     $('#allUsersTable tr:gt(0)').remove()
@@ -253,7 +255,9 @@
           //Item description
           '<td>' + object.user + '</td>'
           + '<td>' + object.status + ' </td>' + '<td>'
-          + `<button class='btn btn-danger ml-1' onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; right: 0px; padding: 0px 0px;'>Delete</button></td>`
+          + `<button class='btn btn-danger ml-1' 
+          onclick='deleteBtn(\"${i}\", \"${iterator}\")' style='position: relative; 
+          right: 0px; padding: 0px 0px;'>Delete</button></td>`
           + '</td>';
         apprTable.appendChild(tr);
       }
