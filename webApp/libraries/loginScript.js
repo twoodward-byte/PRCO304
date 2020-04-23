@@ -73,16 +73,7 @@ function loginButton() {
         error: function (data) {
         }
     });
-
 }
-
-//if (wrongPassword == true) {
-//      $('#alertLogin').show();
-//  }
-//  if(notApproved == true){
-//    $('#alertApproved').show();
-// }
-
 
 //Generates a random salt
 function generateSalt() {
@@ -170,7 +161,6 @@ async function registerUser(username, password, password2) {
         return "emailInvalid";
     }
 }
-
 
 //Returns true if parameters match
 function passwordMatch(password1, password2) {
