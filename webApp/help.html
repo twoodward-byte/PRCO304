@@ -44,7 +44,8 @@
     <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;"
       class="nav-link" href="#" onclick="logout()">Logout</a>
   </div>
-  <div style="clear:both;"></div> <!--Used to clear float left-->
+  <div style="clear:both;"></div>
+  <!--Used to clear float left-->
 
   <!--Nav bar-->
   <div id="navDiv"></div>
@@ -65,10 +66,16 @@
 
     <script>
       jQuery(document).ready(function () {
-        loadNavbar();
+        $('#navDiv').load("navbar.html", function () {
+          var pathname = window.location.pathname;
+          $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
+          $('#txtSearch').attr("disabled", true);
+          $("#btnSearch").attr("disabled", true);
+        });
         $('#mainContent').fadeIn(200);
       });
     </script>
   </div>
 </body>
+
 </html>
