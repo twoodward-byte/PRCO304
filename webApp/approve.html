@@ -80,15 +80,12 @@
           </th>
         </thead>
         <tbody id="allUsersBody">
-
         </tbody>
       </table>
     </div>
 
-
     <!--Add new user div-->
     <div class="mt-1 mr-3 ml-1 jumbotron" style="max-width: 375px">
-
       <h3>Add New User</h3>
 
       <!--Input group for email-->
@@ -120,19 +117,17 @@
       <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
       <strong id="alertTestText">TEST</strong>
     </div>
-
   </div>
   <!--End of main content div-->
 </body>
-
 </html>
-
 <script>
   var users;
 
   jQuery(document).ready(function () {
-    $('#navDiv').load("navbar.html", function () {
+    $('#navDiv').load("navbar.html", function () { //Load the navbar in
       var pathname = window.location.pathname;
+      //Next highlight the current page in the navbar
       $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
       $("#btnSearch").click(function () {
             var value = $('#txtSearch').val();
@@ -145,7 +140,7 @@
             });
           }); 
     });
-    hideAlerts();
+    $('.alert').hide(); //Hide all alert class items
     populateTables();
     startListeningCaps(document.getElementById('txtPass'), $('#alertCaps'));
     startListeningEnter(document.getElementById('txtPass'), registerButton);
@@ -175,11 +170,6 @@
       $('#alertTestText').text("Email not valid");
       $('#alertTEST').show();
     }
-  }
-
-  //Hides all alerts on page
-  function hideAlerts() {
-    $('.alert').hide(); //Hide all alert class items
   }
 
   function resetAddUserInput() {
@@ -292,7 +282,6 @@
     $.ajax({
       type: "GET",
       url: "/usersasync",
-      //data: params,
       success: function (data) {
         fillTableAllUsers(data);
         fillTable(data);
