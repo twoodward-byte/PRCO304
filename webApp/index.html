@@ -44,8 +44,13 @@
     var canopyAmount = 1; //Canopy 211 Data
     var brckt555Amount = 1; //Bracket 555 Data
 
-    jQuery(document).ready(function () { //On document ready
-      loadNavbar();
+    $(document).ready(function () { //On document ready
+      $('#navDiv').load("navbar.html", function () {
+        var pathname = window.location.pathname;
+        $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
+        $('#txtSearch').attr("disabled", true);
+        $("#btnSearch").attr("disabled", true);
+      });
       $.ajax({ //Get bracket 423 data
         type: "POST",
         url: "/getConfData",
@@ -210,13 +215,14 @@
     }
   </script>
   <script class="mocha-init">
-      mocha.setup('tdd');
+    mocha.setup('tdd');
     //mocha.checkLeaks();
   </script>
   <script src="/tests.js"></script>
   <script class="mocha-exec">
-      mocha.run();
+    mocha.run();
   </script>
   </div>
 </body>
+
 </html>
