@@ -32,14 +32,15 @@
 </head>
 
 <body>
-  <div class="mt-2 mb-2" >
-    <img  style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30" height="30" alt="">
+  <div class="mt-2 mb-2">
+    <img style="float: left; margin-top: 8px; margin-left: 23px" src="/baseline_work_black_18dp.png" width="30"
+      height="30" alt="">
     <h1 style="position: relative; float:left; margin-left: 10px">All Confirmations</h1>
-    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;" class="nav-link" href="#"
-    onclick="logout()">Logout</a>
+    <a style="position: relative;float:right;text-align: right;  z-index: 1000; margin-top: 5px; margin-right: 3px;"
+      class="nav-link" href="#" onclick="logout()">Logout</a>
   </div>
 
-  
+
 
   <div style="clear:both;"></div>
 
@@ -51,6 +52,7 @@
       <!--Main table-->
       <table style="width:inherit" class="table table-striped table-bordered table-hover table-dark mr-0 pr-0"
         id="itemTable">
+        <thead>
         <tr>
           <th>Amount</th>
           <th>Name </th>
@@ -58,6 +60,10 @@
           <th>Date Confirmed <button style="position: relative; right: 0px; padding: 1px 3px; margin: 0px 0px;"
               class="btn btn-success ml-1" onclick="refreshPage()">Refresh</button></th>
         </tr>
+      </thead>
+      <tbody id="itemTableBody">
+
+      </tbody>
       </table>
     </div>
 
@@ -72,8 +78,18 @@
     <script>
       var users;
 
-      jQuery(document).ready(function () {
-        loadNavbar();
+      $(document).ready(function () {
+        $('#navDiv').load("navbar.html", function () {
+          var pathname = window.location.pathname;
+          $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
+          $("#btnSearch").click(function () {
+            var value = $('#txtSearch').val();
+            //alert(value);
+            $('#itemTableBody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+        });
+        });
         hideAlerts();
         sendConfRequest();
       });
@@ -88,7 +104,7 @@
 
       //Fills the table with the users data
       function fillTable(data) {
-        $('#itemTable tr:gt(0)').remove()
+        $('#itemTableBody tr:gt(0)').remove()
         var i;
         var iterator = 0;
         data.forEach(function (object) {
@@ -105,7 +121,7 @@
             + '<td>' + object.name + ' </td>'
             + '<td>' + object.origin + '</td>'
             + '<td>' + date + '</td>' //object.date
-          $('#itemTable').append(tr);
+          $('#itemTableBody').append(tr);
         });
         $('#mainContent').fadeIn(200);
       }
