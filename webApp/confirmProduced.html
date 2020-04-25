@@ -85,9 +85,8 @@
 
 </html>
 <script>
-  jQuery(document).ready(function () {
-    $('#targetAlert').hide();
-    $('#noValueAlert').hide();
+  $(document).ready(function () {
+    $('.alert').hide();
     $('#navDiv').load("navbar.html", function () {
       var pathname = window.location.pathname;
       $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
@@ -125,7 +124,4 @@
       $('#targetAlert').show();
     })
   });
-
-
-
 </script>

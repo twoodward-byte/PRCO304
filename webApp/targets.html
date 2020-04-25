@@ -3,7 +3,7 @@
 
 <head>
   <title>Enter Targets</title>
-  
+
   <!--Jquery Library-->
   <script src="jquery-3.4.1.min.js"></script>
 
@@ -85,7 +85,8 @@
       </button>
     </div>
 
-  </div> <!--End of jumbotron-->
+  </div>
+  <!--End of jumbotron-->
 </body>
 
 </html>
@@ -93,14 +94,14 @@
 
 <script>
 
-function hideAlerts(){
-  $('#targetAlert').hide();
-  $('#noValueAlert').hide();
-}
-
-  jQuery(document).ready(function () {
-    hideAlerts();
-    loadNavbar();
+  $(document).ready(function () {
+    $('.alert').hide();
+    $('#navDiv').load("navbar.html", function () {
+      var pathname = window.location.pathname;
+      $('.nav > li > a[href="' + pathname + '"]').parent().addClass('active');
+      $('#txtSearch').attr("disabled", true);
+      $("#btnSearch").attr("disabled", true);
+    });
     $('#mainContent').fadeIn(200);
   });
 
