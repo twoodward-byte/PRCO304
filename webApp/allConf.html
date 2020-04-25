@@ -53,17 +53,17 @@
       <table style="width:inherit" class="table table-striped table-bordered table-hover table-dark mr-0 pr-0"
         id="itemTable">
         <thead>
-        <tr>
-          <th>Amount</th>
-          <th>Name </th>
-          <th>Origin</th>
-          <th>Date Confirmed <button style="position: relative; right: 0px; padding: 1px 3px; margin: 0px 0px;"
-              class="btn btn-success ml-1" onclick="refreshPage()">Refresh</button></th>
-        </tr>
-      </thead>
-      <tbody id="itemTableBody">
+          <tr>
+            <th>Amount</th>
+            <th>Name </th>
+            <th>Origin</th>
+            <th>Date Confirmed <button style="position: relative; right: 0px; padding: 1px 3px; margin: 0px 0px;"
+                class="btn btn-success ml-1" onclick="refreshPage()">Refresh</button></th>
+          </tr>
+        </thead>
+        <tbody id="itemTableBody">
 
-      </tbody>
+        </tbody>
       </table>
     </div>
 
@@ -86,10 +86,10 @@
             var value = $('#txtSearch').val();
             //alert(value);
             $('#itemTableBody tr').filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-        });
-        });
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          }); //End of btn search click function
+        }); //End of loading navbar function 
         hideAlerts();
         sendConfRequest();
       });
