@@ -281,7 +281,7 @@ app.post('/login', async function (req, res) {
   } try {    //Try to find user in database
     var result = await dbo.collection("users").findOne({ "user": req.body.user });
     if (result == null) { //User not found in database
-      res.status(200); //Need to change to correct http code Unauthorised
+      res.status(401); //Need to change to correct http code Unauthorised
       res.type("application/json");
       res.send({ success: false, });
       return;
