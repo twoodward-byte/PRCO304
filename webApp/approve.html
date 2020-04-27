@@ -103,7 +103,11 @@
             onclick="registerButton()">
         </div>
       </div>
-
+<!--Main alert that changes content depending on message-->
+<div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertTEST">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
+  <strong id="alertTestText">TEST</strong>
+</div>
     </div>
 
     <!--Caps lock alert-->
@@ -112,11 +116,7 @@
       <strong>Caps Lock On</strong>
     </div>
 
-    <!--Main alert that changes content depending on message-->
-    <div class="alert alert-warning alert-dismissible fade show collapse ml-3 mr-3 mt-1" role="alert" id="alertTEST">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close" onclick="$('#alertEmail').hide()">&times;</a>
-      <strong id="alertTestText">TEST</strong>
-    </div>
+    
   </div>
   <!--End of main content div-->
 </body>
@@ -148,6 +148,11 @@
 
   //Event handler for register button click event
   async function registerButton() {
+    if($('#txtPass').val()==""){ //If password is empty
+      $('#alertTestText').text("Please enter a password");
+      $('#alertTEST').show();
+    }
+    else{
     var registerStatus;
     if (validateEmail($('#txtEmail').val())) { //If valid email
       registerStatus = await registerUser($('#txtEmail').val(), $('#txtPass').val(), $('#txtPass').val()); //Try registering user
@@ -171,6 +176,7 @@
       $('#alertTEST').show();
     }
   }
+}
 
   function resetAddUserInput() {
     $('.myInput').val(""); //Clear all my input boxes
