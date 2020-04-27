@@ -28,6 +28,10 @@
     height: 80vh;
   }
 
+  button:disabled {
+    cursor: not-allowed;
+    pointer-events: all !important;
+  }
   .sidenav a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
