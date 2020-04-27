@@ -64,15 +64,24 @@ function loginButton() {
                 console.log("redirecting");
                 window.location.assign("/index");
             }
-            else if (data.success == false) {
-                console.log("Not authorised");
-                $("#alertLogin").show();
+            
+            else if(data.success == "waiting"){
+                console.log("User not approved");
+                $('#alertLogin').html("User not approved");
+                $('#alertLogin').show();
             }
             // window.location.reload();
         },
         error: function (data) {
-        }
-    });
+            if (data.responseJSON.success == false) {
+                console.log("Not authorised");
+                $("#alertLogin").show();
+            }
+        },
+        fail: function(e){
+            console.log("Failed");
+        } 
+    })    
 }
 
 //Generates a random salt
