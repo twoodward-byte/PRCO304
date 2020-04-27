@@ -289,8 +289,8 @@ app.post('/login', async function (req, res) {
     //Compare password to database record, hashing and salting in the process
     bcrypt.compare(req.body.password, result.password, function (err, passwordMatched) {
       if (passwordMatched == true) { //Valid username and password
-        if(result.status != "approved"){
-          var response = { success: false }
+        if(result.status != "approved"){ //User waiting
+          var response = { success: "waiting" }
           res.send(response);
           return;
         }
