@@ -275,13 +275,13 @@ function generateToken() {
 app.post('/login', async function (req, res) {
   if (!req || !req.body || !req.body.password || !req.body.user) {
     res.type("application/json");
-    res.status(400)
+    res.status(400) //Bad request code
     res.send();
     return true;
   } try {    //Try to find user in database
     var result = await dbo.collection("users").findOne({ "user": req.body.user });
     if (result == null) { //User not found in database
-      res.status(401); //Need to change to correct http code Unauthorised
+      res.status(401); //Unauthorised
       res.type("application/json");
       res.send({ success: false, });
       return;
@@ -291,6 +291,7 @@ app.post('/login', async function (req, res) {
       if (passwordMatched == true) { //Valid username and password
         if(result.status != "approved"){ //User waiting
           var response = { success: "waiting" }
+          res.status(401); //Unauthorised
           res.send(response);
           return;
         }
@@ -302,20 +303,21 @@ app.post('/login', async function (req, res) {
         var saveStatus =  dbo.collection("userSession").save(session);
         if(saveStatus){ //If saved successfully
           res.type("application/json");
-          res.status(200);
+          res.status(200); //OK
           res.cookie('sessionToken', session.sessionID, { sameSite: true }); //Save user session to clients cookies:
           var response = { success: true }
           res.send(response);
           return;
         }
       } else { //Password incorrect
-        res.status(200); //Need to change to http Unauthorised code
+        res.status(401); //http Unauthorised code
         res.type("application/json");
         res.send({success: false,});
         return;
       }
     });
     } catch{
+      console.log("Could not find user in database")
 }
 });
 
