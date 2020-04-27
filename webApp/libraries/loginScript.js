@@ -44,9 +44,7 @@ function startListeningCaps(element, alert) {
 }
 
 function loginButton() {
-    //Get username entered
     var userName = $("#txtUserName").val();
-    //Get password entered
     var password = $("#txtPassword").val();
     var params = {
         user: userName,
@@ -55,33 +53,29 @@ function loginButton() {
     $.ajax({
         type: "POST",
         url: '/login',
-        // dataType: 'text',
         data: params,
         success: function (data) {
-            // users = JSON.parse(data);
             console.log("success logging in");
             if (data.success == true) {
                 console.log("redirecting");
                 window.location.assign("/index");
             }
-            
-            else if(data.success == "waiting"){
-                console.log("User not approved");
-                $('#alertLogin').html("User not approved");
-                $('#alertLogin').show();
-            }
-            // window.location.reload();
         },
         error: function (data) {
             if (data.responseJSON.success == false) {
                 console.log("Not authorised");
                 $("#alertLogin").show();
             }
+            else if(data.responseJSON.success == "waiting"){
+                console.log("User not approved");
+                $('#alertLogin').html("User not approved");
+                $('#alertLogin').show();
+            }
         },
         fail: function(e){
             console.log("Failed");
         } 
-    })    
+    });    
 }
 
 //Generates a random salt
