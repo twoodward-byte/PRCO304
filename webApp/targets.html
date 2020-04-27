@@ -104,8 +104,6 @@
     $('#mainContent').fadeIn(200);
   });
 
-  var method = "POST";
-
   //Update production line 2 button clicked
   $('#btnProdLine2').click(function () {
     if ($('#prodLine2Input').val() == "") {
@@ -119,12 +117,23 @@
         target: $('#target').val()
       };
       $.ajax({
-        type: method,
+        type: "POST",
         url: "/targetsAsync",
         data: params
       }).done(function (e) {
         console.log(e);
         $('#targetAlert').show();
+      })
+      .fail(function(e){
+        console.log(e.responseJSON);
+        if(e.responseJSON.status == "targetIsMinus"){
+          console.log("Target was minus");
+          //Make alert message saying target was minus
+          $('#targetAlert').html("Target cannot be a minus number");
+          $('#targetAlert').removeClass("alert-success");
+          $('#targetAlert').addClass("alert-danger");
+          $('#targetAlert').show();
+        }
       })
     }
   });
@@ -142,12 +151,23 @@
         target: $('#prodLine1Input').val()
       };
       $.ajax({
-        type: method,
+        type: "POST",
         url: "/targetsAsync",
         data: params
       }).done(function (e) {
         console.log(e);
         $('#targetAlert').show()
+      })
+      .fail(function(e){
+        console.log(e.responseJSON);
+        if(e.responseJSON.status == "targetIsMinus"){
+          console.log("Target was minus");
+          //Make alert message saying target was minus
+          $('#targetAlert').html("Target cannot be a minus number");
+          $('#targetAlert').removeClass("alert-success");
+          $('#targetAlert').addClass("alert-danger");
+          $('#targetAlert').show();
+        }
       })
     }
   });

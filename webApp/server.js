@@ -131,22 +131,28 @@ app.post('/deleteAsync', async function (req, res) {
 
 app.post('/targetsAsync', async function (req, res) {
   if(req.body.username == "admin" && req.body.password == "OakTree"){ //Authorised
-    let updateStatus = dbo.collection("targets").updateOne({ "line": req.body.line }, {
-      $set: { "target": req.body.target }
-    }).then(function(status){
-      if(status.modifiedCount == 0){ //Nothing modified
-        res.status(400);
-        res.send({"status":"Nothing modified"});
-      }
-      else{ //Item has been modified
-        console.log(status); // Use this to debug
-        console.log("Database updated successfully");
-        res.status(200);
-        res.send({"status": "Database updated"});
-      }
-    });
-  }
-  else{ //Unauthorised
+    let newTarget = req.body.target
+    if(newTarget >= 0){
+      console.log("Target bigger than 0");
+      let updateStatus = dbo.collection("targets").updateOne({ "line": req.body.line }, {
+        $set: { "target": req.body.target }
+      }).then(function(status){
+        if(status.modifiedCount == 0){ //Nothing modified
+          res.status(400);
+          res.send({"status":"Nothing modified"});
+        }
+        else{ //Item has been modified
+          console.log(status); // Use this to debug
+          console.log("Database updated successfully");
+          res.status(200);
+          res.send({"status": "Database updated"});
+        }
+      });
+    } else { //Target is a minus number
+      res.status(406);
+      res.send({"status": "targetIsMinus"});
+    }
+  } else{ //Unauthorised
     res.status(401);
     res.send({"status": "Wrong username or password"});
   }
