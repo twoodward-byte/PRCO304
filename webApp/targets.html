@@ -104,6 +104,10 @@
     $('#mainContent').fadeIn(200);
   });
 
+  function testInteger(x){
+        var y = Number.isInteger(Number(x));
+        return y;
+    }
   //Update production line 2 button clicked
   $('#btnProdLine2').click(function () {
     if ($('#prodLine2Input').val() == "") {
@@ -143,7 +147,10 @@
     if ($('#prodLine1Input').val() == "") {
       $('#noValueAlert').show();
     }
-    else {
+    else if(testInteger($('#prodLine1Input').val()) == false){
+      $('#noValueAlert').html("Needs to be whole number");
+      $('#noValueAlert').show();
+    } else {
       params = {
         username: "admin",
         password: "OakTree",
