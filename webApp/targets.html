@@ -73,14 +73,15 @@
     <!--Alerts. Hidden by default-->
     <div class="alert alert-success alert-dismissible fade show ml-1" role="alert" id="targetAlert" role="alert"
       style="width: 25%;">
-      Target successfully updated <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span id="spanTarget">Target successfully updated</span>
+      <button type="button" class="close" data-hide="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
 
     <div class="alert alert-danger alert-dismissible fade show ml-1" role="alert" id="noValueAlert" role="alert"
-      style="width: 25%;">
-      Please enter a value <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      style="width: 25%;"><span id="spanAlert">
+        Please enter a value</span> <button type="button" class="close" data-hide="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -94,6 +95,11 @@
 <script>
 
   $(document).ready(function () {
+    $(function () {
+      $("[data-hide]").on("click", function () {
+        $(this).closest("." + $(this).attr("data-hide")).hide();
+      });
+    });
     $('.alert').hide();
     $('#navDiv').load("navbar.html", function () {
       var pathname = window.location.pathname;
@@ -104,17 +110,17 @@
     $('#mainContent').fadeIn(200);
   });
 
-  function testInteger(x){
-        var y = Number.isInteger(Number(x));
-        return y;
-    }
+  function testInteger(x) {
+    var y = Number.isInteger(Number(x));
+    return y;
+  }
   //Update production line 2 button clicked
   $('#btnProdLine2').click(function () {
     if ($('#target').val() == "") {
       $('#noValueAlert').show();
     }
-    else if(testInteger($('#target').val()) == false){
-      $('#noValueAlert').html("Needs to be whole number");
+    else if (testInteger($('#target').val()) == false) {
+      $('#spanAlert').html("Needs to be whole number");
       $('#noValueAlert').show();
     } else {
       var params = {
@@ -131,26 +137,29 @@
         console.log(e);
         $('#targetAlert').show();
       })
-      .fail(function(e){
-        console.log(e.responseJSON);
-        if(e.responseJSON.status == "targetIsMinus"){
-          console.log("Target was minus");
-          //Make alert message saying target was minus
-          $('#targetAlert').html("Target cannot be a minus number");
-          $('#targetAlert').removeClass("alert-success");
-          $('#targetAlert').addClass("alert-danger");
-          $('#targetAlert').show();
-        }
-      })
+        .fail(function (e) {
+          console.log(e.responseJSON);
+          if (e.responseJSON.status == "targetIsMinus") {
+            console.log("Target was minus");
+            displayMinusAlert(); //Make alert message saying target was minus
+          }
+        })
     }
   });
+
+  function displayMinusAlert() {
+    $('#spanTarget').html("Target cannot be a minus number");
+    $('#targetAlert').removeClass("alert-success");
+    $('#targetAlert').addClass("alert-danger");
+    $('#targetAlert').show();
+  }
 
   //Updating production line 1 button clicked
   $('#btnProdLine1').click(function () {
     if ($('#prodLine1Input').val() == "") {
       $('#noValueAlert').show();
     }
-    else if(testInteger($('#prodLine1Input').val()) == false){
+    else if (testInteger($('#prodLine1Input').val()) == false) {
       $('#noValueAlert').html("Needs to be whole number");
       $('#noValueAlert').show();
     } else {
@@ -168,17 +177,13 @@
         console.log(e);
         $('#targetAlert').show()
       })
-      .fail(function(e){
-        console.log(e.responseJSON);
-        if(e.responseJSON.status == "targetIsMinus"){
-          console.log("Target was minus");
-          //Make alert message saying target was minus
-          $('#targetAlert').html("Target cannot be a minus number");
-          $('#targetAlert').removeClass("alert-success");
-          $('#targetAlert').addClass("alert-danger");
-          $('#targetAlert').show();
-        }
-      })
+        .fail(function (e) {
+          console.log(e.responseJSON);
+          if (e.responseJSON.status == "targetIsMinus") {
+            console.log("Target was minus");
+            displayMinusAlert(); //Make alert message saying target was minus
+          }
+        })
     }
   });
 </script>
