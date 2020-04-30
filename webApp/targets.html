@@ -116,7 +116,7 @@
   }
   //Update production line 2 button clicked
   $('#btnProdLine2').click(function () {
-    if ($('#target').val() == "") {
+    if ($('#target').val() == "") { //If empty
       $('#noValueAlert').show();
     }
     else if (testInteger($('#target').val()) == false) {
@@ -160,7 +160,7 @@
       $('#noValueAlert').show();
     }
     else if (testInteger($('#prodLine1Input').val()) == false) {
-      $('#noValueAlert').html("Needs to be whole number");
+      $('#spanAlert').html("Needs to be whole number");
       $('#noValueAlert').show();
     } else {
       params = {
