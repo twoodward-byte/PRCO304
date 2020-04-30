@@ -11,6 +11,8 @@ function startListeningEnter(element, func) {
     });
 }
 
+
+
 //Returns the salt of the username present in the specified data parameter
 function getUserSalt(username, data) {
     for (i = 0; i < data.length; i++) {
@@ -62,20 +64,25 @@ function loginButton() {
             }
         },
         error: function (data) {
+            $(function () {
+                $("[data-hide]").on("click", function () {
+                    $(this).closest("." + $(this).attr("data-hide")).hide();
+                });
+            });
             if (data.responseJSON.success == false) {
                 console.log("Not authorised");
                 $("#alertLogin").show();
             }
-            else if(data.responseJSON.success == "waiting"){
+            else if (data.responseJSON.success == "waiting") {
                 console.log("User not approved");
-                $('#alertLogin').html("User not approved");
+                $('#alertLogin').html("<a href='#' class='close' data-hide='alert' aria-label='close'>&times;</a>User not approved");
                 $('#alertLogin').show();
             }
         },
-        fail: function(e){
+        fail: function (e) {
             console.log("Failed");
-        } 
-    });    
+        }
+    });
 }
 
 //Generates a random salt
