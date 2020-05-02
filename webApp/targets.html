@@ -10,7 +10,7 @@
   <!--Bootstrap Library-->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
 
@@ -82,7 +82,8 @@
       </button>
     </div>
 
-  </div>  <!--End of jumbotron-->
+  </div>
+  <!--End of jumbotron-->
 
 </body>
 
@@ -112,17 +113,9 @@
   }
   //Update production line 2 button clicked
   $('#btnProdLine2').click(function () {
-    if ($('#target').val() == "") { //If empty
-      $('#spanTarget').html("Please enter a value");
-      $('#targetAlert').removeClass('alert-success');
-      $('#targetAlert').addClass('alert-danger');
-      $('#targetAlert').show();
-    }
+    if ($('#target').val() == "") displayNoValueAlert();
     else if (testInteger($('#target').val()) == false) {
-      $('#spanTarget').html("Needs to be whole number"); //Floating point alert
-      $('#targetAlert').removeClass('alert-success');
-      $('#targetAlert').addClass('alert-danger');
-      $('#targetAlert').show();
+      displayIntegerAlert();
     } else {
       var params = {
         username: "admin",
@@ -155,19 +148,25 @@
     $('#targetAlert').show();
   }
 
+  function displayNoValueAlert() {
+    $('#spanTarget').html("Please enter a value");
+    $('#targetAlert').removeClass('alert-success');
+    $('#targetAlert').addClass('alert-danger');
+    $('#targetAlert').show();
+  }
+
+  function displayIntegerAlert() {
+    $('#spanTarget').html("Needs to be whole number");
+    $('#targetAlert').removeClass('alert-success');
+    $('#targetAlert').addClass('alert-danger');
+    $('#targetAlert').show();
+  }
+
   //Updating production line 1 button clicked
   $('#btnProdLine1').click(function () {
-    if ($('#prodLine1Input').val() == "") {
-      $('#spanTarget').html("Please enter a value");
-      $('#targetAlert').removeClass('alert-success');
-      $('#targetAlert').addClass('alert-danger');
-      $('#targetAlert').show();
-    }
+    if ($('#prodLine1Input').val() == "") displayNoValueAlert();
     else if (testInteger($('#prodLine1Input').val()) == false) {
-      $('#spanTarget').html("Needs to be whole number");
-      $('#targetAlert').removeClass('alert-success');
-      $('#targetAlert').addClass('alert-danger');
-      $('#targetAlert').show();
+      displayIntegerAlert();
     } else {
       params = {
         username: "admin",
