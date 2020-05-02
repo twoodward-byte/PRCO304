@@ -66,11 +66,8 @@
 <script>
     startListeningCaps(document.getElementById("txtPassword"), $('#alertCaps'));
     startListeningEnter(document.getElementById("txtPassword"), loginButton);
-    jQuery(document).ready(function () {
-        
+    jQuery(document).ready(function () {       
         //Hide alerts
-        $("#alertLogin").hide();
-        $('#alertCaps').hide();
-        $('#alertApproved').hide();
+        $('.alert').hide();
     });
 </script>
