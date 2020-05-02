@@ -117,15 +117,11 @@
       function fillTable(data) {
         $('#itemTableBody tr:gt(0)').remove()
         var i;
-        var iterator = 0;
         data.forEach(function (object) {
           var date = new Date(object.date);
-          date.setTime(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-          iterator++;
           var tr = document.createElement('tr');
           var i = object._id;
           var i = i.toString();
-          iterator = iterator.toString();
           tr.innerHTML =
             //Item description
             '<td>' + object.amount + '</td>'
@@ -137,7 +133,7 @@
         $('#mainContent').fadeIn(200);
       }
 
-      function sendConfRequest() {
+       function sendConfRequest() {
         $.ajax({
           type: "POST",
           url: "/getConfData",
