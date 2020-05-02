@@ -202,11 +202,12 @@
       type: 'GET',
       url: '/getTargetsAsync',
       dataType: 'text',
-      success: testFunc,
       error: function (req, err) {
         console.log('Error occured: ' + err);
       },
-    });
+    }).done(function(data){
+      testFunc(data);
+    })
 
     function testFunc(input) {
       data = JSON.parse(input);
