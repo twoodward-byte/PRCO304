@@ -10,17 +10,20 @@
   <!--Bootstrap Library-->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"></script>
 
+  <!--Popper CDN-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 
+  <!--Custom font-->
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap" rel="stylesheet">
+
   <!--My stylesheet-->
   <link rel="stylesheet" href="style.css">
 
-  <!--My script-->
+  <!--My function library-->
   <script src="script.js"></script>
 
   <!--Favicon Resources-->
@@ -79,15 +82,8 @@
       </button>
     </div>
 
-    <div class="alert alert-danger alert-dismissible fade show ml-1" role="alert" id="noValueAlert" role="alert"
-      style="width: 25%;"><span id="spanAlert">
-        Please enter a value</span> <button type="button" class="close" data-hide="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+  </div>  <!--End of jumbotron-->
 
-  </div>
-  <!--End of jumbotron-->
 </body>
 
 </html>
@@ -117,11 +113,16 @@
   //Update production line 2 button clicked
   $('#btnProdLine2').click(function () {
     if ($('#target').val() == "") { //If empty
-      $('#noValueAlert').show();
+      $('#spanTarget').html("Please enter a value");
+      $('#targetAlert').removeClass('alert-success');
+      $('#targetAlert').addClass('alert-danger');
+      $('#targetAlert').show();
     }
     else if (testInteger($('#target').val()) == false) {
-      $('#spanAlert').html("Needs to be whole number");
-      $('#noValueAlert').show();
+      $('#spanTarget').html("Needs to be whole number"); //Floating point alert
+      $('#targetAlert').removeClass('alert-success');
+      $('#targetAlert').addClass('alert-danger');
+      $('#targetAlert').show();
     } else {
       var params = {
         username: "admin",
@@ -157,11 +158,16 @@
   //Updating production line 1 button clicked
   $('#btnProdLine1').click(function () {
     if ($('#prodLine1Input').val() == "") {
-      $('#noValueAlert').show();
+      $('#spanTarget').html("Please enter a value");
+      $('#targetAlert').removeClass('alert-success');
+      $('#targetAlert').addClass('alert-danger');
+      $('#targetAlert').show();
     }
     else if (testInteger($('#prodLine1Input').val()) == false) {
-      $('#spanAlert').html("Needs to be whole number");
-      $('#noValueAlert').show();
+      $('#spanTarget').html("Needs to be whole number");
+      $('#targetAlert').removeClass('alert-success');
+      $('#targetAlert').addClass('alert-danger');
+      $('#targetAlert').show();
     } else {
       params = {
         username: "admin",
