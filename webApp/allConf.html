@@ -142,12 +142,9 @@
           type: "POST",
           url: "/getConfData",
           //data: {name: "*"},
-          success: function (data) {
-            fillTable(data);
-          }
-        }).done(function (e) {
-          console.log(e);
-        })
+        }).done(function (data) {
+          fillTable(data);
+        });
       }
     </script>
   </div>
