@@ -99,13 +99,16 @@
         console.log("canopy data recieved");
       });
 
-    }); //End of document ready
     // Load the Visualization API and the corechart package.
     google.charts.load('current', { 'packages': ['corechart'] });
 
     // Set a callback to run when the Google Visualization API is loaded.
     google.charts.load('current', { packages: ['corechart', 'line'] });
     google.charts.setOnLoadCallback(drawBasic);
+    google.charts.setOnLoadCallback(drawChart);
+
+    }); //End of document ready
+
     // Callback that creates and populates a data table,
     // instantiates the pie chart, passes in the data and
     // draws it.
@@ -150,7 +153,6 @@
       options.title = "Assembled part #21"
       chart2.draw(data, options);
     }
-    google.charts.setOnLoadCallback(drawChart);
   </script>
 </head>
 
