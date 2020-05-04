@@ -180,6 +180,9 @@
         data: params
       }).done(function (e) {
         console.log(e);
+        $('#spanTarget').html("Target updated successfully");
+        $('#targetAlert').removeClass('alert-danger');
+        $('#targetAlert').addClass('alert-success');
         $('#targetAlert').show()
       })
         .fail(function (e) {
