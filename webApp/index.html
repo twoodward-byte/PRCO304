@@ -94,6 +94,8 @@
             amount += parseInt(arr[i].amount);
           }
           canopyAmount = amount; //Bracket data
+          google.charts.setOnLoadCallback(drawChart);
+
         }
       }).done(function (e) {
         console.log("canopy data recieved");
@@ -105,7 +107,6 @@
     // Set a callback to run when the Google Visualization API is loaded.
     google.charts.load('current', { packages: ['corechart', 'line'] });
     google.charts.setOnLoadCallback(drawBasic);
-    google.charts.setOnLoadCallback(drawChart);
 
     }); //End of document ready
 
