@@ -126,7 +126,7 @@
 <script>
   var users;
 
-  jQuery(document).ready(function () {
+  $(document).ready(function () {
     $('#navDiv').load("navbar.html", function () { //Load the navbar in
       var pathname = window.location.pathname;
       //Next highlight the current page in the navbar
@@ -146,7 +146,8 @@
     });
     $('.alert').hide(); //Hide all alert class items
     populateTables();
-    startListeningCaps(document.getElementById('txtPass'), $('#alertCaps'));
+   startListeningCaps(document.getElementById('txtPass'), $('#alertCaps'));
+
     startListeningEnter(document.getElementById('txtPass'), registerButton);
   });
 
